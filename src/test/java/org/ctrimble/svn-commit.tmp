@@ -1,5 +1,0 @@
-Moving test cases for the combinatorics package.
---This line, and those below, will be ignored--
-
-A    svn://ctrimble@minime.local/combinatorics/trunk/src/test/java/org/ctrimble/combinatorics
-D    svn://ctrimble@minime.local/chess/trunk/bundles/model/src/test/java/org/ctrimble/combinatorics
