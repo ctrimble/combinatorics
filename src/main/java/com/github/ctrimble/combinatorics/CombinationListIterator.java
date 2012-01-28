@@ -22,16 +22,25 @@ import java.util.NoSuchElementException;
 import javolution.util.FastTable;
 import org.apache.commons.math.util.MathUtils;
 
-public class CombinationIterator<E>
-  implements Iterator<List<E>>
+/**
+ * A class for generating combinations as a list.  Currently 
+ * 
+ * @author Christian Trimble
+ *
+ * @param <E> the type of the elements to be combined.
+ */
+public class CombinationListIterator<E>
+  extends AbstractCombinatoricsIterator<List<E>>
 {
+  /** A copy of the values that were passed in. */
   private FastTable<E> values = new FastTable<E>();
-  private int[] currentIndecies;
-  private int k;
-  private long total;
-  private long index = 0;
-  private FastTable<E> result;
-  public CombinationIterator( List<E> values, int k ) {
+  
+  /**
+   * Creates a new iterator.
+   * @param values the values to be combined.  A reference to this list is not retained.
+   * @param k the number of items in each combination.
+   */
+  public CombinationListIterator( List<E> values, int k ) {
     this.values.addAll(values);
     this.k = k;
     total = MathUtils.binomialCoefficient(values.size(), k);
@@ -41,45 +50,40 @@ public class CombinationIterator<E>
       result.add(values.get(i));
     }
   }
-  
-  @Override
-  public boolean hasNext() {
-    return index < total;
-  }
 
   @Override
   public List<E> next() {
     if( index >= total ) {
-      throw new NoSuchElementException();
+      throw new NoSuchElementException("All of the results have been returned.");
     }
-    //FastTable<E> result = new FastTable<E>(currentIndecies.length);
-    for( int i = 0; i < currentIndecies.length; i++ ) {
-      result.set(i, values.get(currentIndecies[i]));
+
+    // update the results.
+    for( int i = 0; i < currentIndices.length; i++ ) {
+      result.set(i, values.get(currentIndices[i]));
     }
+    
+    // increment the index.
     index++;
-    for( int i = 0; i < currentIndecies.length; i++ ) { // i is offset from tail of list.
-      int iIndex = currentIndecies.length-(i+1);
-      currentIndecies[iIndex]++;
-      if( currentIndecies[iIndex] < values.size()-i ) {
-        for( int j = 1; (iIndex + j) < currentIndecies.length; j++ ) {
-          currentIndecies[iIndex + j] = currentIndecies[iIndex]+j;
+    
+    // update the indexes that will be returned next.
+    for( int i = 0; i < currentIndices.length; i++ ) { // i is offset from tail of list.
+      int iIndex = currentIndices.length-(i+1);
+      currentIndices[iIndex]++;
+      if( currentIndices[iIndex] < values.size()-i ) {
+        for( int j = 1; (iIndex + j) < currentIndices.length; j++ ) {
+          currentIndices[iIndex + j] = currentIndices[iIndex]+j;
         }
         break;
       }
     }
     return result;
   }
-
-  @Override
-  public void remove() {
-    throw new UnsupportedOperationException();
-  }
   
   private void initializeIndecies()
   {
-    currentIndecies = new int[k];
-    for( int i = 0; i < currentIndecies.length; i++ ) {
-      currentIndecies[i] = i;
+    currentIndices = new int[k];
+    for( int i = 0; i < currentIndices.length; i++ ) {
+      currentIndices[i] = i;
     }
   }
 }
