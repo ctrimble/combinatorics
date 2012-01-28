@@ -13,26 +13,20 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.ctrimble.combinatorics;
+package com.github.ctrimble.combinatorics;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
-/**
- * A representation of all combinations of a set of elements.
- * 
- * @author Christian Trimble
- *
- * @param <E> The type of the elements that are being combined.
- */
-public class Combinations<E> implements Iterable<E[]> {
-  
-  private E[] elements;
-  private int k;
+public interface SequenceIterator<E>
+  extends Iterator<E[]> {
 
-  //@Override
-  public Iterator<E[]> iterator() {
- //   return new CombinationIterator<E>(elements, k);
-	  return null;
-  }
+  boolean hasPrevious();
+
+  long nextIndex();
+
+  E[] previous();
+
+  long previousIndex();
 
 }

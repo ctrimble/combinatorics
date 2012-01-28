@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.ctrimble.combinatorics;
+package com.github.ctrimble.combinatorics;
 
 public class PermutationIterator<E> implements SequenceIterator<E> {
 

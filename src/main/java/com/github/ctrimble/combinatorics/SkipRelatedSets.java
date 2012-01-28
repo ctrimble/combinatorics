@@ -13,20 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.ctrimble.combinatorics;
+package com.github.ctrimble.combinatorics;
 
-import java.util.Iterator;
-import java.util.ListIterator;
-
-public interface SequenceIterator<E>
-  extends Iterator<E[]> {
-
-  boolean hasPrevious();
-
-  long nextIndex();
-
-  E[] previous();
-
-  long previousIndex();
+public class SkipRelatedSets extends Exception {
 
 }

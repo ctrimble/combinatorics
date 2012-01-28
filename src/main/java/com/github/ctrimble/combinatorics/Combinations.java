@@ -13,8 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.ctrimble.combinatorics;
+package com.github.ctrimble.combinatorics;
 
-public class SkipRelatedSets extends Exception {
+import java.util.Iterator;
+
+/**
+ * A representation of all combinations of a set of elements.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <E> The type of the elements that are being combined.
+ */
+public class Combinations<E> implements Iterable<E[]> {
+  
+  private E[] elements;
+  private int k;
+
+  //@Override
+  public Iterator<E[]> iterator() {
+ //   return new CombinationIterator<E>(elements, k);
+	  return null;
+  }
 
 }
