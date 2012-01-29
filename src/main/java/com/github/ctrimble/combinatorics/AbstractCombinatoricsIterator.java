@@ -39,7 +39,7 @@ public abstract class AbstractCombinatoricsIterator<R> implements Iterator<R> {
   protected long index = 0;
 
   /** The result that will be returned by calls to next. */
-  protected R result;
+  protected  R result;
 
   @Override
   public boolean hasNext() {

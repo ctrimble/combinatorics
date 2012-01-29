@@ -22,20 +22,24 @@ import java.util.NoSuchElementException;
 import javolution.util.FastTable;
 import org.apache.commons.math.util.MathUtils;
 
-public class FastCombinationIterator<E>
-  implements Iterator<E[]>
+/**
+ * A combination iterator that returns its results in the form of an array.  Every call to next()
+ * returns the same array instance, to reduce allocations.  If you wish to retain combinations
+ * between next calls, you will need to copy this array.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <E>
+ */
+public class CombinationArrayIterator<E>
+  extends AbstractCombinatoricsIterator<E[]>
 {
   private E[] values;
-  private int[] currentIndecies;
-  private int k;
-  private long total;
-  private long index = -1;
-  private E[] result;
   private E[] remaining;
   private int resultSwap;
   private int remainingSwap;
   private int remainingStart;
-  public FastCombinationIterator( List<E> values, int k ) {
+  public CombinationArrayIterator( List<E> values, int k ) {
     this.values = (E[])new Object[values.size()];
     for( int i = 0; i < values.size(); i++ ) {
       this.values[i] = values.get(i);
@@ -43,11 +47,7 @@ public class FastCombinationIterator<E>
     this.k = k;
     total = MathUtils.binomialCoefficient(values.size(), k);
     initializeIndecies();
-  }
-  
-  @Override
-  public boolean hasNext() {
-    return index < total;
+    index = 0;
   }
 
   @Override
@@ -55,7 +55,7 @@ public class FastCombinationIterator<E>
     if( index >= total ) {
       throw new NoSuchElementException();
     }
-    if( index < 0 ) {
+    if( index == 0 ) {
       result = (E[])new Object[k];
       for( int i = 0; i < k; i++) {
         result[i] = this.values[i];
@@ -85,17 +85,17 @@ public class FastCombinationIterator<E>
       //     [4,3] [5,4,3]
 
     }
-    //FastTable<E> result = new FastTable<E>(currentIndecies.length);
-    for( int i = 0; i < currentIndecies.length; i++ ) {
-      result[i] = values[currentIndecies[i]];
+    //FastTable<E> result = new FastTable<E>(currentIndices.length);
+    for( int i = 0; i < currentIndices.length; i++ ) {
+      result[i] = values[currentIndices[i]];
     }
     index++;
-    for( int i = 0; i < currentIndecies.length; i++ ) { // i is offset from tail of list.
-      int iIndex = currentIndecies.length-(i+1);
-      currentIndecies[iIndex]++;
-      if( currentIndecies[iIndex] < values.length-i ) {
-        for( int j = 1; (iIndex + j) < currentIndecies.length; j++ ) {
-          currentIndecies[iIndex + j] = currentIndecies[iIndex]+j;
+    for( int i = 0; i < currentIndices.length; i++ ) { // i is offset from tail of list.
+      int iIndex = currentIndices.length-(i+1);
+      currentIndices[iIndex]++;
+      if( currentIndices[iIndex] < values.length-i ) {
+        for( int j = 1; (iIndex + j) < currentIndices.length; j++ ) {
+          currentIndices[iIndex + j] = currentIndices[iIndex]+j;
         }
         break;
       }
@@ -110,9 +110,9 @@ public class FastCombinationIterator<E>
   
   private void initializeIndecies()
   {
-    currentIndecies = new int[k];
-    for( int i = 0; i < currentIndecies.length; i++ ) {
-      currentIndecies[i] = i;
+    currentIndices = new int[k];
+    for( int i = 0; i < currentIndices.length; i++ ) {
+      currentIndices[i] = i;
     }
   }
 }
