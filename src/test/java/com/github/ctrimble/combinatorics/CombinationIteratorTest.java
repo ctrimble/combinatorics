@@ -46,7 +46,6 @@ public abstract class CombinationIteratorTest<R> {
    * Test 6 C 3 when there are duplicates.
    */
   @Test
-  @Ignore
   public void sixChoseThreeOneDuplicate() {
     List<List<Integer>> actual = createCombinations(
         list(ONE, TWO, THREE, FOUR, ONE, FIVE), 3);

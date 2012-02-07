@@ -16,6 +16,9 @@
 package com.github.ctrimble.combinatorics;
 
 import java.util.Iterator;
+import java.util.List;
+
+import javolution.util.FastTable;
 
 /**
  * A base class for combination and permutation iterators.
@@ -53,5 +56,34 @@ public abstract class AbstractCombinatoricsIterator<R> implements Iterator<R> {
   public void remove() {
     throw new UnsupportedOperationException(
         "Combinatorics iterators do not support editing.");
+  }
+  
+  /**
+   * Plans the combination of elements.  
+   * @param elements
+   * @param k
+   */
+  static <E> void planCombinations( List<E> elements, int k )
+  {
+    // sort the elements ascending
+    FastTable<E> plan = new FastTable<E>(elements);
+    plan.sort();
+    
+    E lastElement = null;
+    E lastNode = null;
+    for( E current : plan) {
+      if( current == lastElement ) {
+        // document the last element.
+      }
+      else {
+        // create a node for this element.
+      }
+      lastElement = current;
+    }
+    
+    // group common elements.
+    
+    // remove elements greater than k
+    
   }
 }

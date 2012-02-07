@@ -42,6 +42,7 @@ public class CombinationListIterator<E>
    */
   public CombinationListIterator( List<E> values, int k ) {
     this.values.addAll(values);
+    this.values.sort();
     this.k = k;
     total = MathUtils.binomialCoefficient(values.size(), k);
     initializeIndecies();
