@@ -6,10 +6,14 @@ import java.util.Collections;
 
 import org.apache.commons.math.util.MathUtils;
 
+import javolution.context.ObjectFactory;
 import javolution.lang.MathLib;
+import javolution.lang.Reusable;
 import javolution.util.FastList;
 
 public class CombMathUtils {
+  private static ObjectFactory<PartialCombinationCount> pccFactory = ObjectFactory.getInstance(PartialCombinationCount.class);
+  
   public static long c(int k, int... m) {
     // sort m
     int[] mSorted = Arrays.copyOf(m, m.length);
@@ -32,18 +36,18 @@ public class CombMathUtils {
   
   private static long c(int k, DistinctM dm)
   {
-    System.out.print("k:"+k+", dm:[");
-    DistinctM dmOut = dm;
-    do {
-      System.out.print(dmOut);
-      if( dmOut.next != null ) {
-        System.out.print(",");
-      }
-      dmOut = dmOut.next;
-    }
-    while( dmOut != null );
+    //System.out.print("k:"+k+", dm:[");
+    //DistinctM dmOut = dm;
+    //do {
+    //  System.out.print(dmOut);
+    //  if( dmOut.next != null ) {
+    //    System.out.print(",");
+    //  }
+    //  dmOut = dmOut.next;
+    //}
+    //while( dmOut != null );
 
-    System.out.println("]");
+    //System.out.println("]");
     long result = 0;
     
     // create a stack for the calculation.
@@ -51,17 +55,17 @@ public class CombMathUtils {
     
     // add the initial partial combination.
     // 
-    stack.addFirst(new PartialCombinationCount(k, dm, dm.value, 0, 1));
+    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1));
     
     while( !stack.isEmpty() ) {
       // get the next combination to expand.
       PartialCombinationCount pc = stack.removeFirst();
       
-      System.out.println(pc);
+      //System.out.println(pc);
       
       // Start the expansion of this partial combination.
       // pc.k = the number of elements that still need to be added to the combination.
-      // pc.dmi = the next index in dm to consider.
+      // pc.dm = the next distinct m to consider.
       // pc.dmk = the size of the next combination of elements to add.
       // pc.ldm = the number of distinct unused elements to the left of mdi minus the number of distinct used elements at mdi.
       // pc.size = the number of combinations already in the solution (in k - pc.k)
@@ -72,7 +76,8 @@ public class CombMathUtils {
       
       // if there could never be an answer, then bail out.
       if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
-        System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
+        //System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
+        pccFactory.recycle(pc);
         continue;
       }
       
@@ -80,7 +85,6 @@ public class CombMathUtils {
       for( int e = 0; e <= pc.dm.count + pc.ldm && e * pc.dmk <= pc.k; e++ ) {
         int nextK = pc.k - (e*pc.dmk);
         int nextDmk = pc.dmk-1;
-        //int nextDmi = pc.dmi+1;
         long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);
         //System.out.println("e:"+e+", nextK:"+nextK+", nextDmk:"+nextDmk+", nextDmi:"+nextDmi+", nextSize:"+nextSize);
         
@@ -94,18 +98,18 @@ public class CombMathUtils {
         else if( nextDmk == 0 ) continue;
         
         // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
-        else if( pc.dm.next == null || pc.dm.next.value < nextDmk ) {
+        else if( pc.dm.next == null || pc.dm.next.m < nextDmk ) {
           int nextLdm = pc.ldm - e;
-          stack.addFirst(new PartialCombinationCount(nextK, pc.dm, nextDmk, nextLdm, nextSize));
+          stack.addFirst(pccFactory.object().init(nextK, pc.dm, nextDmk, nextLdm, nextSize));
         }
         
         // we need to advance to the next dmi.
         else {
           int nextLdm = pc.ldm - e + cdm.count;
-          stack.addFirst(new PartialCombinationCount(nextK, pc.dm.next, nextDmk, nextLdm, nextSize));
+          stack.addFirst(pccFactory.object().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize));
         }
-        
       }
+      pccFactory.recycle(pc);
     }
     
     System.out.println("Result: "+result);
@@ -115,11 +119,12 @@ public class CombMathUtils {
   /**
    * Defines a partial solution to a counting of combinations.
    */
-  private static class PartialCombinationCount
+  public static class PartialCombinationCount
+    implements Reusable
   {
     /** the number of elements that still need to be added to the combination. */
     public int k;
-    /** the next dm to consider */
+    /** the next distinct m to consider */
     public DistinctM dm;
     /**  the size of the next combination of elements to add. */
     public int dmk;
@@ -128,15 +133,24 @@ public class CombMathUtils {
     /** the number of combinations already in the solution */
     public long size;
     
-    public PartialCombinationCount( int k, DistinctM dm, int dmk, int ldm, long size ) {
+    public PartialCombinationCount init( int k, DistinctM dm, int dmk, int ldm, long size ) {
       this.k = k;
       this.dm = dm;
       this.dmk = dmk;
       this.ldm = ldm;
       this.size = size;
+      return this;
     }
     public String toString() {
       return "{k:"+k+", dm:"+dm+", dmk:"+dmk+", ldm:"+ldm+", size:"+size+"}";
+    }
+    @Override
+    public void reset() {
+      k = 0;
+      dm = null;
+      dmk = 0;
+      ldm = 0;
+      size = 0;    
     }
   }
   
@@ -146,22 +160,22 @@ public class CombMathUtils {
    */
   private static class DistinctM {
     /** The m value that was grouped together. */
-    public final int value;
+    public final int m;
     /** The number of elements that were grouped. */
     public final int count;
-    /** The number of elements to the right. */
+    /** The number of elements to the right (in next). */
     public final int rn;
     
     public final DistinctM next;
     
     public DistinctM( int value, int count, int rn, DistinctM next ) {
-      this.value = value;
+      this.m = value;
       this.count = count;
       this.rn = rn;
       this.next = next;
     }
     public String toString(){
-      return "{value:"+value+", count:"+count+", rn:"+rn+"}";
+      return "{value:"+m+", count:"+count+", rn:"+rn+"}";
     }
   }
 }

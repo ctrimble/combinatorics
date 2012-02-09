@@ -32,14 +32,14 @@ class CombMathUtilsRi {
   
   private static long c(int k, DistinctM... dm)
   {
-    System.out.print("k:"+k+", dm:[");
-    for( int i = 0; i < dm.length; i++ ) {
-      System.out.print(dm[i]);
-      if( i+1 < dm.length ) {
-        System.out.print(",");
-      }
-    }
-    System.out.println("]");
+    //System.out.print("k:"+k+", dm:[");
+    //for( int i = 0; i < dm.length; i++ ) {
+    //  System.out.print(dm[i]);
+    //  if( i+1 < dm.length ) {
+    //    System.out.print(",");
+    //  }
+    //}
+    //System.out.println("]");
     long result = 0;
     
     // create a stack for the calculation.
@@ -53,7 +53,7 @@ class CombMathUtilsRi {
       // get the next combination to expand.
       PartialCombinationCount pc = stack.removeFirst();
       
-      System.out.println(pc);
+      //System.out.println(pc);
       
       // Start the expansion of this partial combination.
       // pc.k = the number of elements that still need to be added to the combination.
@@ -97,7 +97,7 @@ class CombMathUtilsRi {
       }
     }
     
-    System.out.println("Result: "+result);
+    //System.out.println("Result: "+result);
     return result;
   }
   

@@ -17,10 +17,18 @@ public class CombinationCountPerformance {
   public static List<Object[]> parameters() {
     List<Object[]> params = new ArrayList<Object[]>();
     
-    //params.add(combinationParams(50, 30, 25, 20, 15, 10, 5));
+    params.add(combinationParams(50, 30, 25, 20, 15, 10, 5));
     params.add(combinationParams(20, 10, 7, 4));
+    params.add(combinationParams(100, 70, 60, 59, 58, 30, 29, 25, 3));
+    params.add(combinationParams(100, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20));
     
     return params;
+  }
+  
+  static {
+    // warm up the comb math util.
+    CombMathUtils.c(100, 50, 40, 30, 20, 10);
+    CombMathUtilsRi.c(100, 50, 40, 30, 20, 10);
   }
 
     protected  final int k;
@@ -35,18 +43,22 @@ public class CombinationCountPerformance {
   public void testResult()
   {
     long start = System.currentTimeMillis();
-    long actual = CombMathUtils.c(k, m);
+    long actual = 0;
+    actual = CombMathUtils.c(k, m);
     long time = System.currentTimeMillis() - start;
     
     start = System.currentTimeMillis();
-    long expected = CombMathUtilsRi.c(k, m);
+    long expected = 0;
+    expected = CombMathUtilsRi.c(k, m);
     long refTime = System.currentTimeMillis() - start;
     
     System.out.println("Ref Time:"+refTime+", Actual Time:"+time);
     
     //expected and actual need to be the same.
     assertEquals(expected, actual);
-    assertTrue(time < refTime);
+    if( time > 10 || refTime > 10 ) {
+      assertTrue(time < refTime);
+    }
   }
   
   public static Object[] combinationParams(int k, int... m) {
