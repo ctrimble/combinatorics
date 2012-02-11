@@ -24,13 +24,12 @@
 
 ### Counting Combinations with Duplicates
 
-  How many strings of length 5 can you make from the letters in MISSISSIPPI?
+  How many unique six packs can you make from 6 cans of Dr. Pepper, 4 cans of Coke, 4 cans of 7UP, and 2 cans of Barqs?
 
         import com.github.ctrimble.combinatorics.CombMathUtilImpl;
         
         ...
         
         int k = 5;
-        // S=4, I=4, P=2, M=1
-        long count = new CombMathUtilImpl().c(k, 4, 4, 2, 1);
+        long number of six packs = new CombMathUtilImpl().c(k, 6, 4, 4, 2);
 
