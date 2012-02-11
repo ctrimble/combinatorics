@@ -55,6 +55,7 @@ public class CombinationCountTest {
     protected  final int k;
     protected  final int[] m;
     protected   final long result;
+    protected static CombMathUtils mathUtils = new CombMathUtilsImpl();
   
   public CombinationCountTest( long result, int k, int[] m ) {
     this.result = result;
@@ -65,7 +66,7 @@ public class CombinationCountTest {
   @Test
   public void testResult()
   {
-    long actual = CombMathUtils.c(k, m);
+    long actual = mathUtils.c(k, m);
     assertEquals(result, actual);
   }
   

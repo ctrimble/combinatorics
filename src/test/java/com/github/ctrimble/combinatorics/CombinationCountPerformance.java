@@ -25,10 +25,13 @@ public class CombinationCountPerformance {
     return params;
   }
   
+  static CombMathUtils mathUtils = new CombMathUtilsImpl();
+  static CombMathUtils benchmark = new CombMathUtilsBenchmark();
+  
   static {
     // warm up the comb math util.
-    CombMathUtils.c(100, 50, 40, 30, 20, 10);
-    CombMathUtilsRi.c(100, 50, 40, 30, 20, 10);
+    mathUtils.c(100, 50, 40, 30, 20, 10);
+    benchmark.c(100, 50, 40, 30, 20, 10);
   }
 
     protected  final int k;
@@ -44,12 +47,12 @@ public class CombinationCountPerformance {
   {
     long start = System.currentTimeMillis();
     long actual = 0;
-    actual = CombMathUtils.c(k, m);
+    actual = mathUtils.c(k, m);
     long time = System.currentTimeMillis() - start;
     
     start = System.currentTimeMillis();
     long expected = 0;
-    expected = CombMathUtilsRi.c(k, m);
+    expected = benchmark.c(k, m);
     long refTime = System.currentTimeMillis() - start;
     
     System.out.println("Ref Time:"+refTime+", Actual Time:"+time);
