@@ -47,6 +47,11 @@ class CombMathUtilsBenchmark
     
     return c(k, distinctMs.toArray(new DistinctM[distinctMs.size()]));
   }
+
+  public long p(int k, int... m)
+  {
+    return 0;
+  }
   
   private static long c(int k, DistinctM... dm)
   {

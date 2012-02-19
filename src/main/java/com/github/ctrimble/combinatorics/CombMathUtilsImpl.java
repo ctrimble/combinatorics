@@ -33,23 +33,7 @@ public class CombMathUtilsImpl
   
   @Override
   public long c(int k, int... m) {
-    // sort m
-    int[] mSorted = Arrays.copyOf(m, m.length);
-    Arrays.sort(mSorted);
-
-    // group the distinct values.
-    ArrayList<DistinctM> distinctMs = new ArrayList<DistinctM>();
-    int rn = 0;
-    DistinctM head = null;
-    for( int i = 0; i < mSorted.length; ) {
-      int count = 1;
-      for( ; i + count < mSorted.length && mSorted[i] == mSorted[i+count];count++);
-      head = new DistinctM(mSorted[i], count, rn, head);
-      rn += (mSorted[i]*count);
-      i += count;
-    }
-    
-    return c(k, head);
+    return c(k, createDistinctM(m));
   }
   
   private static long c(int k, DistinctM dm)
@@ -195,5 +179,32 @@ public class CombMathUtilsImpl
     public String toString(){
       return "{value:"+m+", count:"+count+", rn:"+rn+"}";
     }
+  }
+  
+  private static DistinctM createDistinctM(int[] m)
+  {
+    int[] mSorted = Arrays.copyOf(m, m.length);
+    Arrays.sort(mSorted);
+
+    // group the distinct values.
+    int rn = 0;
+    DistinctM head = null;
+    for( int i = 0; i < mSorted.length; ) {
+      int count = 1;
+      for( ; i + count < mSorted.length && mSorted[i] == mSorted[i+count];count++);
+      head = new DistinctM(mSorted[i], count, rn, head);
+      rn += (mSorted[i]*count);
+      i += count;
+    }
+    return head;
+  }
+
+  @Override
+  public long p(int rank, int... rankArray) {
+    return p(rank, createDistinctM(rankArray));
+  }
+  
+  private long p(int rank, DistinctM head) {
+    return 0;
   }
 }

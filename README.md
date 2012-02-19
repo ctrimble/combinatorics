@@ -24,7 +24,7 @@
 
 ### Counting Combinations with Duplicates
 
-  How many unique six packs can you make from 6 cans of Dr. Pepper, 4 cans of Coke, 4 cans of 7UP, and 2 cans of Barqs?
+  How many unique six packs can you make from 6 cans of Dr. Pepper, 4 cans of Coke, 4 cans of 7UP, and 2 cans of Barq's?
 
         import com.github.ctrimble.combinatorics.CombMathUtilImpl;
         

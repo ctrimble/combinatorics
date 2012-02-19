@@ -19,4 +19,6 @@ public interface CombMathUtils {
 
   long c(int k, int... m);
 
+  long p(int rank, int[] rankArray);
+  
 }
