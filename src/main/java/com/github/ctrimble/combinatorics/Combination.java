@@ -87,14 +87,16 @@ public class Combination<T>
       remaining++;
       
       // move forward and update indices and next.
-      for(cur++; cur < indices.length && remaining > 0; cur++) {
+      for(cur++; cur < indices.length; cur++) {
         indices[cur].count = Math.min(remaining, domainRanks[cur]);
         indices[cur].index = indices[cur-1].index+indices[cur-1].count;
+        remaining -= indices[cur].count;
         for( int i = 0; i < indices[cur].count; i++ ) {
-          System.out.println("Indices:"+Arrays.toString(indices));
-          System.out.println("Domain:"+domain);
-          System.out.println("Cur:"+cur);
-          System.out.println("i:"+i);
+          //System.out.println("Remaining:"+remaining);
+          //System.out.println("Indices:"+Arrays.toString(indices));
+          //System.out.println("Domain:"+domain);
+          //System.out.println("Cur:"+cur);
+          //System.out.println("i:"+i);
           next[indices[cur].index+i] = domain.get(cur).get(i);
         }
       }

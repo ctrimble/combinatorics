@@ -22,6 +22,18 @@ public class FastMultiset<E>
     E[] newDomain = Arrays.copyOf(domain, domain.length);
     Arrays.sort(newDomain);
     rank = 0;
+    for( int i = 0; i < newDomain.length;) {
+      int cur = i;
+      FastList<E> elements = new FastList<E>();
+      for( ; i < newDomain.length && newDomain[cur].equals(newDomain[i]); i++) {
+        if( i - cur < maxTypeRank ) {
+          elements.addFirst(newDomain[i]);
+        }
+      }
+      add(elements.unmodifiable());
+      rank += elements.size();
+    }
+    /*
     for( int i = newDomain.length-1; i >= 0;) {
       int cur = i;
       FastList<E> elements = new FastList<E>();
@@ -33,6 +45,7 @@ public class FastMultiset<E>
       add(elements.unmodifiable());
       rank += elements.size();
     }
+    */
   }
 
   @Override
