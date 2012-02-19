@@ -92,11 +92,6 @@ public class Combination<T>
         indices[cur].index = indices[cur-1].index+indices[cur-1].count;
         remaining -= indices[cur].count;
         for( int i = 0; i < indices[cur].count; i++ ) {
-          //System.out.println("Remaining:"+remaining);
-          //System.out.println("Indices:"+Arrays.toString(indices));
-          //System.out.println("Domain:"+domain);
-          //System.out.println("Cur:"+cur);
-          //System.out.println("i:"+i);
           next[indices[cur].index+i] = domain.get(cur).get(i);
         }
       }
@@ -107,13 +102,41 @@ public class Combination<T>
 
     @Override
     public T[] previous() {
-      if( true ) throw new UnsupportedOperationException();
       if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // set both values to the the previous value.
       for( int i = 0; i < previous.length; i++ ) next[i] = previous[i];
+      nextIndex--;
       
+      if( nextIndex > 0 ) {
+      
+      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
+      // Position  | 0 | 1 | 2 | 3 | 4
+      // Index     | 0 | 3 | 5 | 5 | 6
+      // Count     | 3 | 2 | 0 | 1 | 1
+      // ToRight   | 9 | 6 | 5 | 2 | 0
+
       // advance the indices.
+      int cur = domainRanks.length - 1;
+      int remaining = 0;
+
+      // move cur backwards to find an item to increment.
+      for( ; cur > 0 && (remaining == 0 || indices[cur].count == domainRanks[cur]); remaining += indices[cur--].count );
+
+      // decrement the items at cur.
+      indices[cur].count++;
+      previous[indices[cur].index+indices[cur].count-1] = domain.get(cur).get(indices[cur].count-1);
+      remaining--;
+       
+      for(cur++; cur < indices.length; cur++) {
+        indices[cur].count = Math.max(remaining-indices[cur].toRight, 0);
+        indices[cur].index = indices[cur-1].index+indices[cur-1].count;
+        remaining -= indices[cur].count;
+        for( int i = 0; i < indices[cur].count; i++ ) {
+          previous[indices[cur].index+i] = domain.get(cur).get(i);
+        }
+      }
+      }
       
       // return next, since we advanced past the previous position.
       return next;

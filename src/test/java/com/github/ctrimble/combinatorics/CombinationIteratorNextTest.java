@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CombinationIteratorImplTest extends CombinationIteratorTest {
+public class CombinationIteratorNextTest extends AbstractCombinationIteratorTest {
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
