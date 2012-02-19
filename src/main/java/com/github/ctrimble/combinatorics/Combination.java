@@ -2,6 +2,7 @@ package com.github.ctrimble.combinatorics;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -12,7 +13,9 @@ public class Combination<T>
   protected Combination(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
     componentType = (Class<T>)domain.getClass().getComponentType();
-  }
+  } 
+ 
+  public Iterator<T[]> iterator() { return combIterator(); }
 
   @Override
   public CombinatoricIterator<T> combIterator() {
@@ -30,14 +33,19 @@ public class Combination<T>
     protected T[] next;
     protected T[] previous;
     protected int[] domainRanks;
-    protected int[][] indicies;
+    protected DomainPointer[] indices;
     
     protected CombinationIterator(long nextIndex) {
       super(nextIndex);
       next = (T[])Array.newInstance(componentType, rank);
       previous = (T[])Array.newInstance(componentType, rank);
       domainRanks = domain.toRankArray();
-      indicies = new int[domainRanks.length][2];
+      indices = new DomainPointer[domainRanks.length];
+      indices[indices.length-1] = new DomainPointer();
+      for( int i = domainRanks.length-1; i > 0; i-- ) {
+        indices[i-1] = new DomainPointer();
+        indices[i-1].toRight = domainRanks[i] + indices[i].toRight;
+      }      
     }
 
     @Override
@@ -46,50 +54,58 @@ public class Combination<T>
       
       // reset the next array if needed.
       if( nextIndex == 0 ) {
-        for(int i = 0, used = 0; i < indicies.length && used < rank; used += domainRanks[i++]) {
-          indicies[i][0] = used;
-          indicies[i][1] = Math.min(rank-used, domainRanks[i]);
-          for( int j = 0; j < indicies[i][1] ; j++ ) {
-            next[indicies[i][0]+j] = domain.get(i).get(j);
+        for(int i = 0, used = 0; i < indices.length && used < rank; used += domainRanks[i++]) {
+          indices[i].index = used;
+          indices[i].count = Math.min(rank-used, domainRanks[i]);
+          for( int j = 0; j < indices[i].count; j++ ) {
+            next[indices[i].index+j] = domain.get(i).get(j);
           }
         }
       }
       
       // set both values to the the next value.
       for( int i = 0; i < next.length; i++ ) previous[i] = next[i];
+      nextIndex++;
+      
+      if( nextIndex != size ) {
+      
+      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
+      // Position  | 0 | 1 | 2 | 3 | 4
+      // Index     | 0 | 3 | 5 | 5 | 6
+      // Count     | 3 | 2 | 0 | 1 | 1
+      // ToRight   | 9 | 6 | 5 | 2 | 0
 
       // advance the indices.
-      int cur = domainRanks.length - 2;
-      int remaining = indicies[indicies.length-1][1];
+      int cur = domainRanks.length - 1;
+      int remaining = 0;
       
+      // move cur backwards to find the next item to update.
+      for( ; cur > 0 && (indices[cur].count == 0 || indices[cur].toRight < remaining+1); remaining += indices[cur--].count ); // back cur up to a position to increment.
       
-      
-      // wind backwards past zero indicies
-      for( ; cur > 0 && indicies[cur][1] == 0; cur-- ); // back up past the zeros.
-      
-      // back up past the last represented element
-      remaining = indicies[cur][1];
-      indicies[cur][0] = 0;
-      indicies[cur][1] = 0;
-      cur--;
-      
-      // back up past any more empty indicies.
-      for( ; cur > 0 && indicies[cur][1] == 0; cur--);
-      
-      // decriment this index and start assigning forward.
-      indicies[cur][1]--;
+      // decrement the items at cur.
+      indices[cur].count--;
       remaining++;
-
-        
-      // wind 
       
-      
+      // move forward and update indices and next.
+      for(cur++; cur < indices.length && remaining > 0; cur++) {
+        indices[cur].count = Math.min(remaining, domainRanks[cur]);
+        indices[cur].index = indices[cur-1].index+indices[cur-1].count;
+        for( int i = 0; i < indices[cur].count; i++ ) {
+          System.out.println("Indices:"+Arrays.toString(indices));
+          System.out.println("Domain:"+domain);
+          System.out.println("Cur:"+cur);
+          System.out.println("i:"+i);
+          next[indices[cur].index+i] = domain.get(cur).get(i);
+        }
+      }
+      }
       // return previous, since we advanced past the next position.
       return previous;
     }
 
     @Override
     public T[] previous() {
+      if( true ) throw new UnsupportedOperationException();
       if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // set both values to the the previous value.
@@ -100,6 +116,17 @@ public class Combination<T>
       // return next, since we advanced past the previous position.
       return next;
     }
-
+  }
+  
+  private static class DomainPointer
+  {
+    public int index = 0;
+    public int count = 0;
+    public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
+    
+    public String toString()
+    {
+      return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
+    }
   }
 }

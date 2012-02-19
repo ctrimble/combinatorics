@@ -29,7 +29,7 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.*;
 
-public abstract class CombinationIteratorTest<R> {
+public abstract class CombinationIteratorTest {
 
   private static Integer ONE = 1;
   private static Integer TWO = 2;

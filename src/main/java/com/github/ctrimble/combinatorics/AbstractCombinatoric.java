@@ -4,8 +4,7 @@ import java.util.AbstractList;
 import java.util.Arrays;
 
 public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
-    implements
-      Combinatoric<T> {
+    implements Combinatoric<T> {
 
   protected int rank;
   protected Multiset<T> domain;
