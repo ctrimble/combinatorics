@@ -10,7 +10,7 @@ public class Combination<T>
   extends AbstractCombinatoric<T>
 {
   protected Class<T> componentType = null;
-  protected Combination(int rank, T[] domain, CombMathUtils mathUtil) {
+  public Combination(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
     componentType = (Class<T>)domain.getClass().getComponentType();
   } 
