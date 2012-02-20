@@ -1,10 +1,10 @@
 package com.github.ctrimble.combinatorics;
 
-public class Permutation<T>
+public class Permutations<T>
   extends AbstractCombinatoric<T>
 {
 
-  protected Permutation(int rank, T[] domain, CombMathUtils mathUtils) {
+  protected Permutations(int rank, T[] domain, CombMathUtils mathUtils) {
     super(rank, domain, mathUtils);
   }
 

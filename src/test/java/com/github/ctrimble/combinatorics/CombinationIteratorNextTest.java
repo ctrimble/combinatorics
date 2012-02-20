@@ -8,7 +8,7 @@ public class CombinationIteratorNextTest extends AbstractCombinationIteratorTest
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
-    Combination<Integer> combination = new Combination<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
+    Combinations<Integer> combination = new Combinations<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
     List<List<Integer>> result = new ArrayList<List<Integer>>();
     for( Integer[] element : combination ) {
       result.add(Arrays.asList(Arrays.copyOf(element, element.length)));

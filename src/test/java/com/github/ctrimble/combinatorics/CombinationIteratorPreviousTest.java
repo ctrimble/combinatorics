@@ -12,7 +12,7 @@ public class CombinationIteratorPreviousTest
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
-    Combination<Integer> combination = new Combination<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
+    Combinations<Integer> combination = new Combinations<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
     FastList<List<Integer>> result = new FastList<List<Integer>>();
     CombinatoricIterator<Integer> iterator = combination.combIterator();
     

@@ -6,11 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class Combination<T>
+public class Combinations<T>
   extends AbstractCombinatoric<T>
 {
   protected Class<T> componentType = null;
-  public Combination(int rank, T[] domain, CombMathUtils mathUtil) {
+  public Combinations(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
     componentType = (Class<T>)domain.getClass().getComponentType();
   } 
