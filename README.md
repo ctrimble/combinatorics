@@ -38,7 +38,7 @@
   Iterate the unique six packs that can be made from 6 cans of Dr. Pepper, 4 cans of Coke, 4 cans of 7UP and 2 cans of Barq's.
 
         import com.github.ctrimble.combinatorics.CombMathUtilsImpl;
-        import com.github.ctrimble.combinatorics.Combination;
+        import com.github.ctrimble.combinatorics.Combinations;
         
         ...
 
@@ -52,8 +52,8 @@
         String[] domain = {DP, DP, DP, DP, DP, DP, COKE, COKE, COKE, COKE, SEVEN_UP, SEVEN_UP, SEVEN_UP, SEVEN_UP, BARQS, BARQS};
         CombMathUtilsImpl mathUtils = new CombMathUtilImpl();
         
-        Combination combination = new Combination(6, domain, mathUtils);
-        for( String[] sixPack : combination ) {
-          System.out.println(Arrays.toString(sixPack));
+        Combinations combinations = new Combinations(6, domain, mathUtils);
+        for( String[] combination : combinations ) {
+          System.out.println(Arrays.toString(combination));
         }
 
