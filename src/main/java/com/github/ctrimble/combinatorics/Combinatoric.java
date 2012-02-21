@@ -49,4 +49,6 @@ public interface Combinatoric<T>
    * The iterator for this combinatoric collection.
    */
   public CombinatoricIterator<T> combIterator();
+  
+  public void recycle(T[] element);
 }

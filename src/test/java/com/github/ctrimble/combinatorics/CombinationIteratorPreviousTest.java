@@ -37,7 +37,7 @@ public class CombinationIteratorPreviousTest
     // iterate backwards to the beginning.
     while( iterator.hasPrevious() ) {
       Integer[] element = iterator.previous();
-      result.addFirst(Arrays.asList(Arrays.copyOf(element, element.length)));
+      result.addFirst(Arrays.asList(element));
     }
     return result;
   }

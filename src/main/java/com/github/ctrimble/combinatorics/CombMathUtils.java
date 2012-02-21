@@ -17,8 +17,23 @@ package com.github.ctrimble.combinatorics;
 
 public interface CombMathUtils {
 
+  /**
+   * Returns the number of combinations of length k from a multiset.
+   * 
+   * @param k the rank of the combinations to count.
+   * @param m the multiset of the domain elements.
+   * @return the number of combinations of length k from the multiset m.
+   */
   long c(int k, int... m);
 
-  long p(int rank, int[] rankArray);
+  /**
+   * Counts the number of permutations of length k from a multiset.
+   * 
+   * @param k the rank of the permutations to count.
+   * @param m the multiset of the domain elements.
+   * @return the number of permutations of length k from the multiset m.
+   */
+  long p(int k, int... m);
   
 }
+  

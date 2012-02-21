@@ -26,7 +26,7 @@ public class CombinationIteratorNextTest extends AbstractCombinationIteratorTest
     Combinations<Integer> combination = new Combinations<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
     List<List<Integer>> result = new ArrayList<List<Integer>>();
     for( Integer[] element : combination ) {
-      result.add(Arrays.asList(Arrays.copyOf(element, element.length)));
+      result.add(Arrays.asList(element));
     }
     return result;
   }
