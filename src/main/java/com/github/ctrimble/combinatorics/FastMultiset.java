@@ -15,9 +15,12 @@
  */
 package com.github.ctrimble.combinatorics;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.lang.model.element.Element;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
@@ -27,6 +30,7 @@ public class FastMultiset<E>
   implements Multiset<E>
 {
   protected int rank = 0;
+  protected Class<E> componentType;
   
   public FastMultiset(E[] domain) {
     this(Integer.MAX_VALUE, domain);
@@ -34,6 +38,7 @@ public class FastMultiset<E>
   
   public FastMultiset(int maxTypeRank, E[] domain)
   {
+    componentType = (Class<E>)domain.getClass().getComponentType();
     E[] newDomain = Arrays.copyOf(domain, domain.length);
     Arrays.sort(newDomain);
     rank = 0;
@@ -76,5 +81,14 @@ public class FastMultiset<E>
       rankArray[i++] = element.size(); 
     }
     return rankArray;
+  }
+
+  @Override
+  public E[][] toValueArray() {
+    E[][] valueArray = (E[][])Array.newInstance(componentType, size(), 0);
+    for( int i = 0; i < size(); i++ ) {
+      valueArray[i] = get(i).toArray((E[])Array.newInstance(componentType, get(i).size()));
+    }
+    return valueArray;
   }
 }

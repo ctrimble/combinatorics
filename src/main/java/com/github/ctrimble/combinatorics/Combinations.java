@@ -26,6 +26,7 @@ import javolution.context.ObjectFactory;
 public class Combinations<T>
   extends AbstractCombinatoric<T>
 {
+  
   public Combinations(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
   } 
@@ -58,7 +59,7 @@ public class Combinations<T>
         indices[i-1].toRight = domainRanks[i] + indices[i].toRight;
       }
       for(int i = 0, used = 0; i < indices.length && used < rank; used += domainRanks[i++]) {
-        indices[i].index = used;
+        //indices[i].index = used;
         indices[i].count = Math.min(rank-used, domainRanks[i]);        
       }
     }
@@ -69,9 +70,11 @@ public class Combinations<T>
       else {
         // build the next object.
         T[] next = elementFactory.object();
+        int index = 0;
         for( int i = 0; i < indices.length; i++ )
           for( int j = 0; j < indices[i].count; j++ )
-            next[indices[i].index+j] = domain.get(i).get(j);
+            //next[index++] = domain.get(i).get(j);
+            next[index++] = domainValues[i][j];
         nextIndex++;
         if( nextIndex == size ) {
           return next;
@@ -98,7 +101,7 @@ public class Combinations<T>
       // move forward and update indices and next.
       for(cur++; cur < indices.length; cur++) {
           indices[cur].count = Math.min(remaining, domainRanks[cur]);
-          indices[cur].index = indices[cur-1].index+indices[cur-1].count;
+          //indices[cur].index = indices[cur-1].index+indices[cur-1].count;
           remaining -= indices[cur].count;
       }
       return next;
@@ -110,10 +113,12 @@ public class Combinations<T>
       if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
       else {
         T[] previous = elementFactory.object();
+        int index = 0;
         if( nextIndex == size ) {
           for( int i = 0; i < indices.length; i++ )
             for( int j = 0; j < indices[i].count; j++ )
-              previous[indices[i].index+j] = domain.get(i).get(j);
+              //previous[index++] = domain.get(i).get(j);
+              previous[index++] = domainValues[i][j];
           nextIndex--;
           return previous;
         }
@@ -135,14 +140,16 @@ public class Combinations<T>
       indices[cur].count++;
       remaining--;
 
+      index = 0;
       for(int i = 0; i < indices.length; i++) {
         if( i > cur ) {
           indices[i].count = Math.max(remaining-indices[i].toRight, 0);
-          indices[i].index = indices[i-1].index+indices[i-1].count;
+          //indices[i].index = indices[i-1].index+indices[i-1].count;
           remaining -= indices[i].count;
         }
         for( int j = 0; j < indices[i].count; j++ ) {
-          previous[indices[i].index+j] = domain.get(i).get(j);
+          //previous[index++] = domain.get(i).get(j);
+          previous[index++] = domainValues[i][j];
         }
       }
       return previous;
@@ -152,13 +159,13 @@ public class Combinations<T>
   
   private static class DomainPointer
   {
-    public int index = 0;
+    //public int index = 0;
     public int count = 0;
     public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
     
     public String toString()
     {
-      return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
+      return "{Index:"+"index"+",Count:"+count+",ToRight:"+toRight+"}";
     }
   }
 }

@@ -22,4 +22,5 @@ public interface Multiset<E> extends List<List<E>>
 {
   public int getRank(); 
   public int[] toRankArray();
+  public E[][] toValueArray();
 }

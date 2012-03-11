@@ -73,7 +73,7 @@ public class CombinationsBenchmark<T>
           indices[i].index = used;
           indices[i].count = Math.min(rank-used, domainRanks[i]);
           for( int j = 0; j < indices[i].count; j++ ) {
-            next[indices[i].index+j] = domain.get(i).get(j);
+            next[indices[i].index+j] = domainValues[i][j];
           }
         }
       }
@@ -107,7 +107,7 @@ public class CombinationsBenchmark<T>
         indices[cur].index = indices[cur-1].index+indices[cur-1].count;
         remaining -= indices[cur].count;
         for( int i = 0; i < indices[cur].count; i++ ) {
-          next[indices[cur].index+i] = domain.get(cur).get(i);
+          next[indices[cur].index+i] = domainValues[cur][i];
         }
       }
       }
@@ -140,7 +140,7 @@ public class CombinationsBenchmark<T>
 
       // decrement the items at cur.
       indices[cur].count++;
-      previous[indices[cur].index+indices[cur].count-1] = domain.get(cur).get(indices[cur].count-1);
+      previous[indices[cur].index+indices[cur].count-1] = domainValues[cur][indices[cur].count-1];
       remaining--;
        
       for(cur++; cur < indices.length; cur++) {
@@ -148,7 +148,7 @@ public class CombinationsBenchmark<T>
         indices[cur].index = indices[cur-1].index+indices[cur-1].count;
         remaining -= indices[cur].count;
         for( int i = 0; i < indices[cur].count; i++ ) {
-          previous[indices[cur].index+i] = domain.get(cur).get(i);
+          previous[indices[cur].index+i] = domainValues[cur][i];
         }
       }
       }

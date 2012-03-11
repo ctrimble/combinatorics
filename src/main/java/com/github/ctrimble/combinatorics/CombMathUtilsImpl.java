@@ -134,6 +134,8 @@ public class CombMathUtilsImpl
     public int ldm;
     /** the number of combinations already in the solution */
     public long size;
+    /** the permutation denominator component when doing permutations. */
+    public long pd = 1;
     
     public PartialCombinationCount init( int k, DistinctM dm, int dmk, int ldm, long size ) {
       this.k = k;
@@ -143,8 +145,19 @@ public class CombMathUtilsImpl
       this.size = size;
       return this;
     }
+    
+    public PartialCombinationCount init( int k, DistinctM dm, int dmk, int ldm, long size, long pd ) {
+      this.k = k;
+      this.dm = dm;
+      this.dmk = dmk;
+      this.ldm = ldm;
+      this.size = size;
+      this.pd = pd;
+      return this;
+    }
+    
     public String toString() {
-      return "{k:"+k+", dm:"+dm+", dmk:"+dmk+", ldm:"+ldm+", size:"+size+"}";
+      return "{k:"+k+", dm:"+dm+", dmk:"+dmk+", ldm:"+ldm+", size:"+size+", pd:"+pd+"}";
     }
     @Override
     public void reset() {
@@ -152,7 +165,8 @@ public class CombMathUtilsImpl
       dm = null;
       dmk = 0;
       ldm = 0;
-      size = 0;    
+      size = 0;
+      pd = 1;
     }
   }
   
@@ -204,7 +218,75 @@ public class CombMathUtilsImpl
     return p(rank, createDistinctM(rankArray));
   }
   
-  private long p(int rank, DistinctM head) {
-    return 0;
+  private long p(int k, DistinctM dm) {
+    long result = 0;
+    
+    // create a stack for the calculation.
+    FastList<PartialCombinationCount> stack = new FastList<PartialCombinationCount>();
+    
+    // add the initial partial combination.
+    // 
+    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
+    
+    while( !stack.isEmpty() ) {
+      // get the next combination to expand.
+      PartialCombinationCount pc = stack.removeFirst();
+      
+      //System.out.println(pc);
+      
+      // Start the expansion of this partial combination.
+      // pc.k = the number of elements that still need to be added to the combination.
+      // pc.dm = the next distinct m to consider.
+      // pc.dmk = the size of the next combination of elements to add.
+      // pc.ldm = the number of distinct unused elements to the left of mdi minus the number of distinct used elements at mdi.
+      // pc.size = the number of combinations already in the solution (in k - pc.k)
+      // pc.pd = the permutation count denominator.
+      
+      // get the current distinct m
+      DistinctM cdm = pc.dm;
+      //System.out.println(cdm);
+      
+      // if there could never be an answer, then bail out.
+      if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
+        //System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
+        pccFactory.recycle(pc);
+        continue;
+      }
+      
+      // for each number of pc.dmk sized sets that we can create, add new partial combinations.
+      for( int e = 0; e <= pc.dm.count + pc.ldm && e * pc.dmk <= pc.k; e++ ) {
+        int nextK = pc.k - (e*pc.dmk);
+        int nextDmk = pc.dmk-1;
+        long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);
+        long nextPd = pc.pd * MathUtils.pow(MathUtils.factorial(pc.dmk),e);
+
+        //System.out.println("e:"+e+", nextK:"+nextK+", nextDmk:"+nextDmk+", nextDmi:"+nextDmi+", nextSize:"+nextSize);
+        
+        // if nextK is zero, then this set of combinations is complete.
+        if( nextK == 0 ) {
+          result += (nextSize * (MathUtils.factorial(k)/nextPd));
+          continue;
+        }
+        
+        // if nextDmk is zero, then we have run out of items to place into k.
+        else if( nextDmk == 0 ) continue;
+        
+        // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
+        else if( pc.dm.next == null || pc.dm.next.m < nextDmk ) {
+          int nextLdm = pc.ldm - e;
+          stack.addFirst(pccFactory.object().init(nextK, pc.dm, nextDmk, nextLdm, nextSize, nextPd));
+        }
+        
+        // we need to advance to the next dmi.
+        else {
+          int nextLdm = pc.ldm - e + cdm.count;
+          stack.addFirst(pccFactory.object().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize, nextPd));
+        }
+      }
+      pccFactory.recycle(pc);
+    }
+    
+    //System.out.println("Result: "+result);
+    return result;
   }
 }

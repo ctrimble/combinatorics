@@ -26,6 +26,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
 
   protected int rank;
   protected Multiset<T> domain;
+  protected T[][] domainValues;
   protected long size;
   protected CombMathUtils mathUtils;
   protected Class<T> componentType;
@@ -42,6 +43,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     this.mathUtils = mathUtils;
     this.size = computeSize(this.rank, this.domain);
     this.componentType = (Class<T>)domain.getClass().getComponentType();
+    this.domainValues = this.domain.toValueArray();
   }
 
   @Override
