@@ -112,7 +112,7 @@ public class CombinationsBenchmark<T>
       }
       }
       // return previous, since we advanced past the next position.
-      return previous;
+      return Arrays.copyOf(previous, previous.length);
     }
 
     @Override

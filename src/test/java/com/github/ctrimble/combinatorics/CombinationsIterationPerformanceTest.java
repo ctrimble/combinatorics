@@ -32,7 +32,7 @@ public class CombinationsIterationPerformanceTest {
   @Test
   public void plan()
   {
-    Combinations<Integer> combinations = new Combinations<Integer>(4, new Integer[]{1,2,3,4,5}, mathUtils);
+    Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1,1,2,2,2,3,3,4,4,5}, mathUtils);
     FastList<Integer[]> values = new FastList<Integer[]>();
     values.addAll(combinations);
     FastList<Integer[]> result = new FastList<Integer[]>();
@@ -45,9 +45,9 @@ public class CombinationsIterationPerformanceTest {
   public int findOrdering(FastList<Integer[]> result, FastList<Integer[]> remainder) {
 
     if( remainder.size() == 0 ) {
-      if( distance(result.getFirst(), result.getLast()) > 1 ) {
-        return 0;
-      }
+      //if( distance(result.getFirst(), result.getLast()) > 1 ) {
+      //  return 0;
+      //}
       System.out.println("Result:");
       for( Integer[] element : result ) {
         System.out.println("  "+Arrays.toString(element));
@@ -58,11 +58,11 @@ public class CombinationsIterationPerformanceTest {
     for( int i = 0; i < remainder.size(); i++ ) {
       int distance = distance(result.getLast(), remainder.get(i));
       if( distance == 1) {
-        boolean option = false;
-        for( int j = 0; j < remainder.size() && !option; j++ ) {
-          if( j != i && distance(result.getFirst(), remainder.get(j)) == 1 ) option = true;
-        }
-        if( !option ) return orderings;
+        //boolean option = false;
+        //for( int j = 0; j < remainder.size() && !option; j++ ) {
+        //  if( j != i && distance(result.getFirst(), remainder.get(j)) <= 2 ) option = true;
+        //}
+        //if( !option ) return orderings;
         result.addLast(remainder.remove(i));
         orderings += findOrdering(result, remainder);
         remainder.add(i, result.removeLast());
@@ -82,31 +82,37 @@ public class CombinationsIterationPerformanceTest {
     return distance;
   }
  
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 1, concurrency=1)
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
   @Test
   @Ignore
   public void iterateCombinations()
   {
     //Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5), mathUtils);
-    Combinations<Integer> combinations = new Combinations<Integer>(32, rangeValues(0, 64), mathUtils);
+    Combinations<Integer> combinations = new Combinations<Integer>(8, rangeValues(0, 48), mathUtils);
+    System.out.println("Size:"+combinations.longSize());
+    long index = 0;
     for(Integer[] element: combinations) {
-      System.out.println(Arrays.toString(element));
+      index++;
+      if( index % 10000000 == 0 ) {
+      System.out.println(index+":"+Arrays.toString(element));
+      }
       combinations.recycle(element);
     }
   }
   
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 1, concurrency=1)
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
   @Test
   @Ignore
   public void iterateCombinationsBenchmark()
   {
 //    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5), mathUtils);
-    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(16, rangeValues(0, 48), mathUtils);
+    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(8, rangeValues(0, 48), mathUtils);
+    System.out.println("Size:"+combinations.longSize());
     long index = 0;
     for(Integer[] element: combinations) {
       //Arrays.copyOf(element, element.length);
       index++;
-      if( index % 100000000 == 0 ) {
+      if( index % 10000000 == 0 ) {
       System.out.println(index+":"+Arrays.toString(element));
       }
     }
