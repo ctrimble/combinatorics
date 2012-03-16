@@ -80,17 +80,16 @@ public class Permutations<T>
       
       int windowStart = 0;
       int windowEnd = next.length;
-      int windowLength = windowEnd - windowStart;
       int swapSource = 0;
       int swapTarget = 0;
       TYPE: for( int i = 0; i < state.length; i++ ) {
         switch( state[i].direction ) {
           case DOWN:
             // scan the entries from back to front, looking for the first item to move.
-            for( int j = state[i].entryState.length-1; j >= 0; j-- ) {
+            ENTRY: for( int j = state[i].entryState.length-1; j >= 0; j-- ) {
               switch (state[i].entryState[j].direction) {
                 case DOWN:
-                  if( state[i].entryState[j].index < windowLength - state[i].entryState.length + j ) {
+                  if( state[i].entryState[j].index < (windowEnd - 1) - ((state[i].entryState.length-1)-j) ) {
                     // track the source index for the swap.
                     swapSource = windowStart + state[i].entryState[j].index;
                        
@@ -108,23 +107,31 @@ public class Permutations<T>
                   state[i].entryState[j].direction = Direction.UP;
                   break;
                 case UP:
-                  // NOTE: j != 0, the 0 entry only moves down when the type is moving down.
-                  if( state[i].entryState[j].index >= windowStart + j && state[i].entryState[j].index > state[i].entryState[j-1].index + 1 ) {
-                    // track the source index for the swap.
-                    swapSource = windowStart + state[i].entryState[j].index--;
+                    int startIndex = j;
+                    for(; state[i].entryState[j].index == state[i].entryState[j-1].index+1; j-- ) {
+                      // if this entry is moving down, then switch case statements.
+                      if( state[i].entryState[j-1].direction == Direction.DOWN ) {
+                        continue ENTRY;
+                      }
+                    }
+                    swapSource = windowStart + state[i].entryState[startIndex].index;
+                    state[i].entryState[j].direction = Direction.UP;
+                    state[i].entryState[j].index--;
                     swapTarget = windowStart + state[i].entryState[j].index;
+                    for(j++; j <= startIndex; j++) {
+                      state[i].entryState[j].direction = Direction.DOWN;
+                      state[i].entryState[j].index--;
+                    }
                     break TYPE;
-                  }
-                  break;
+                }
               }
-            }
             // none of the entries can move down, switch directions.
             state[i].direction = Direction.UP;
             windowEnd -= state[i].entryState.length;
             continue TYPE;
           case UP:
             // scan the entries from front to back, looking for the first item to move.
-            for( int j = 0; j < state[i].entryState.length; j++ ) {
+            ENTRY:for( int j = 0; j < state[i].entryState.length; j++ ) {
               switch (state[i].entryState[j].direction) {
                 case UP:
                   if( state[i].entryState[j].index > j ) {
@@ -145,21 +152,28 @@ public class Permutations<T>
                   state[i].entryState[j].direction = Direction.DOWN;
                   break;
                 case DOWN:
-                  // NOTE: j != state[i].entryState.length, the state[i].entryState.length entry only moves up when the type is moving up.
-                  if( state[i].entryState[j].index < windowEnd - state[i].entryState.length + j - 1 && state[i].entryState[j].index < state[i].entryState[j+1].index - 1 ) {
-                    // track the source index for the swap.
-                    swapSource = state[i].entryState[j].index++;
-                    swapTarget = state[i].entryState[j].index;
-                    break TYPE;
+                  int startIndex = j;
+                  for(; state[i].entryState[j].index == state[i].entryState[j+1].index-1; j++ ) {
+                    // if this entry is moving down, then switch case statements.
+                    if( state[i].entryState[j+1].direction == Direction.UP ) {
+                      continue ENTRY;
+                    }
                   }
-                  break;
+                  swapSource = windowStart + state[i].entryState[startIndex].index;
+                  state[i].entryState[j].direction = Direction.DOWN;
+                  state[i].entryState[j].index++;
+                  swapTarget = windowStart + state[i].entryState[j].index;
+                  for(j--; j >= startIndex; j--) {
+                    state[i].entryState[j].direction = Direction.UP;
+                    state[i].entryState[j].index++;
+                  }
+                  break TYPE;
               }
             }
             state[i].direction = Direction.DOWN;
             windowStart += state[i].entryState.length;
             continue TYPE;
         }
-        
         // NOTE: nothing was able to advance.  Iteration complete for this combination.  Once support for more than rank elements is added, we will need to:
         // 1) Sort out the final order of the elements.
         // 2) Move to the next combination
@@ -172,7 +186,7 @@ public class Permutations<T>
       next[swapTarget] = next[swapSource];
       next[swapSource] = target;
       
-      //System.out.println(Arrays.toString(next));
+      //System.out.println(Arrays.toString(previous));
       
       return previous;
     }
