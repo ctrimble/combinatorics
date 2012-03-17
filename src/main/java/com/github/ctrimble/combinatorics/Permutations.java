@@ -220,7 +220,7 @@ public class Permutations<T>
       next[swapTarget] = next[swapSource];
       next[swapSource] = target;
       
-      System.out.println(Arrays.toString(previous));
+      //System.out.println(Arrays.toString(previous));
       
       return previous;
     }

@@ -30,6 +30,7 @@ public class CombinationsIterationPerformanceTest {
   
   @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
   @Test
+  @Ignore
   public void plan()
   {
     Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1,1,2,2,2,3,3,4,4,5}, mathUtils);
