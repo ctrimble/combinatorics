@@ -22,6 +22,11 @@ import javolution.context.ObjectFactory;
 import javolution.lang.Reusable;
 import javolution.util.FastList;
 
+/**
+ * An implementation of the CombMathUtils.
+ * 
+ * @author Christian Trimble
+ */
 public class CombMathUtilsImpl
   implements CombMathUtils
 {

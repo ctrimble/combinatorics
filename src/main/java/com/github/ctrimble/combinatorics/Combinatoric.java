@@ -18,35 +18,39 @@ package com.github.ctrimble.combinatorics;
 import java.util.List;
 
 /**
- * The root interface for combinations and permutations.  Combinations and permutations are represented as arrays.
+ * The root interface for combinations and permutations. The individual elements
+ * of the combinations and permutations are returned as arrays.
  * 
  * @author Christian Trimble
- *
+ * 
+ * @param <T> The type of element that is being permuted or combined.
  */
-public interface Combinatoric<T>
-  extends List<T[]>
-{
+public interface Combinatoric<T> extends List<T[]> {
   /**
    * The number of elements in each combination or permutation.
    * 
-   * @return
+   * @return the number of elements in each combination or permutation.
    */
   public int getRank();
-  
+
   /**
    * The elements that are combined or permuted by this combinatoric collection.
-   * @return
+   * 
+   * @return the elements that are combined or permuted by this combinatoric collection, as a multiset.
    */
   public Multiset<T> getDomain();
-  
+
   /**
-   * The size of this combinatoric collection as a long.
-   * @return
+   * The size of this combinatoric collection, as a long.
+   * 
+   * @return the size of this combinatoric collection, as a long.
    */
   public long longSize();
-  
+
   /**
    * The iterator for this combinatoric collection.
+   * 
+   * @return the iterator for this combinatoric collection.
    */
-  public CombinatoricIterator<T> combIterator();
+  public CombinatoricIterator<T> iterator();
 }

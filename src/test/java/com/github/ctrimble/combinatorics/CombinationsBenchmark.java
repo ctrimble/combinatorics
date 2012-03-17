@@ -16,7 +16,6 @@
 package com.github.ctrimble.combinatorics;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class CombinationsBenchmark<T>
@@ -25,11 +24,9 @@ public class CombinationsBenchmark<T>
   public CombinationsBenchmark(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
   } 
- 
-  public Iterator<T[]> iterator() { return combIterator(); }
 
   @Override
-  public CombinatoricIterator<T> combIterator() {
+  public CombinatoricIterator<T> iterator() {
     return new CombinationIterator(0);
   }
 

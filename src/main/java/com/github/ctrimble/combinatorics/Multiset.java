@@ -17,9 +17,35 @@ package com.github.ctrimble.combinatorics;
 
 import java.util.List;
 
+/**
+ * A representation of a set of elements where the like elements have been grouped.  Usually, a 
+ * multiset would just contain information about the quantities of the distinct types in a collection,
+ * but this implementation also holds the actual elements.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <E> the element type of the collection or array that this multiset represents.
+ */
 public interface Multiset<E> extends List<List<E>>
 {
-  public int getRank(); 
+  /**
+   * Returns the total number of elements in this multiset.
+   * 
+   * @return the total number of elements in this multiset.
+   */
+  public int getRank();
+  
+  /**
+   * Returns an array of the element ranks for this multiset.
+   * 
+   * @return an array of the element ranks for this multiset.
+   */
   public int[] toRankArray();
+  
+  /**
+   * Returns a two dimensional array representation of this multiset.
+   * 
+   * @return a two dimensional array representation of this multiset.
+   */
   public E[][] toValueArray();
 }

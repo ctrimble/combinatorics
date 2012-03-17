@@ -20,30 +20,57 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+/**
+ * Static utilities to support this package.
+ * 
+ * @author Christian Trimble
+ */
 public class Utils {
   /**
-   * Returns a new array of type T with the length provided.
+   * Returns a new array for the type T.
    * 
-   * @return a new array of type T with the length provided.
+   * @param componentType the component type for the array.
+   * @param length the length of the array.
+   * @return a new array for the type T.
    */
   @SuppressWarnings("unchecked")
-  public static final <T> T[] newArray(Class<T> componentType, int length)
+  public static final <T> T[] newArray(final Class<T> componentType, final int length)
   {
     return (T[])Array.newInstance(componentType, length);
   }
   
+  /**
+   * Returns a two dimensional array for the type T.
+   * 
+   * @param componentType the component type for the array.
+   * @param firstDim the length of the array's first dimension.
+   * @param secondDim the length of the array's second dimension.
+   * @return a two dimensional array for the type T.
+   */
   @SuppressWarnings("unchecked")
-  public static final <T> T[][] newArray(Class<T> componentType, int length0, int length1)
+  public static final <T> T[][] newArray(final Class<T> componentType, final int firstDim, final int secondDim)
   {
-    return (T[][])Array.newInstance(componentType, length0, length1);
+    return (T[][])Array.newInstance(componentType, firstDim, secondDim);
   }
   
+  /**
+   * Returns the component type of an array.
+   * 
+   * @param array the array to inspect.
+   * @return the component type of an array.
+   */
   @SuppressWarnings("unchecked")
-  public static final <T> Class<T> getComponentType(T[] array) {
+  public static final <T> Class<T> getComponentType(final T[] array) {
     return (Class<T>)array.getClass().getComponentType();
   }
-  
-  public static <E> List<E> list(E... elements) {
+ 
+  /**
+   * Returns a Javolution FastList for the specified elements.
+   * 
+   * @param elements the elements to place in the list.
+   * @return a list of elements.
+   */
+  public static final <E> List<E> list(final E... elements) {
     FastList<E> list = new FastList<E>();
     for (E element : elements) {
       list.add(element);

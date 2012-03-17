@@ -15,6 +15,11 @@
  */
 package com.github.ctrimble.combinatorics;
 
+/**
+ * A factory for combination and permutation collections.
+ * @author Christian Trimble
+ *
+ */
 public interface CombinatoricFactory {
   public <T> Combinations<T> createCombination(int k, T elements);
   public <T> Permutations<T> createPermutation(int k, T elements);

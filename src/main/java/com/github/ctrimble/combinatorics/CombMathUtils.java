@@ -15,6 +15,12 @@
  */
 package com.github.ctrimble.combinatorics;
 
+/**
+ * Math methods for dealing with complex combinatoric problems with duplicates involved.
+ * 
+ * @author Christian Trimble
+ *
+ */
 public interface CombMathUtils {
 
   /**

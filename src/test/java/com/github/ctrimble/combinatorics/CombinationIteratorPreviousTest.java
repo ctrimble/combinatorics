@@ -27,7 +27,7 @@ public class CombinationIteratorPreviousTest
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
     Combinations<Integer> combination = new Combinations<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
     FastList<List<Integer>> result = new FastList<List<Integer>>();
-    CombinatoricIterator<Integer> iterator = combination.combIterator();
+    CombinatoricIterator<Integer> iterator = combination.iterator();
     
     // move to the end
     while( iterator.hasNext() ) { iterator.next(); }

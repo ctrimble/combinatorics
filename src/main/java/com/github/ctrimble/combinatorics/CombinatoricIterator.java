@@ -23,13 +23,23 @@ import java.util.ListIterator;
  * 
  * @author Christian Trimble
  *
- * @param <T> A collection or array type that contains the combination or permutation.
+ * @param <T> The type of element that is being combined or permuted.
  */
 public interface CombinatoricIterator<T>
   extends ListIterator<T[]>
 {
+  /**
+   * Returns the next index, as a long.
+   * 
+   * @return the next index, as a long.
+   */
   public long nextLongIndex();
   
+  /**
+   * Returns the previous index, as a long.
+   * 
+   * @return returns the previous index, as a long.
+   */
   public long previousLongIndex();
 
 }

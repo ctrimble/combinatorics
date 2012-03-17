@@ -18,6 +18,13 @@ package com.github.ctrimble.combinatorics;
 import java.lang.reflect.Array;
 import java.util.AbstractList;
 
+/**
+ * An abstract base class for combinatoric implementations.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <T> the type of the elements being combined or permuted.
+ */
 public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     implements Combinatoric<T> {
 
@@ -85,6 +92,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     return (int) size;
   }
 
+  public abstract CombinatoricIterator<T> iterator();
   protected abstract long computeSize(int rank, Multiset<T> domain);
 
   protected abstract class AbstractCombinatoricIterator

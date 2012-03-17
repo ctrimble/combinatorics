@@ -20,18 +20,39 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+/**
+ * An implementation of Multiset, based on Javolutions FastList.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <E> the element type of the domain.
+ */
 @SuppressWarnings("serial")
 public class FastMultiset<E>
   extends FastList<List<E>>
   implements Multiset<E>
 {
+  /** The total of all the element ranks of this multiset. */
   protected int rank = 0;
+  /** The class for the elements in this multiset. */
   protected Class<E> componentType;
-  
+
+  /**
+   * Creates a new FastMultiset for the specified domain.
+   * 
+   * @param domain the elements that make up this multiset.
+   */
   public FastMultiset(E[] domain) {
     this(Integer.MAX_VALUE, domain);
   }
   
+  /**
+   * Creates a new FastMultiSet for the specified domain.  If any type has more than maxTypeRank elements,
+   * then those elements will be excluded from the multiset.
+   * 
+   * @param maxTypeRank the maximum number of elements for any unique value in the domain.
+   * @param domain the elements that make up this multiset.
+   */
   public FastMultiset(int maxTypeRank, E[] domain)
   {
     componentType = Utils.getComponentType(domain);

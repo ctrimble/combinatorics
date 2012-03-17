@@ -16,28 +16,51 @@
 package com.github.ctrimble.combinatorics;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * A collection class that contains the combinations of a set of elements.  This implementation accounts for duplicate elements in the domain.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <T> The type of element being combined.
+ */
 public class Combinations<T>
   extends AbstractCombinatoric<T>
 {
+  /**
+   * Creates a new Combinations object over the domain.
+   * 
+   * @param rank the length of the combinations.
+   * @param domain the elements that make up the combinations.
+   * @param mathUtil an instance of the math utilities.
+   */
   public Combinations(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
   } 
- 
-  public Iterator<T[]> iterator() { return combIterator(); }
-
+  
   @Override
-  public CombinatoricIterator<T> combIterator() {
+  public CombinatoricIterator<T> iterator() {
     return new CombinationIterator(0);
   }
 
+  /**
+   * Computes the number of combinations for the specified rank and domain.
+   * 
+   * @param rank the rank of the permutation.
+   * @param domain the multiset containing the elements to be permuted.
+   */
   @Override
   protected long computeSize(int rank, Multiset<T> domain) {
     return mathUtils.c(rank, domain.toRankArray());
   }
   
+  /**
+   * The iterator that produces the individual elements for this Combinations object.
+   * 
+   * @author Christian Trimble
+   *
+   */
   protected class CombinationIterator
     extends AbstractCombinatoric<T>.AbstractCombinatoricIterator
   {
@@ -154,12 +177,23 @@ public class Combinations<T>
     }
   }
   
+  /**
+   * State information for each unique type in the domain.
+   * 
+   * @author Christian Trimble
+   */
   private static class DomainPointer
   {
+    /** The start index for this type in the current result. */
     public int index = 0;
+    /** The number of elements of this type in the current result. */
     public int count = 0;
+    /** The number of elements in the domain that are greater than this type. */
     public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
-    
+    /**
+     * Returns a string representation of this object.
+     * @return a string representation of this object.
+     */
     public String toString()
     {
       return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";

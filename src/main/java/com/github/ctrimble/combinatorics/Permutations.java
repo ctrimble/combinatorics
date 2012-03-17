@@ -16,29 +16,51 @@
 package com.github.ctrimble.combinatorics;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * A collection class that contains the permutations of a set of elements.  This implementation accounts for duplicate elements in the domain.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <T> The type of element being permuted.
+ */
 public class Permutations<T>
   extends AbstractCombinatoric<T>
 {
 
+  /**
+   * Creates a new Permutations object over the domain.
+   * 
+   * @param rank the length of the permutations.
+   * @param domain the elements that make up the permutations.
+   * @param mathUtils an instance of the math utilities.
+   */
   protected Permutations(int rank, T[] domain, CombMathUtils mathUtils) {
     super(rank, domain, mathUtils);
   }
  
-  public Iterator<T[]> iterator() { return combIterator(); }
-
   @Override
-  public CombinatoricIterator<T> combIterator() {
+  public CombinatoricIterator<T> iterator() {
     return new PermutationIterator(0);
   }
 
+  /**
+   * Computes the number of permutations for the specified rank and domain.
+   * 
+   * @param rank the rank of the permutation.
+   * @param domain the multiset containing the elements to be permuted.
+   */
   @Override
   protected long computeSize(int rank, Multiset<T> domain) {
     return mathUtils.p(rank, domain.toRankArray());
   }
   
+  /**
+   * An iterator for this permutation.
+   * 
+   * @author Christian Trimble
+   */
   public class PermutationIterator
     extends AbstractCombinatoricIterator
   {
@@ -51,6 +73,11 @@ public class Permutations<T>
       super(nextIndex);
     }
 
+    /**
+     * Returns the next permutation, if one exists.
+     * 
+     * @throws NoSuchElementException if there are no more permutations in this collection.
+     */
     @Override
     public T[] next() {
       if( nextIndex >= size ) throw new NoSuchElementException();
@@ -224,6 +251,11 @@ public class Permutations<T>
       return previous;
     }
 
+    /**
+     * Currently unimplemented.
+     * 
+     * @throws UnsupportedOperationException previous is not yet implemented.
+     */
     @Override
     public T[] previous() {
       throw new UnsupportedOperationException("Previous is not currently supported for permutations.");
