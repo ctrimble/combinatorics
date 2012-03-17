@@ -2,6 +2,7 @@ package com.github.ctrimble.combinatorics;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -205,7 +206,7 @@ public abstract class AbstractPermutationsIteratorTest
   }
   
   @Test
-  @Ignore
+ // @Ignore
   public void threeOneOnePermFour() {
     List<List<Integer>> actual = createPermutations(list(ONE, ONE, ONE, TWO, THREE), 4);
     List<List<Integer>> expected = list(
@@ -229,8 +230,19 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, THREE, ONE, TWO),
         list(THREE, ONE, ONE, TWO),
         list(ONE, ONE, THREE, TWO));
-
-    assertEquals(expected, actual);      
+    
+    assertEquals(expected.size(), actual.size());
+    List<List<Integer>> testList = new ArrayList<List<Integer>>();
+    testList.addAll(expected);
+    testList.removeAll(actual);
+    
+    assertEquals("Elements are missing.", new ArrayList<List<Integer>>(), testList);
+    
+    testList.clear();
+    testList.addAll(actual);
+    testList.removeAll(expected);
+    
+    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);   
   }
   
   public abstract List<List<Integer>> createPermutations(

@@ -60,13 +60,20 @@ public class Permutations<T>
         next = (T[])Array.newInstance(componentType, rank);
         domainRanks = domain.toRankArray();
         state = new TypePermutationState[domainRanks.length];
-        for( int i = 0, j = 0, ri = 0; i < next.length && ri < domainRanks.length; i += j, ri++) {
+        int ni = 0;
+        for( int ri = 0; ri < domainRanks.length; ri++) {
           state[ri] = new TypePermutationState();
-          state[ri].entryState = new EntryPermutationState[Math.min(domainRanks[ri], next.length-i)];
-          for( j = 0; j < state[ri].entryState.length; j++ ) {
-            next[i+j] = domain.get(ri).get(j);
+          state[ri].count = Math.min(domainRanks[ri], rank-ni);
+          state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
+          for( int j = 0; j < state[ri].entryState.length; j++ ) {
             state[ri].entryState[j] = new EntryPermutationState(j);
+            if( j < state[ri].count ) {
+              next[ni++] = domain.get(ri).get(j);         
+            }
           }
+        }
+        for( int i = state.length - 2; i >= 0; i-- ) {
+          state[i].toRight = state[i].entryState.length + state[i+1].toRight;
         }
       }
       nextIndex++;
@@ -87,16 +94,16 @@ public class Permutations<T>
         switch( state[i].direction ) {
           case DOWN:
             // scan the entries from back to front, looking for the first item to move.
-            ENTRY: for( int j = state[i].entryState.length-1; j >= 0; j-- ) {
+            ENTRY: for( int j = state[i].count-1; j >= 0; j-- ) {
               switch (state[i].entryState[j].direction) {
                 case DOWN:
-                  if( state[i].entryState[j].index < (windowEnd - 1) - ((state[i].entryState.length-1)-j) ) {
+                  if( state[i].entryState[j].index < (windowEnd - 1) - ((state[i].count-1)-j) ) {
                     // track the source index for the swap.
                     swapSource = windowStart + state[i].entryState[j].index;
                        
                     // increment the index and deal with moving over like elements
                     state[i].entryState[j].index++;
-                    for(;j < state[i].entryState.length-1 && state[i].entryState[j].index == state[i].entryState[j+1].index; j++ ) {
+                    for(;j < state[i].count-1 && state[i].entryState[j].index == state[i].entryState[j+1].index; j++ ) {
                       state[i].entryState[j+1].index++;
                       state[i].entryState[j+1].direction = Direction.DOWN;
                     }
@@ -128,11 +135,12 @@ public class Permutations<T>
               }
             // none of the entries can move down, switch directions.
             state[i].direction = Direction.UP;
-            windowEnd -= state[i].entryState.length;
-            continue TYPE;
+            windowEnd -= state[i].count;
+            if( i < state.length - 1 ) continue TYPE;
+            break;
           case UP:
             // scan the entries from front to back, looking for the first item to move.
-            ENTRY:for( int j = 0; j < state[i].entryState.length; j++ ) {
+            ENTRY:for( int j = 0; j < state[i].count; j++ ) {
               switch (state[i].entryState[j].direction) {
                 case UP:
                   if( state[i].entryState[j].index > j ) {
@@ -172,14 +180,39 @@ public class Permutations<T>
               }
             }
             state[i].direction = Direction.DOWN;
-            windowStart += state[i].entryState.length;
-            continue TYPE;
+            windowStart += state[i].count;
+            if( i < state.length - 1 ) continue TYPE;
+            break;
         }
-        // NOTE: nothing was able to advance.  Iteration complete for this combination.  Once support for more than rank elements is added, we will need to:
-        // 1) Sort out the final order of the elements.
-        // 2) Move to the next combination
-        // 3) Reset the state array for the new multiset.
-        throw new IllegalStateException();
+        
+        // end of permutations for this combination reached.  Advance to the next combination.
+        int cur = state.length - 1;
+        int remaining = 0;
+        
+        // move cur backwards to find the next item to update.
+        for( ; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining+1); remaining += state[cur--].count ); // back cur up to a position to increment.
+        
+        // decrement the items at cur.
+        state[cur].count--;
+        remaining++;
+        
+        // move forward and update all of the counts.
+        for(cur++; cur < state.length; cur++) {
+          state[cur].count = Math.min(remaining, domainRanks[cur]);
+          remaining -= state[cur].count;
+        }
+        
+        // for now, totally reset next.  Making this an incremental update will help when the rank is much smaller than the number of entries.
+        for( int ri = 0, ni = 0;ri < domainRanks.length; ri++) {
+          state[ri].direction = Direction.DOWN;
+          for( int k = 0; k < state[ri].entryState.length; k++ ) {
+            state[ri].entryState[k].index = k;
+            state[ri].entryState[k].direction = Direction.DOWN;
+            if( k < state[ri].count ) {
+              next[ni++] = domain.get(ri).get(k);         
+            }
+          }
+        }
       }
       
       // swap the indices.
@@ -187,7 +220,7 @@ public class Permutations<T>
       next[swapTarget] = next[swapSource];
       next[swapSource] = target;
       
-      //System.out.println(Arrays.toString(previous));
+      System.out.println(Arrays.toString(previous));
       
       return previous;
     }
@@ -203,6 +236,8 @@ public class Permutations<T>
   {
     public Direction direction = Direction.DOWN;
     public EntryPermutationState[] entryState;
+    public int count = 0; // the number of entries being used.
+    public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
     public String toString() {
       return "{direction:"+direction+", entries:"+Arrays.toString(entryState)+"}";
     }
