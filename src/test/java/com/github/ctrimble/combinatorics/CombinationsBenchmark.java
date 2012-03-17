@@ -15,19 +15,15 @@
  */
 package com.github.ctrimble.combinatorics;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class CombinationsBenchmark<T>
   extends AbstractCombinatoric<T>
 {
-  protected Class<T> componentType = null;
   public CombinationsBenchmark(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
-    componentType = (Class<T>)domain.getClass().getComponentType();
   } 
  
   public Iterator<T[]> iterator() { return combIterator(); }
@@ -43,7 +39,7 @@ public class CombinationsBenchmark<T>
   }
   
   protected class CombinationIterator
-    extends AbstractCombinatoric<T>.AbstractCombinatoricIterator<T>
+    extends AbstractCombinatoric<T>.AbstractCombinatoricIterator
   {
     protected T[] next;
     protected T[] previous;
@@ -52,8 +48,8 @@ public class CombinationsBenchmark<T>
     
     protected CombinationIterator(long nextIndex) {
       super(nextIndex);
-      next = (T[])Array.newInstance(componentType, rank);
-      previous = (T[])Array.newInstance(componentType, rank);
+      next = newComponentArray(rank);
+      previous = newComponentArray(rank);
       domainRanks = domain.toRankArray();
       indices = new DomainPointer[domainRanks.length];
       indices[indices.length-1] = new DomainPointer();

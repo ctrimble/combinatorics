@@ -1,7 +1,6 @@
 package com.github.ctrimble.combinatorics;
 
 import java.util.Arrays;
-import java.util.List;
 
 import javolution.util.FastList;
 
@@ -9,8 +8,9 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 public class CombinationsIterationPerformanceTest {
   
@@ -118,6 +118,7 @@ public class CombinationsIterationPerformanceTest {
     }
   }
   
+  @SuppressWarnings("unused")
   @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 1, concurrency=1)
   @Test
   @Ignore
@@ -130,6 +131,7 @@ public class CombinationsIterationPerformanceTest {
     }
   }
   
+  @SuppressWarnings("unused")
   private Integer[] values(int... args) {
     if( args.length % 2 != 0 ) throw new IllegalArgumentException();
     FastList<Integer> values = new FastList<Integer>();

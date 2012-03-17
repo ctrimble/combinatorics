@@ -15,14 +15,10 @@
  */
 package com.github.ctrimble.combinatorics;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-
 import org.apache.commons.math.util.MathUtils;
 
 import javolution.context.ObjectFactory;
-import javolution.lang.MathLib;
 import javolution.lang.Reusable;
 import javolution.util.FastList;
 

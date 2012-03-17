@@ -15,7 +15,6 @@
  */
 package com.github.ctrimble.combinatorics;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -41,7 +40,7 @@ public class Permutations<T>
   }
   
   public class PermutationIterator
-    extends AbstractCombinatoricIterator<T>
+    extends AbstractCombinatoricIterator
   {
     TypePermutationState[] state;
     int[] domainRanks;
@@ -57,7 +56,7 @@ public class Permutations<T>
       if( nextIndex >= size ) throw new NoSuchElementException();
       // if the index is 0, build the next array and the iteration state.
       if( nextIndex == 0 ) {
-        next = (T[])Array.newInstance(componentType, rank);
+        next = newComponentArray(rank);
         domainRanks = domain.toRankArray();
         state = new TypePermutationState[domainRanks.length];
         int ni = 0;

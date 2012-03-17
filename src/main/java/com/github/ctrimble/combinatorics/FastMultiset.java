@@ -15,16 +15,12 @@
  */
 package com.github.ctrimble.combinatorics;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.lang.model.element.Element;
-
 import javolution.util.FastList;
-import javolution.util.FastSet;
 
+@SuppressWarnings("serial")
 public class FastMultiset<E>
   extends FastList<List<E>>
   implements Multiset<E>
@@ -38,7 +34,7 @@ public class FastMultiset<E>
   
   public FastMultiset(int maxTypeRank, E[] domain)
   {
-    componentType = (Class<E>)domain.getClass().getComponentType();
+    componentType = Utils.getComponentType(domain);
     E[] newDomain = Arrays.copyOf(domain, domain.length);
     Arrays.sort(newDomain);
     rank = 0;
@@ -53,19 +49,6 @@ public class FastMultiset<E>
       add(elements.unmodifiable());
       rank += elements.size();
     }
-    /*
-    for( int i = newDomain.length-1; i >= 0;) {
-      int cur = i;
-      FastList<E> elements = new FastList<E>();
-      for( ; i >= 0 && newDomain[cur].equals(newDomain[i]); i-- ) {
-        if( cur - i < maxTypeRank ) {
-          elements.addFirst(newDomain[i]);
-        }
-      }
-      add(elements.unmodifiable());
-      rank += elements.size();
-    }
-    */
   }
 
   @Override
@@ -85,9 +68,9 @@ public class FastMultiset<E>
 
   @Override
   public E[][] toValueArray() {
-    E[][] valueArray = (E[][])Array.newInstance(componentType, size(), 0);
+    E[][] valueArray = Utils.newArray(componentType, size(), 0);
     for( int i = 0; i < size(); i++ ) {
-      valueArray[i] = get(i).toArray((E[])Array.newInstance(componentType, get(i).size()));
+      valueArray[i] = get(i).toArray(Utils.newArray(componentType, get(i).size()));
     }
     return valueArray;
   }

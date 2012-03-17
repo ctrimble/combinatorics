@@ -5,12 +5,21 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import static com.github.ctrimble.combinatorics.Utils.list;
 
 public abstract class AbstractPermutationsIteratorTest
-    extends AbstractCombinatoricIteratorTest {
+{
+  protected static Integer ONE = 1;
+  protected static Integer TWO = 2;
+  protected static Integer THREE = 3;
+  protected static Integer FOUR = 4;
+  protected static Integer FIVE = 5;
+  protected static Integer SIX = 6;
+  protected static Integer SEVEN = 7;
+  protected static Integer EIGHT = 8;
   
+  @SuppressWarnings("unchecked")
   @Test
   public void threePermThree() {
     List<List<Integer>> actual = createPermutations(list(ONE, TWO, THREE), 3);
@@ -24,6 +33,7 @@ public abstract class AbstractPermutationsIteratorTest
     assertEquals(expected, actual);
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void twoOnePermThree() {
     List<List<Integer>> actual = createPermutations(list(ONE, ONE, TWO), 3);
@@ -34,6 +44,7 @@ public abstract class AbstractPermutationsIteratorTest
     assertEquals(expected, actual);    
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void threeOneOnePermFive() {
     List<List<Integer>> actual = createPermutations(list(ONE, ONE, ONE, TWO, THREE), 5);
@@ -66,6 +77,7 @@ public abstract class AbstractPermutationsIteratorTest
     }  
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void threeOneOneOnePermSix() {
     List<List<Integer>> actual = createPermutations(list(ONE, ONE, ONE, TWO, THREE, FOUR), 6);
@@ -205,6 +217,7 @@ public abstract class AbstractPermutationsIteratorTest
     } 
   }
   
+  @SuppressWarnings("unchecked")
   @Test
  // @Ignore
   public void threeOneOnePermFour() {

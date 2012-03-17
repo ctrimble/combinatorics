@@ -15,7 +15,6 @@
  */
 package com.github.ctrimble.combinatorics;
 
-import java.util.Iterator;
 import java.util.ListIterator;
 
 /**

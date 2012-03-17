@@ -15,19 +15,12 @@
  */
 package com.github.ctrimble.combinatorics;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
-import javolution.util.FastList;
-
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.runner.RunWith;
-
-import static org.junit.Assert.*;
+import static com.github.ctrimble.combinatorics.Utils.list;
 
 public abstract class AbstractCombinationIteratorTest {
 
@@ -36,10 +29,9 @@ public abstract class AbstractCombinationIteratorTest {
   private static Integer THREE = 3;
   private static Integer FOUR = 4;
   private static Integer FIVE = 5;
-  private static Integer SIX = 6;
-  private static Integer SEVEN = 7;
-  private static Integer EIGHT = 8;
 
+
+  @SuppressWarnings("unchecked")
   @Test
   public void threeChoseTwo() {
     List<List<Integer>> actual = createCombinations(list(ONE, TWO, THREE), 2);
@@ -48,6 +40,7 @@ public abstract class AbstractCombinationIteratorTest {
     assertEquals(expected, actual);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void fourChoseTwo() {
     List<List<Integer>> actual = createCombinations(
@@ -60,6 +53,7 @@ public abstract class AbstractCombinationIteratorTest {
   /**
    * Test 6 C 3 when there are duplicates.
    */
+  @SuppressWarnings("unchecked")
   @Test
   public void sixChoseThreeOneDuplicate() {
     List<List<Integer>> actual = createCombinations(
@@ -71,14 +65,6 @@ public abstract class AbstractCombinationIteratorTest {
         list(TWO, THREE, FOUR), list(TWO, THREE, FIVE), list(TWO, FOUR, FIVE),
         list(THREE, FOUR, FIVE));
     assertEquals(expected, actual);
-  }
-
-  public static <E> List<E> list(E... elements) {
-    FastList<E> list = new FastList<E>();
-    for (E element : elements) {
-      list.add(element);
-    }
-    return list;
   }
 
   public abstract List<List<Integer>> createCombinations(

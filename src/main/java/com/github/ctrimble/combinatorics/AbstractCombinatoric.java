@@ -17,9 +17,6 @@ package com.github.ctrimble.combinatorics;
 
 import java.lang.reflect.Array;
 import java.util.AbstractList;
-import java.util.Arrays;
-
-import javolution.context.ObjectFactory;
 
 public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     implements Combinatoric<T> {
@@ -36,8 +33,24 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     this.domain = new FastMultiset<T>(rank, domain);
     this.mathUtils = mathUtils;
     this.size = computeSize(this.rank, this.domain);
-    this.componentType = (Class<T>)domain.getClass().getComponentType();
+    this.componentType = getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
+  }
+  
+  @SuppressWarnings("unchecked")
+  protected static final <T> Class<T> getComponentType(T[] array) {
+    return (Class<T>)array.getClass().getComponentType();
+  }
+  
+  /**
+   * Returns a new array of type T with the length provided.
+   * 
+   * @return a new array of type T with the length provided.
+   */
+  @SuppressWarnings("unchecked")
+  protected final T[] newComponentArray(int length)
+  {
+    return (T[])Array.newInstance(componentType, length);
   }
 
   @Override
@@ -74,7 +87,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
 
   protected abstract long computeSize(int rank, Multiset<T> domain);
 
-  protected abstract class AbstractCombinatoricIterator<T>
+  protected abstract class AbstractCombinatoricIterator
       implements CombinatoricIterator<T>
   {
     protected long nextIndex = 0;

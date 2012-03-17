@@ -5,8 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PermutationsIteratorNextTest
-    extends
-      AbstractPermutationsIteratorTest {
+    extends AbstractPermutationsIteratorTest {
 
   @Override
   public List<List<Integer>> createPermutations(List<Integer> elements, int k) {

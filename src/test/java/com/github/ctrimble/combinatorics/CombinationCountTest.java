@@ -15,17 +15,15 @@
  */
 package com.github.ctrimble.combinatorics;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class CombinationCountTest {
