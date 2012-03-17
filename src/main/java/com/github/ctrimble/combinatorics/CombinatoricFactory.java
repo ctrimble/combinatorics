@@ -21,6 +21,9 @@ package com.github.ctrimble.combinatorics;
  *
  */
 public interface CombinatoricFactory {
-  public <T> Combinations<T> createCombination(int k, T elements);
-  public <T> Permutations<T> createPermutation(int k, T elements);
+  public <T> Combinations<T> createCombinations(int rank, T... domain);
+  public <T> Permutations<T> createPermutations(int rank, T... domain);
+  public <T> Multiset<T> createMultiset(T... domain);
+  public <T> Multiset<T> createMultiset(int maxElementRank, T... domain);
+  public CombMathUtils getMathUtils();
 }
