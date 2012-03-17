@@ -30,12 +30,6 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   protected long size;
   protected CombMathUtils mathUtils;
   protected Class<T> componentType;
-  protected ObjectFactory<T[]> elementFactory = new ObjectFactory<T[]>() { 
-    
-    protected T[] create() {
-        return (T[])Array.newInstance(componentType, rank);
-    }
-  };
 
   protected AbstractCombinatoric(int rank, T[] domain, CombMathUtils mathUtils) {
     this.rank = rank;
@@ -76,11 +70,6 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       return Integer.MAX_VALUE;
     }
     return (int) size;
-  }
-  
-  @Override
-  public void recycle(T[] element) {
-    elementFactory.recycle(element);
   }
 
   protected abstract long computeSize(int rank, Multiset<T> domain);

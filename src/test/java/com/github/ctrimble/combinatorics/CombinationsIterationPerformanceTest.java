@@ -96,7 +96,6 @@ public class CombinationsIterationPerformanceTest {
       if( index % 10000000 == 0 ) {
       System.out.println(index+":"+Arrays.toString(element));
       }
-      combinations.recycle(element);
     }
   }
   

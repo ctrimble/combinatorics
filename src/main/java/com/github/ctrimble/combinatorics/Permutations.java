@@ -15,6 +15,7 @@
  */
 package com.github.ctrimble.combinatorics;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -56,7 +57,7 @@ public class Permutations<T>
       if( nextIndex >= size ) throw new NoSuchElementException();
       // if the index is 0, build the next array and the iteration state.
       if( nextIndex == 0 ) {
-        next = elementFactory.object();
+        next = (T[])Array.newInstance(componentType, rank);
         domainRanks = domain.toRankArray();
         state = new TypePermutationState[domainRanks.length];
         for( int i = 0, j = 0, ri = 0; i < next.length && ri < domainRanks.length; i += j, ri++) {
@@ -221,6 +222,6 @@ public class Permutations<T>
   
   private static enum Direction
   {
-    UP,DOWN, CHANGE
+    UP,DOWN
   }
 }

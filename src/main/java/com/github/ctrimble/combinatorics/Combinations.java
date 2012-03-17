@@ -21,12 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javolution.context.ObjectFactory;
-
 public class Combinations<T>
   extends AbstractCombinatoric<T>
 {
-  
   public Combinations(int rank, T[] domain, CombMathUtils mathUtil) {
     super(rank, domain, mathUtil);
   } 
@@ -46,39 +43,44 @@ public class Combinations<T>
   protected class CombinationIterator
     extends AbstractCombinatoric<T>.AbstractCombinatoricIterator<T>
   {
+    protected T[] next;
+    protected T[] previous;
     protected int[] domainRanks;
     protected DomainPointer[] indices;
     
     protected CombinationIterator(long nextIndex) {
       super(nextIndex);
+      next = (T[])Array.newInstance(componentType, rank);
+      previous = (T[])Array.newInstance(componentType, rank);
       domainRanks = domain.toRankArray();
       indices = new DomainPointer[domainRanks.length];
       indices[indices.length-1] = new DomainPointer();
       for( int i = domainRanks.length-1; i > 0; i-- ) {
         indices[i-1] = new DomainPointer();
         indices[i-1].toRight = domainRanks[i] + indices[i].toRight;
-      }
-      for(int i = 0, used = 0; i < indices.length && used < rank; used += domainRanks[i++]) {
-        //indices[i].index = used;
-        indices[i].count = Math.min(rank-used, domainRanks[i]);        
-      }
+      }      
     }
 
     @Override
     public T[] next() {
       if( nextIndex >= size ) throw new NoSuchElementException(); // we may just want to do this in the next method.
-      else {
-        // build the next object.
-        T[] next = elementFactory.object();
-        int index = 0;
-        for( int i = 0; i < indices.length; i++ )
-          for( int j = 0; j < indices[i].count; j++ )
-            //next[index++] = domain.get(i).get(j);
-            next[index++] = domainValues[i][j];
-        nextIndex++;
-        if( nextIndex == size ) {
-          return next;
+      
+      // reset the next array if needed.
+      if( nextIndex == 0 ) {
+        for(int i = 0, used = 0; i < indices.length && used < rank; used += domainRanks[i++]) {
+          indices[i].index = used;
+          indices[i].count = Math.min(rank-used, domainRanks[i]);
+          for( int j = 0; j < indices[i].count; j++ ) {
+            next[indices[i].index+j] = domainValues[i][j];
+          }
         }
+      }
+      
+      // set both values to the the next value.
+      for( int i = 0; i < next.length; i++ ) previous[i] = next[i];
+      nextIndex++;
+      
+      if( nextIndex != size ) {
       
       // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
       // Position  | 0 | 1 | 2 | 3 | 4
@@ -87,7 +89,6 @@ public class Combinations<T>
       // ToRight   | 9 | 6 | 5 | 2 | 0
 
       // advance the indices.
-
       int cur = domainRanks.length - 1;
       int remaining = 0;
       
@@ -100,28 +101,28 @@ public class Combinations<T>
       
       // move forward and update indices and next.
       for(cur++; cur < indices.length; cur++) {
-          indices[cur].count = Math.min(remaining, domainRanks[cur]);
-          //indices[cur].index = indices[cur-1].index+indices[cur-1].count;
-          remaining -= indices[cur].count;
+        indices[cur].count = Math.min(remaining, domainRanks[cur]);
+        indices[cur].index = indices[cur-1].index+indices[cur-1].count;
+        remaining -= indices[cur].count;
+        for( int i = 0; i < indices[cur].count; i++ ) {
+          next[indices[cur].index+i] = domainValues[cur][i];
+        }
       }
-      return next;
       }
+      // return previous, since we advanced past the next position.
+      return Arrays.copyOf(previous, previous.length);
     }
 
     @Override
     public T[] previous() {
       if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
-      else {
-        T[] previous = elementFactory.object();
-        int index = 0;
-        if( nextIndex == size ) {
-          for( int i = 0; i < indices.length; i++ )
-            for( int j = 0; j < indices[i].count; j++ )
-              //previous[index++] = domain.get(i).get(j);
-              previous[index++] = domainValues[i][j];
-          nextIndex--;
-          return previous;
-        }
+      
+      // set both values to the the previous value.
+      for( int i = 0; i < previous.length; i++ ) next[i] = previous[i];
+      nextIndex--;
+      
+      if( nextIndex > 0 ) {
+      
       // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
       // Position  | 0 | 1 | 2 | 3 | 4
       // Index     | 0 | 3 | 5 | 5 | 6
@@ -129,7 +130,6 @@ public class Combinations<T>
       // ToRight   | 9 | 6 | 5 | 2 | 0
 
       // advance the indices.
-      nextIndex--;
       int cur = domainRanks.length - 1;
       int remaining = 0;
 
@@ -138,34 +138,33 @@ public class Combinations<T>
 
       // decrement the items at cur.
       indices[cur].count++;
+      previous[indices[cur].index+indices[cur].count-1] = domainValues[cur][indices[cur].count-1];
       remaining--;
-
-      index = 0;
-      for(int i = 0; i < indices.length; i++) {
-        if( i > cur ) {
-          indices[i].count = Math.max(remaining-indices[i].toRight, 0);
-          //indices[i].index = indices[i-1].index+indices[i-1].count;
-          remaining -= indices[i].count;
-        }
-        for( int j = 0; j < indices[i].count; j++ ) {
-          //previous[index++] = domain.get(i).get(j);
-          previous[index++] = domainValues[i][j];
+       
+      for(cur++; cur < indices.length; cur++) {
+        indices[cur].count = Math.max(remaining-indices[cur].toRight, 0);
+        indices[cur].index = indices[cur-1].index+indices[cur-1].count;
+        remaining -= indices[cur].count;
+        for( int i = 0; i < indices[cur].count; i++ ) {
+          previous[indices[cur].index+i] = domainValues[cur][i];
         }
       }
-      return previous;
       }
+      
+      // return next, since we advanced past the previous position.
+      return Arrays.copyOf(next, next.length);
     }
   }
   
   private static class DomainPointer
   {
-    //public int index = 0;
+    public int index = 0;
     public int count = 0;
     public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
     
     public String toString()
     {
-      return "{Index:"+"index"+",Count:"+count+",ToRight:"+toRight+"}";
+      return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
     }
   }
 }
