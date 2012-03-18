@@ -1,0 +1,43 @@
+<project
+  xmlns="http://maven.apache.org/DECORATION/1.1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.1.0 http://maven.apache.org/xsd/decoration-1.1.0.xsd">
+
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.1</version>
+  </skin>
+
+  <body>
+    <menu ref="reports"/>
+  </body>
+
+  <custom>
+    <fluidoSkin>
+      <!-- Renders under topbar in 1.1
+      <gitHub>
+        <projectId>ctrimble/combinatorics</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>gray</ribbonColor>
+      </gitHub>
+         -->
+      <topBarEnabled>true</topBarEnabled>
+      <sideBarEnabled>true</sideBarEnabled>
+      <topBarIcon>
+        <name>Java Combinatorics</name>
+        <alt>Java Combinatorics</alt>
+        <src>/images/topbar-logo.png</src>
+        <href>/index.html</href>
+      </topBarIcon>
+      <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+      <profile>pre-release</profile>
+      <twitter>
+        <user>xiantrimble</user>
+        <showUser>true</showUser>
+        <showFollowers>true</showFollowers>
+      </twitter>
+    </fluidoSkin>
+  </custom>
+</project>
+

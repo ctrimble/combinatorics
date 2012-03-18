@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.github.ctrimble</groupId>
@@ -10,7 +11,8 @@
   <artifactId>combinatorics</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>Fast Combinatorics Library</name>
+  <name>Java Combinatorics Library</name>
+  <description>A Java combinatorics package, with a focus on fast iteration.</description>
   <properties>
     <java.source.version>1.6</java.source.version>
     <java.target.version>1.6</java.target.version>
@@ -23,8 +25,8 @@
     <orientdb.version>1.0rc6</orientdb.version>
   </properties>
   <scm>
-    <connection>scm:svn//minime.local/combinatorics/trunk/</connection>
-    <developerConnection>scm:svn://minime.local/combinatorics/trunk/</developerConnection>
+    <connection>scm:git:git://github.com/ctrimble/combinatorics</connection>
+    <developerConnection>scm:git:git://github.com/ctrimble/combinatorics</developerConnection>
   </scm>
   <dependencyManagement>
     <dependencies>
@@ -175,11 +177,11 @@
       <artifactId>mockito-all</artifactId>
       <scope>test</scope>
     </dependency>
-      <dependency>
-        <groupId>com.carrotsearch</groupId>
-        <artifactId>junit-benchmarks</artifactId>
-        <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>junit-benchmarks</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
@@ -250,6 +252,36 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>github</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.github.github</groupId>
+            <artifactId>site-maven-plugin</artifactId>
+            <version>0.5</version>
+            <configuration>
+              <repositoryName>combinatorics</repositoryName>
+              <repositoryOwner>ctrimble</repositoryOwner>
+              <message>Creating site for ${project.version}</message>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>site</goal>
+                </goals>
+                <phase>site</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
   <reporting>
     <plugins>
       <plugin>
