@@ -1,7 +1,6 @@
 package com.github.ctrimble.combinatorics;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 
 public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
