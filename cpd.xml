@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="32" tokens="137">
+<file line="61" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombMathUtilsImpl.java"/>
+<file line="230" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombMathUtilsImpl.java"/>
+<codefragment>
+<![CDATA[
+    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
+    
+    while( !stack.isEmpty() ) {
+      // get the next combination to expand.
+      PartialCombinationCount pc = stack.removeFirst();
+      
+      //System.out.println(pc);
+      
+      // Start the expansion of this partial combination.
+      // pc.k = the number of elements that still need to be added to the combination.
+      // pc.dm = the next distinct m to consider.
+      // pc.dmk = the size of the next combination of elements to add.
+      // pc.ldm = the number of distinct unused elements to the left of mdi minus the number of distinct used elements at mdi.
+      // pc.size = the number of combinations already in the solution (in k - pc.k)
+      // pc.pd = the permutation count denominator.
+      
+      // get the current distinct m
+      DistinctM cdm = pc.dm;
+      //System.out.println(cdm);
+      
+      // if there could never be an answer, then bail out.
+      if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
+        //System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
+        pccFactory.recycle(pc);
+        continue;
+      }
+      
+      // for each number of pc.dmk sized sets that we can create, add new partial combinations.
+      for( int e = 0; e <= pc.dm.count + pc.ldm && e * pc.dmk <= pc.k; e++ ) {
+        int nextK = pc.k - (e*pc.dmk);
+        int nextDmk = pc.dmk-1;
+        long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>

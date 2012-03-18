@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.2.5" timestamp="2012-03-18T06:42:05.267">
+<file name="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/FastMultiset.java">
+<violation beginline="65" endline="69" begincolumn="7" endcolumn="7" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="FastMultiset" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+</file>
+<file name="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java">
+<violation beginline="132" endline="135" begincolumn="21" endcolumn="21" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="Permutations$PermutationIterator" method="next" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="145" endline="150" begincolumn="21" endcolumn="21" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="Permutations$PermutationIterator" method="next" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="155" endline="158" begincolumn="21" endcolumn="21" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="Permutations$PermutationIterator" method="next" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="178" endline="181" begincolumn="21" endcolumn="21" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="Permutations$PermutationIterator" method="next" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="191" endline="196" begincolumn="19" endcolumn="19" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="Permutations$PermutationIterator" method="next" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+<violation beginline="201" endline="204" begincolumn="19" endcolumn="19" rule="JumbledIncrementer" ruleset="Basic Rules" package="com.github.ctrimble.combinatorics" class="Permutations$PermutationIterator" method="next" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#JumbledIncrementer" priority="3">
+Avoid modifying an outer loop incrementer in an inner loop for update expression
+</violation>
+</file>
+</pmd>

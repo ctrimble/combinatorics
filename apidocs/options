@@ -1,0 +1,23 @@
+-classpath
+'/Users/ctrimble/svn/minime/combinatorics-git/target/classes:/Users/ctrimble/.m2/public-repository/javolution/javolution/5.5.1/javolution-5.5.1.jar:/Users/ctrimble/.m2/public-repository/org/apache/commons/commons-math/2.2/commons-math-2.2.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/ctrimble/svn/minime/combinatorics-git/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2012. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/ctrimble/svn/minime/combinatorics-git/target/site/apidocs'
+-docencoding
+'UTF-8'
+-docfilessubdirs
+-doctitle
+'Java Combinatorics Library 0.1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'Java Combinatorics Library 0.1.0-SNAPSHOT API'
