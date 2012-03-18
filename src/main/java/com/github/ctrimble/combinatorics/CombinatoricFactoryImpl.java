@@ -30,4 +30,14 @@ public class CombinatoricFactoryImpl
     return mathUtils;
   }
 
+  @Override
+  public <T> CombinationsEngine<T> createCombinationsEngine(int rank, T... domain) {
+    return new CombinationsEngine<T>(rank, domain, getMathUtils());
+  }
+
+  @Override
+  public <T> PermutationsEngine<T> createPermutationsEngine(int rank, T... domain) {
+    return new PermutationsEngine<T>(rank, domain, getMathUtils());
+  }
+
 }
