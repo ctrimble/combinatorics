@@ -1,0 +1,148 @@
+The Combinatoric Factory
+
+  To use this package, you will first need to get an instance of CombinatoricsFactory.
+
++------------------------------------------------------------------+
+import com.github.ctrimble.combinatorics.CombinatoricFactory;
+import com.github.ctrimble.combinatorics.CombinatoricFactoryImpl;
+
+...
+
+CombinatoricsFactory factory = new CombinatoricsFactoryImpl();
++------------------------------------------------------------------+
+
+  Once you have an instance of a factory, you are ready to create combinatoric collections, combinatoric engines, multisets, and the math engine.
+
+Combinatoric Collections
+
+  This package provides collection implementations for combinations and permutations.  The collections are currently iterator based, so iterating the collections with calls to size() and get(int index) will be very slow.  However, iterating these collections with their iterators is very fast.
+
+  To create combination and permutation collections, use the createCombinations(rank, domain) and createPermutations(rank, domain) methods on the factory.  The rank is the length of the entries in the collection.  The domain is the array containing the elements to combine or permute.  These implementations can peroperly combine and permute domains that contain duplicates, so it is fine to have domains like (1,1,1,2,2).
+
+* Combination Collection Example
+
++------------------------------------------------------------------+
+import com.github.ctrimble.combinatorics.Combinatoric;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+Combinatoric<Integer> combinations = factory.createCombinations(rank, domain);
+for( Integer[] combination : combinations ) {
+  // do something with the combination.
+}
++------------------------------------------------------------------+
+
+* Permutation Collection Example
+
++------------------------------------------------------------------+
+import com.github.ctrimble.combinatorics.Combinatoric;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+Combinatoric<Integer> permutations = factory.createPermutations(rank, domain);
+for( Integer[] permutation : permutations ) {
+  // do something with the permutation.
+}
++------------------------------------------------------------------+
+
+Combinatoric Engines and Handlers
+
+  This package provides change event based implementations for combinations and permutations.  To access the functionality, you need to create a CombinatoricEngine with the factory and then define a CombinatoricHandler to manage the state.  The engine will fire change events to the handler (init, swap, replace) and evaluate events when a new combination or permutation state has been reached.
+
+* Method calls on CombinatoricHandler
+
+  The combinatoric engine will call handler methods in the following order:
+
+    [[1]] start() is called.
+
+    [[1]] init( ... ) is called, followed by evaluate().
+
+    [[1]] one or more calls to init( ... ), swap( ... ), or replace( ... ) are made, followed by evaluate().
+
+    [[1]] end() is called.
+
+
+  If the start() method throws an exception, then no more calls are made.  If any other method throws an exception, then end() will be called.
+
+* Combination Engine Example
+
++------------------------------------------------------------------+
+import com.github.ctrimble.combinatorics.CombinatoricEngine;
+import com.github.ctrimble.combinatorics.AbstractCombinatoricHandler;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+final Integer[] state = new Integer[rank];
+
+CombinatoricEngine<Integer> engine = factory.createCombinationsEngine(rank, domain);
+
+engine.setHandler(new AbstractCombinatoricHandler<Integer>() {
+  public void init( Integer[] newState ) {
+    for( int i = 0; i < newState.length; i++ ) {
+      state[i] = newState[i];
+    }
+  }
+
+  public void swap( Integer newA, int ai, Integer newB, int bi ) {
+    state[ai] = newA;
+    state[bi] = newB;
+  }
+
+  public void replace( Integer newValue, Integer oldValue, int index ) {
+    state[index] = newValue;
+  }
+
+  public void evaluate()
+  {
+    // do something with state.
+  }
+});
+
+engine.execute();
++------------------------------------------------------------------+
+
+* Permutation Engine Example
+
++------------------------------------------------------------------+
+import com.github.ctrimble.combinatorics.CombinatoricEngine;
+import com.github.ctrimble.combinatorics.AbstractCombinatoricHandler;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+final Integer[] state = new Integer[rank];
+
+CombinatoricEngine<Integer> engine = factory.createPermutationsEngine(rank, domain);
+
+engine.setHandler(new AbstractCombinatoricHandler<Integer>() {
+  public void init( Integer[] newState ) {
+    for( int i = 0; i < newState.length; i++ ) {
+      state[i] = newState[i];
+    }
+  }
+
+  public void swap( Integer newA, int ai, Integer newB, int bi ) {
+    state[ai] = newA;
+    state[bi] = newB;
+  }
+
+  public void replace( Integer newValue, Integer oldValue, int index ) {
+    state[index] = newValue;
+  }
+
+  public void evaluate()
+  {
+    // do something with state.
+  }
+});
+
+engine.execute();
++------------------------------------------------------------------+
+

@@ -250,6 +250,20 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <docfilessubdirs>true</docfilessubdirs>
+          <links>
+            <link>http://commons.apache.org/math/apidocs</link>
+            <link>http://javolution.org/target/site/apidocs</link>
+            <link>http://docs.oracle.com/javase/6/docs/api</link>
+          </links>
+          <linksource>true</linksource>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <profiles>
@@ -289,6 +303,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <docfilessubdirs>true</docfilessubdirs>
+          <quiet>true</quiet>
         </configuration>
       </plugin>
     </plugins>
