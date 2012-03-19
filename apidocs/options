@@ -3,6 +3,7 @@
 -encoding
 'UTF-8'
 -protected
+-quiet
 -sourcepath
 '/Users/ctrimble/svn/minime/combinatorics-git/src/main/java'
 -author

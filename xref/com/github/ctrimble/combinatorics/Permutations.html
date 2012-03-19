@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="64" href="#64">64</a>    <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">PermutationIterator</a>
 <a class="jxr_linenumber" name="65" href="#65">65</a>      <strong class="jxr_keyword">extends</strong> <a href="../../../../com/github/ctrimble/combinatorics/AbstractCombinatoric.html">AbstractCombinatoricIterator</a>
 <a class="jxr_linenumber" name="66" href="#66">66</a>    {
-<a class="jxr_linenumber" name="67" href="#67">67</a>      <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">TypePermutationState</a>[] state;
+<a class="jxr_linenumber" name="67" href="#67">67</a>      <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">TypePermutationState</a>[] state;
 <a class="jxr_linenumber" name="68" href="#68">68</a>      <strong class="jxr_keyword">int</strong>[] domainRanks;
 <a class="jxr_linenumber" name="69" href="#69">69</a>      T[] next;
 <a class="jxr_linenumber" name="70" href="#70">70</a>      T[] previous;
@@ -95,14 +95,14 @@
 <a class="jxr_linenumber" name="85" href="#85">85</a>        <strong class="jxr_keyword">if</strong>( nextIndex == 0 ) {
 <a class="jxr_linenumber" name="86" href="#86">86</a>          next = newComponentArray(rank);
 <a class="jxr_linenumber" name="87" href="#87">87</a>          domainRanks = domain.toRankArray();
-<a class="jxr_linenumber" name="88" href="#88">88</a>          state = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">TypePermutationState</a>[domainRanks.length];
+<a class="jxr_linenumber" name="88" href="#88">88</a>          state = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">TypePermutationState</a>[domainRanks.length];
 <a class="jxr_linenumber" name="89" href="#89">89</a>          <strong class="jxr_keyword">int</strong> ni = 0;
 <a class="jxr_linenumber" name="90" href="#90">90</a>          <strong class="jxr_keyword">for</strong>( <strong class="jxr_keyword">int</strong> ri = 0; ri &lt; domainRanks.length; ri++) {
-<a class="jxr_linenumber" name="91" href="#91">91</a>            state[ri] = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">TypePermutationState</a>();
+<a class="jxr_linenumber" name="91" href="#91">91</a>            state[ri] = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">TypePermutationState</a>();
 <a class="jxr_linenumber" name="92" href="#92">92</a>            state[ri].count = Math.min(domainRanks[ri], rank-ni);
-<a class="jxr_linenumber" name="93" href="#93">93</a>            state[ri].entryState = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">EntryPermutationState</a>[domainRanks[ri]];
+<a class="jxr_linenumber" name="93" href="#93">93</a>            state[ri].entryState = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">EntryPermutationState</a>[domainRanks[ri]];
 <a class="jxr_linenumber" name="94" href="#94">94</a>            <strong class="jxr_keyword">for</strong>( <strong class="jxr_keyword">int</strong> j = 0; j &lt; state[ri].entryState.length; j++ ) {
-<a class="jxr_linenumber" name="95" href="#95">95</a>              state[ri].entryState[j] = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">EntryPermutationState</a>(j);
+<a class="jxr_linenumber" name="95" href="#95">95</a>              state[ri].entryState[j] = <strong class="jxr_keyword">new</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">EntryPermutationState</a>(j);
 <a class="jxr_linenumber" name="96" href="#96">96</a>              <strong class="jxr_keyword">if</strong>( j &lt; state[ri].count ) {
 <a class="jxr_linenumber" name="97" href="#97">97</a>                next[ni++] = domain.get(ri).get(j);         
 <a class="jxr_linenumber" name="98" href="#98">98</a>              }
@@ -273,10 +273,10 @@
 <a class="jxr_linenumber" name="263" href="#263">263</a>     
 <a class="jxr_linenumber" name="264" href="#264">264</a>   }
 <a class="jxr_linenumber" name="265" href="#265">265</a> 
-<a class="jxr_linenumber" name="266" href="#266">266</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">TypePermutationState</a>
+<a class="jxr_linenumber" name="266" href="#266">266</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">TypePermutationState</a>
 <a class="jxr_linenumber" name="267" href="#267">267</a>   {
-<a class="jxr_linenumber" name="268" href="#268">268</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">Direction</a> direction = Direction.DOWN;
-<a class="jxr_linenumber" name="269" href="#269">269</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">EntryPermutationState</a>[] entryState;
+<a class="jxr_linenumber" name="268" href="#268">268</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">Direction</a> direction = Direction.DOWN;
+<a class="jxr_linenumber" name="269" href="#269">269</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">EntryPermutationState</a>[] entryState;
 <a class="jxr_linenumber" name="270" href="#270">270</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> count = 0; <em class="jxr_comment">// the number of entries being used.</em>
 <a class="jxr_linenumber" name="271" href="#271">271</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> toRight = 0; <em class="jxr_comment">// the number of items that can occur to the right.  Would be better with the rank array.</em>
 <a class="jxr_linenumber" name="272" href="#272">272</a>     <strong class="jxr_keyword">public</strong> String toString() {
@@ -284,19 +284,19 @@
 <a class="jxr_linenumber" name="274" href="#274">274</a>     }
 <a class="jxr_linenumber" name="275" href="#275">275</a>   }
 <a class="jxr_linenumber" name="276" href="#276">276</a>   
-<a class="jxr_linenumber" name="277" href="#277">277</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">EntryPermutationState</a>
+<a class="jxr_linenumber" name="277" href="#277">277</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">EntryPermutationState</a>
 <a class="jxr_linenumber" name="278" href="#278">278</a>   {
-<a class="jxr_linenumber" name="279" href="#279">279</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">EntryPermutationState</a>(<strong class="jxr_keyword">int</strong> index) {
+<a class="jxr_linenumber" name="279" href="#279">279</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">EntryPermutationState</a>(<strong class="jxr_keyword">int</strong> index) {
 <a class="jxr_linenumber" name="280" href="#280">280</a>       <strong class="jxr_keyword">this</strong>.index = index;
 <a class="jxr_linenumber" name="281" href="#281">281</a>     }
-<a class="jxr_linenumber" name="282" href="#282">282</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">Direction</a> direction = Direction.DOWN;
+<a class="jxr_linenumber" name="282" href="#282">282</a>     <strong class="jxr_keyword">public</strong> <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">Direction</a> direction = Direction.DOWN;
 <a class="jxr_linenumber" name="283" href="#283">283</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> index = 0;
 <a class="jxr_linenumber" name="284" href="#284">284</a>     <strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="285" href="#285">285</a>       <strong class="jxr_keyword">return</strong> <span class="jxr_string">"{direction:"</span>+direction+<span class="jxr_string">", index:"</span>+index+<span class="jxr_string">"}"</span>;
 <a class="jxr_linenumber" name="286" href="#286">286</a>     }
 <a class="jxr_linenumber" name="287" href="#287">287</a>   }
 <a class="jxr_linenumber" name="288" href="#288">288</a>   
-<a class="jxr_linenumber" name="289" href="#289">289</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> enum <a href="../../../../com/github/ctrimble/combinatorics/Permutations.html">Direction</a>
+<a class="jxr_linenumber" name="289" href="#289">289</a>   <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> enum <a href="../../../../com/github/ctrimble/combinatorics/PermutationsEngine.html">Direction</a>
 <a class="jxr_linenumber" name="290" href="#290">290</a>   {
 <a class="jxr_linenumber" name="291" href="#291">291</a>     UP,DOWN
 <a class="jxr_linenumber" name="292" href="#292">292</a>   }

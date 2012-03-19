@@ -1,0 +1,181 @@
+<HTML>
+<BODY BGCOLOR="white">
+<PRE>
+<FONT color="green">001</FONT>    package com.github.ctrimble.combinatorics;<a name="line.1"></a>
+<FONT color="green">002</FONT>    <a name="line.2"></a>
+<FONT color="green">003</FONT>    public class CombinationsEngine&lt;T&gt; extends AbstractCombinatoricEngine&lt;T&gt; {<a name="line.3"></a>
+<FONT color="green">004</FONT>      protected T[] last;<a name="line.4"></a>
+<FONT color="green">005</FONT>      protected int[] domainRanks;<a name="line.5"></a>
+<FONT color="green">006</FONT>      protected DomainPointer[] indices;<a name="line.6"></a>
+<FONT color="green">007</FONT>      <a name="line.7"></a>
+<FONT color="green">008</FONT>      protected CombinationsEngine(int rank, T[] domain, CombMathUtils mathUtils) {<a name="line.8"></a>
+<FONT color="green">009</FONT>        super(rank, domain, mathUtils);<a name="line.9"></a>
+<FONT color="green">010</FONT>        last = Utils.newArray(componentType, rank);<a name="line.10"></a>
+<FONT color="green">011</FONT>        domainRanks = this.domain.toRankArray();<a name="line.11"></a>
+<FONT color="green">012</FONT>        indices = new DomainPointer[domainRanks.length];<a name="line.12"></a>
+<FONT color="green">013</FONT>        indices[indices.length-1] = new DomainPointer();<a name="line.13"></a>
+<FONT color="green">014</FONT>        for( int i = domainRanks.length-1; i &gt; 0; i-- ) {<a name="line.14"></a>
+<FONT color="green">015</FONT>          indices[i-1] = new DomainPointer();<a name="line.15"></a>
+<FONT color="green">016</FONT>          indices[i-1].toRight = domainRanks[i] + indices[i].toRight;<a name="line.16"></a>
+<FONT color="green">017</FONT>        }<a name="line.17"></a>
+<FONT color="green">018</FONT>      }<a name="line.18"></a>
+<FONT color="green">019</FONT>    <a name="line.19"></a>
+<FONT color="green">020</FONT>      @Override<a name="line.20"></a>
+<FONT color="green">021</FONT>      public void execute() {<a name="line.21"></a>
+<FONT color="green">022</FONT>        <a name="line.22"></a>
+<FONT color="green">023</FONT>        // signal that execution is starting.<a name="line.23"></a>
+<FONT color="green">024</FONT>        handler.start();<a name="line.24"></a>
+<FONT color="green">025</FONT>        <a name="line.25"></a>
+<FONT color="green">026</FONT>        try {<a name="line.26"></a>
+<FONT color="green">027</FONT>        <a name="line.27"></a>
+<FONT color="green">028</FONT>        // initialize the state and notify the handler.<a name="line.28"></a>
+<FONT color="green">029</FONT>        for(int i = 0, used = 0; i &lt; indices.length &amp;&amp; used &lt; rank; used += domainRanks[i++]) {<a name="line.29"></a>
+<FONT color="green">030</FONT>          indices[i].index = used;<a name="line.30"></a>
+<FONT color="green">031</FONT>          indices[i].count = Math.min(rank-used, domainRanks[i]);<a name="line.31"></a>
+<FONT color="green">032</FONT>          for( int j = 0; j &lt; indices[i].count; j++ ) {<a name="line.32"></a>
+<FONT color="green">033</FONT>            last[indices[i].index+j] = domainValues[i][j];<a name="line.33"></a>
+<FONT color="green">034</FONT>          }<a name="line.34"></a>
+<FONT color="green">035</FONT>        }<a name="line.35"></a>
+<FONT color="green">036</FONT>        handler.init(last);<a name="line.36"></a>
+<FONT color="green">037</FONT>        handler.evaluate();<a name="line.37"></a>
+<FONT color="green">038</FONT>        <a name="line.38"></a>
+<FONT color="green">039</FONT>        // we are now at index 1, start iterating over the combinations.<a name="line.39"></a>
+<FONT color="green">040</FONT>        for (long index = 1; index &lt; size; index++) {<a name="line.40"></a>
+<FONT color="green">041</FONT>    <a name="line.41"></a>
+<FONT color="green">042</FONT>          // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION:<a name="line.42"></a>
+<FONT color="green">043</FONT>          // (3,2,0,1,1)<a name="line.43"></a>
+<FONT color="green">044</FONT>          // Position | 0 | 1 | 2 | 3 | 4<a name="line.44"></a>
+<FONT color="green">045</FONT>          // Index | 0 | 3 | 5 | 5 | 6<a name="line.45"></a>
+<FONT color="green">046</FONT>          // Count | 3 | 2 | 0 | 1 | 1<a name="line.46"></a>
+<FONT color="green">047</FONT>          // ToRight | 9 | 6 | 5 | 2 | 0<a name="line.47"></a>
+<FONT color="green">048</FONT>    <a name="line.48"></a>
+<FONT color="green">049</FONT>          // advance the indices.<a name="line.49"></a>
+<FONT color="green">050</FONT>          int cur = domainRanks.length - 1;<a name="line.50"></a>
+<FONT color="green">051</FONT>          int remaining = 0;<a name="line.51"></a>
+<FONT color="green">052</FONT>    <a name="line.52"></a>
+<FONT color="green">053</FONT>          // move cur backwards to find the next item to update.<a name="line.53"></a>
+<FONT color="green">054</FONT>          for (; cur &gt; 0 &amp;&amp; (indices[cur].count == 0 || indices[cur].toRight &lt; remaining + 1); remaining += indices[cur--].count);<a name="line.54"></a>
+<FONT color="green">055</FONT>    <a name="line.55"></a>
+<FONT color="green">056</FONT>          // decrement the items at cur.<a name="line.56"></a>
+<FONT color="green">057</FONT>          indices[cur].count--;<a name="line.57"></a>
+<FONT color="green">058</FONT>          remaining++;<a name="line.58"></a>
+<FONT color="green">059</FONT>    <a name="line.59"></a>
+<FONT color="green">060</FONT>          // move forward and update indices and next.<a name="line.60"></a>
+<FONT color="green">061</FONT>          for (cur++; cur &lt; indices.length; cur++) {<a name="line.61"></a>
+<FONT color="green">062</FONT>            indices[cur].count = Math.min(remaining, domainRanks[cur]);<a name="line.62"></a>
+<FONT color="green">063</FONT>            indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;<a name="line.63"></a>
+<FONT color="green">064</FONT>            remaining -= indices[cur].count;<a name="line.64"></a>
+<FONT color="green">065</FONT>            for (int i = 0; i &lt; indices[cur].count; i++) {<a name="line.65"></a>
+<FONT color="green">066</FONT>              int replaceIndex = indices[cur].index + i;<a name="line.66"></a>
+<FONT color="green">067</FONT>              T oldValue = last[replaceIndex];<a name="line.67"></a>
+<FONT color="green">068</FONT>              last[indices[cur].index + i] = domainValues[cur][i];<a name="line.68"></a>
+<FONT color="green">069</FONT>              <a name="line.69"></a>
+<FONT color="green">070</FONT>              // fire the replace event.  This could be much faster with swaps.<a name="line.70"></a>
+<FONT color="green">071</FONT>              handler.replace(last[replaceIndex], oldValue, replaceIndex);<a name="line.71"></a>
+<FONT color="green">072</FONT>            }<a name="line.72"></a>
+<FONT color="green">073</FONT>          }<a name="line.73"></a>
+<FONT color="green">074</FONT>          handler.evaluate();<a name="line.74"></a>
+<FONT color="green">075</FONT>        }<a name="line.75"></a>
+<FONT color="green">076</FONT>        }<a name="line.76"></a>
+<FONT color="green">077</FONT>        finally {<a name="line.77"></a>
+<FONT color="green">078</FONT>          handler.end();<a name="line.78"></a>
+<FONT color="green">079</FONT>        }<a name="line.79"></a>
+<FONT color="green">080</FONT>      }<a name="line.80"></a>
+<FONT color="green">081</FONT>    <a name="line.81"></a>
+<FONT color="green">082</FONT>      /**<a name="line.82"></a>
+<FONT color="green">083</FONT>       * Computes the number of combinations for the specified rank and domain.<a name="line.83"></a>
+<FONT color="green">084</FONT>       * <a name="line.84"></a>
+<FONT color="green">085</FONT>       * @param rank the rank of the permutation.<a name="line.85"></a>
+<FONT color="green">086</FONT>       * @param domain the multiset containing the elements to be permuted.<a name="line.86"></a>
+<FONT color="green">087</FONT>       */<a name="line.87"></a>
+<FONT color="green">088</FONT>      @Override<a name="line.88"></a>
+<FONT color="green">089</FONT>      protected long computeSize(int rank, Multiset&lt;T&gt; domain) {<a name="line.89"></a>
+<FONT color="green">090</FONT>        return mathUtils.c(rank, domain.toRankArray());<a name="line.90"></a>
+<FONT color="green">091</FONT>      }<a name="line.91"></a>
+<FONT color="green">092</FONT>    <a name="line.92"></a>
+<FONT color="green">093</FONT>      /**<a name="line.93"></a>
+<FONT color="green">094</FONT>       * State information for each unique type in the domain.<a name="line.94"></a>
+<FONT color="green">095</FONT>       * <a name="line.95"></a>
+<FONT color="green">096</FONT>       * @author Christian Trimble<a name="line.96"></a>
+<FONT color="green">097</FONT>       */<a name="line.97"></a>
+<FONT color="green">098</FONT>      private static class DomainPointer<a name="line.98"></a>
+<FONT color="green">099</FONT>      {<a name="line.99"></a>
+<FONT color="green">100</FONT>        /** The start index for this type in the current result. */<a name="line.100"></a>
+<FONT color="green">101</FONT>        public int index = 0;<a name="line.101"></a>
+<FONT color="green">102</FONT>        /** The number of elements of this type in the current result. */<a name="line.102"></a>
+<FONT color="green">103</FONT>        public int count = 0;<a name="line.103"></a>
+<FONT color="green">104</FONT>        /** The number of elements in the domain that are greater than this type. */<a name="line.104"></a>
+<FONT color="green">105</FONT>        public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.<a name="line.105"></a>
+<FONT color="green">106</FONT>        /**<a name="line.106"></a>
+<FONT color="green">107</FONT>         * Returns a string representation of this object.<a name="line.107"></a>
+<FONT color="green">108</FONT>         * @return a string representation of this object.<a name="line.108"></a>
+<FONT color="green">109</FONT>         */<a name="line.109"></a>
+<FONT color="green">110</FONT>        public String toString()<a name="line.110"></a>
+<FONT color="green">111</FONT>        {<a name="line.111"></a>
+<FONT color="green">112</FONT>          return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";<a name="line.112"></a>
+<FONT color="green">113</FONT>        }<a name="line.113"></a>
+<FONT color="green">114</FONT>      }<a name="line.114"></a>
+<FONT color="green">115</FONT>    }<a name="line.115"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</PRE>
+</BODY>
+</HTML>

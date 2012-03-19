@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>About</title>
+    <title></title>
     <link rel="stylesheet" href="./css/apache-maven-fluido.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -38,6 +38,15 @@
                     
           <ul>
                         <li class="dropdown" data-dropdown="dropdown" >
+        <a href="#" class="dropdown-toggle">Combinatorics</a>
+        <ul class="dropdown-menu">
+                      <li>      <a href="index.html"  title="Introduction">Introduction</a>
+</li>
+                      <li>      <a href="apidocs/index.html"  title="JavaDocs">JavaDocs</a>
+</li>
+                  </ul>
+      </li>
+                <li class="dropdown" data-dropdown="dropdown" >
         <a href="#" class="dropdown-toggle">Project Documentation</a>
         <ul class="dropdown-menu">
                       <li>      <a href="project-info.html"  title="Project Information">Project Information</a>
@@ -72,7 +81,16 @@
         <div class="well">
                 
             
-                                   <h5>Project Documentation</h5>
+                                   <h5>Combinatorics</h5>
+                  <ul>
+                  <li class="none">
+            <strong>Introduction</strong>
+          </li>
+                  <li class="none">
+                          <a href="apidocs/index.html" title="JavaDocs">JavaDocs</a>
+            </li>
+          </ul>
+                       <h5>Project Documentation</h5>
                   <ul>
                                                                                                                                                                                                                                                                                                       <li class="expanded">
                           <a href="project-info.html" title="Project Information">Project Information</a>
@@ -146,7 +164,96 @@
       <div id="bodyColumn" class="content">
         <div id="contentBox">
                               
-          <div class="section"><h2>About Java Combinatorics Library<a name="About_Java_Combinatorics_Library"></a></h2><a name="About_Java_Combinatorics_Library"></a><p>A Java combinatorics package, with a focus on fast iteration.</p></div>
+          <div class="section"><h2>The Combinatoric Factory<a name="The_Combinatoric_Factory"></a></h2><p>To use this package, you will first need to get an instance of CombinatoricsFactory.</p><div class="source"><pre class="prettyprint linenums">import com.github.ctrimble.combinatorics.CombinatoricFactory;
+import com.github.ctrimble.combinatorics.CombinatoricFactoryImpl;
+
+...
+
+CombinatoricsFactory factory = new CombinatoricsFactoryImpl();</pre></div><p>Once you have an instance of a factory, you are ready to create combinatoric collections, combinatoric engines, multisets, and the math engine.</p></div><div class="section"><h2>Combinatoric Collections<a name="Combinatoric_Collections"></a></h2><p>This package provides collection implementations for combinations and permutations. The collections are currently iterator based, so iterating the collections with calls to size() and get(int index) will be very slow. However, iterating these collections with their iterators is very fast.</p><p>To create combination and permutation collections, use the createCombinations(rank, domain) and createPermutations(rank, domain) methods on the factory. The rank is the length of the entries in the collection. The domain is the array containing the elements to combine or permute. These implementations can peroperly combine and permute domains that contain duplicates, so it is fine to have domains like (1,1,1,2,2).</p><div class="section"><h3>Combination Collection Example<a name="Combination_Collection_Example"></a></h3><div class="source"><pre class="prettyprint linenums">import com.github.ctrimble.combinatorics.Combinatoric;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+Combinatoric&lt;Integer&gt; combinations = factory.createCombinations(rank, domain);
+for( Integer[] combination : combinations ) {
+  // do something with the combination.
+}</pre></div></div><div class="section"><h3>Permutation Collection Example<a name="Permutation_Collection_Example"></a></h3><div class="source"><pre class="prettyprint linenums">import com.github.ctrimble.combinatorics.Combinatoric;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+Combinatoric&lt;Integer&gt; permutations = factory.createPermutations(rank, domain);
+for( Integer[] permutation : permutations ) {
+  // do something with the permutation.
+}</pre></div></div></div><div class="section"><h2>Combinatoric Engines and Handlers<a name="Combinatoric_Engines_and_Handlers"></a></h2><p>This package provides change event based implementations for combinations and permutations. To access the functionality, you need to create a CombinatoricEngine with the factory and then define a CombinatoricHandler to manage the state. The engine will fire change events to the handler (init, swap, replace) and evaluate events when a new combination or permutation state has been reached.</p><div class="section"><h3>Method calls on CombinatoricHandler<a name="Method_calls_on_CombinatoricHandler"></a></h3><p>The combinatoric engine will call handler methods in the following order:</p><ol style="list-style-type: decimal"><li>start() is called.</li><li>init( ... ) is called, followed by evaluate().</li><li>one or more calls to init( ... ), swap( ... ), or replace( ... ) are made, followed by evaluate().</li><li>end() is called.</li></ol><p>If the start() method throws an exception, then no more calls are made. If any other method throws an exception, then end() will be called.</p></div><div class="section"><h3>Combination Engine Example<a name="Combination_Engine_Example"></a></h3><div class="source"><pre class="prettyprint linenums">import com.github.ctrimble.combinatorics.CombinatoricEngine;
+import com.github.ctrimble.combinatorics.AbstractCombinatoricHandler;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+final Integer[] state = new Integer[rank];
+
+CombinatoricEngine&lt;Integer&gt; engine = factory.createCombinationsEngine(rank, domain);
+
+engine.setHandler(new AbstractCombinatoricHandler&lt;Integer&gt;() {
+  public void init( Integer[] newState ) {
+    for( int i = 0; i &lt; newState.length; i++ ) {
+      state[i] = newState[i];
+    }
+  }
+
+  public void swap( Integer newA, int ai, Integer newB, int bi ) {
+    state[ai] = newA;
+    state[bi] = newB;
+  }
+
+  public void replace( Integer newValue, Integer oldValue, int index ) {
+    state[index] = newValue;
+  }
+
+  public void evaluate()
+  {
+    // do something with state.
+  }
+});
+
+engine.execute();</pre></div></div><div class="section"><h3>Permutation Engine Example<a name="Permutation_Engine_Example"></a></h3><div class="source"><pre class="prettyprint linenums">import com.github.ctrimble.combinatorics.CombinatoricEngine;
+import com.github.ctrimble.combinatorics.AbstractCombinatoricHandler;
+
+...
+
+Integer[] domain = new Integer[]{1,1,1,2,2};
+int rank = 4;
+final Integer[] state = new Integer[rank];
+
+CombinatoricEngine&lt;Integer&gt; engine = factory.createPermutationsEngine(rank, domain);
+
+engine.setHandler(new AbstractCombinatoricHandler&lt;Integer&gt;() {
+  public void init( Integer[] newState ) {
+    for( int i = 0; i &lt; newState.length; i++ ) {
+      state[i] = newState[i];
+    }
+  }
+
+  public void swap( Integer newA, int ai, Integer newB, int bi ) {
+    state[ai] = newA;
+    state[bi] = newB;
+  }
+
+  public void replace( Integer newValue, Integer oldValue, int index ) {
+    state[index] = newValue;
+  }
+
+  public void evaluate()
+  {
+    // do something with state.
+  }
+});
+
+engine.execute();</pre></div></div></div>
                   </div>
       </div>
     </div>

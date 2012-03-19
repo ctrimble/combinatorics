@@ -38,6 +38,15 @@
                     
           <ul>
                         <li class="dropdown" data-dropdown="dropdown" >
+        <a href="#" class="dropdown-toggle">Combinatorics</a>
+        <ul class="dropdown-menu">
+                      <li>      <a href="index.html"  title="Introduction">Introduction</a>
+</li>
+                      <li>      <a href="apidocs/index.html"  title="JavaDocs">JavaDocs</a>
+</li>
+                  </ul>
+      </li>
+                <li class="dropdown" data-dropdown="dropdown" >
         <a href="#" class="dropdown-toggle">Project Documentation</a>
         <ul class="dropdown-menu">
                       <li>      <a href="project-info.html"  title="Project Information">Project Information</a>
@@ -72,7 +81,16 @@
         <div class="well">
                 
             
-                                   <h5>Project Documentation</h5>
+                                   <h5>Combinatorics</h5>
+                  <ul>
+                  <li class="none">
+                          <a href="index.html" title="Introduction">Introduction</a>
+            </li>
+                  <li class="none">
+                          <a href="apidocs/index.html" title="JavaDocs">JavaDocs</a>
+            </li>
+          </ul>
+                       <h5>Project Documentation</h5>
                   <ul>
                                                                                                                                                                                                                                                                                             <li class="collapsed">
                           <a href="project-info.html" title="Project Information">Project Information</a>
@@ -134,7 +152,155 @@
       <div id="bodyColumn" class="content">
         <div id="contentBox">
                               
-          <div class="section"><h2>CPD Results<a name="CPD_Results"></a></h2><p>The following document contains the results of PMD's  <a class="externalLink" href="http://pmd.sourceforge.net/cpd.html">CPD</a> 4.2.5.</p></div><div class="section"><h2>Duplications<a name="Duplications"></a></h2><table border="0" class="zebra-striped"><tr class="a"><th>File</th><th>Line</th></tr><tr class="b"><td>com/github/ctrimble/combinatorics/CombMathUtilsImpl.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/CombMathUtilsImpl.html#61">61</a></td></tr><tr class="a"><td>com/github/ctrimble/combinatorics/CombMathUtilsImpl.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/CombMathUtilsImpl.html#230">230</a></td></tr><tr class="b"><td colspan='2'><div><pre>    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
+          <div class="section"><h2>CPD Results<a name="CPD_Results"></a></h2><p>The following document contains the results of PMD's  <a class="externalLink" href="http://pmd.sourceforge.net/cpd.html">CPD</a> 4.2.5.</p></div><div class="section"><h2>Duplications<a name="Duplications"></a></h2><table border="0" class="zebra-striped"><tr class="a"><th>File</th><th>Line</th></tr><tr class="b"><td>com/github/ctrimble/combinatorics/Permutations.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/Permutations.html#116">116</a></td></tr><tr class="a"><td>com/github/ctrimble/combinatorics/PermutationsEngine.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/PermutationsEngine.html#57">57</a></td></tr><tr class="b"><td colspan='2'><div><pre>        int windowEnd = last.length;
+        int swapSource = 0;
+        int swapTarget = 0;
+        TYPE : for (int i = 0; i &lt; state.length; i++) {
+          switch (state[i].direction) {
+            case DOWN :
+              // scan the entries from back to front, looking for the first item
+              // to move.
+              ENTRY : for (int j = state[i].count - 1; j &gt;= 0; j--) {
+                switch (state[i].entryState[j].direction) {
+                  case DOWN :
+                    if (state[i].entryState[j].index &lt; (windowEnd - 1) - ((state[i].count - 1) - j)) {
+                      // track the source index for the swap.
+                      swapSource = windowStart + state[i].entryState[j].index;
+
+                      // increment the index and deal with moving over like
+                      // elements
+                      state[i].entryState[j].index++;
+                      for (; j &lt; state[i].count - 1 &amp;&amp; state[i].entryState[j].index == state[i].entryState[j + 1].index; j++) {
+                        state[i].entryState[j + 1].index++;
+                        state[i].entryState[j + 1].direction = Direction.DOWN;
+                      }
+
+                      // track the target index for the swap.
+                      swapTarget = windowStart + state[i].entryState[j].index;
+                      break TYPE;
+                    }
+                    state[i].entryState[j].direction = Direction.UP;
+                    break;
+                  case UP :
+                    int startIndex = j;
+                    for (; state[i].entryState[j].index == state[i].entryState[j - 1].index + 1; j--) {
+                      // if this entry is moving down, then switch case
+                      // statements.
+                      if (state[i].entryState[j - 1].direction == Direction.DOWN) {
+                        continue ENTRY;
+                      }
+                    }
+                    swapSource = windowStart + state[i].entryState[startIndex].index;
+                    state[i].entryState[j].direction = Direction.UP;
+                    state[i].entryState[j].index--;
+                    swapTarget = windowStart + state[i].entryState[j].index;
+                    for (j++; j &lt;= startIndex; j++) {
+                      state[i].entryState[j].direction = Direction.DOWN;
+                      state[i].entryState[j].index--;
+                    }
+                    break TYPE;
+                }
+              }
+              // none of the entries can move down, switch directions.
+              state[i].direction = Direction.UP;
+              windowEnd -= state[i].count;
+              if (i &lt; state.length - 1)
+                continue TYPE;
+              break;
+            case UP :
+              // scan the entries from front to back, looking for the first item
+              // to move.
+              ENTRY : for (int j = 0; j &lt; state[i].count; j++) {
+                switch (state[i].entryState[j].direction) {
+                  case UP :
+                    if (state[i].entryState[j].index &gt; j) {
+                      // track the source index of the swap.
+                      swapSource = state[i].entryState[j].index + windowStart;
+
+                      // decrement the index and deal with moving over like
+                      // elements.
+                      state[i].entryState[j].index--;
+                      for (; j &gt; 0 &amp;&amp; state[i].entryState[j].index == state[i].entryState[j - 1].index; j--) {
+                        state[i].entryState[j - 1].index--;
+                        state[i].entryState[j - 1].direction = Direction.UP;
+                      }
+
+                      // track the target index for the swap.
+                      swapTarget = state[i].entryState[j].index + windowStart;
+                      break TYPE;
+                    }
+                    state[i].entryState[j].direction = Direction.DOWN;
+                    break;
+                  case DOWN :
+                    int startIndex = j;
+                    for (; state[i].entryState[j].index == state[i].entryState[j + 1].index - 1; j++) {
+                      // if this entry is moving down, then switch case
+                      // statements.
+                      if (state[i].entryState[j + 1].direction == Direction.UP) {
+                        continue ENTRY;
+                      }
+                    }
+                    swapSource = windowStart + state[i].entryState[startIndex].index;
+                    state[i].entryState[j].direction = Direction.DOWN;
+                    state[i].entryState[j].index++;
+                    swapTarget = windowStart + state[i].entryState[j].index;
+                    for (j--; j &gt;= startIndex; j--) {
+                      state[i].entryState[j].direction = Direction.UP;
+                      state[i].entryState[j].index++;
+                    }
+                    break TYPE;
+                }
+              }
+              state[i].direction = Direction.DOWN;
+              windowStart += state[i].count;
+              if (i &lt; state.length - 1)
+                continue TYPE;
+              break;
+          }
+
+          // end of permutations for this combination reached. Advance to the
+          // next
+          // combination.
+          int cur = state.length - 1;
+          int remaining = 0;
+
+          // move cur backwards to find the next item to update.
+          for (; cur &gt; 0 &amp;&amp; (state[cur].count == 0 || state[cur].toRight &lt; remaining + 1); remaining += state[cur--].count);
+
+          // decrement the items at cur.
+          state[cur].count--;
+          remaining++;
+
+          // move forward and update all of the counts.
+          for (cur++; cur &lt; state.length; cur++) {
+            state[cur].count = Math.min(remaining, domainRanks[cur]);
+            remaining -= state[cur].count;
+          }</pre></div></td></tr></table><table border="0" class="zebra-striped"><tr class="a"><th>File</th><th>Line</th></tr><tr class="b"><td>com/github/ctrimble/combinatorics/Combinations.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/Combinations.html#104">104</a></td></tr><tr class="a"><td>com/github/ctrimble/combinatorics/CombinationsEngine.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/CombinationsEngine.html#40">40</a></td></tr><tr class="b"><td colspan='2'><div><pre>    for (long index = 1; index &lt; size; index++) {
+
+      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION:
+      // (3,2,0,1,1)
+      // Position | 0 | 1 | 2 | 3 | 4
+      // Index | 0 | 3 | 5 | 5 | 6
+      // Count | 3 | 2 | 0 | 1 | 1
+      // ToRight | 9 | 6 | 5 | 2 | 0
+
+      // advance the indices.
+      int cur = domainRanks.length - 1;
+      int remaining = 0;
+
+      // move cur backwards to find the next item to update.
+      for (; cur &gt; 0 &amp;&amp; (indices[cur].count == 0 || indices[cur].toRight &lt; remaining + 1); remaining += indices[cur--].count);
+
+      // decrement the items at cur.
+      indices[cur].count--;
+      remaining++;
+
+      // move forward and update indices and next.
+      for (cur++; cur &lt; indices.length; cur++) {
+        indices[cur].count = Math.min(remaining, domainRanks[cur]);
+        indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;
+        remaining -= indices[cur].count;
+        for (int i = 0; i &lt; indices[cur].count; i++) {</pre></div></td></tr></table><table border="0" class="zebra-striped"><tr class="a"><th>File</th><th>Line</th></tr><tr class="b"><td>com/github/ctrimble/combinatorics/CombMathUtilsImpl.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/CombMathUtilsImpl.html#61">61</a></td></tr><tr class="a"><td>com/github/ctrimble/combinatorics/CombMathUtilsImpl.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/CombMathUtilsImpl.html#230">230</a></td></tr><tr class="b"><td colspan='2'><div><pre>    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
     
     while( !stack.isEmpty() ) {
       // get the next combination to expand.
@@ -165,7 +331,46 @@
       for( int e = 0; e &lt;= pc.dm.count + pc.ldm &amp;&amp; e * pc.dmk &lt;= pc.k; e++ ) {
         int nextK = pc.k - (e*pc.dmk);
         int nextDmk = pc.dmk-1;
-        long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);</pre></div></td></tr></table></div>
+        long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);</pre></div></td></tr></table><table border="0" class="zebra-striped"><tr class="a"><th>File</th><th>Line</th></tr><tr class="b"><td>com/github/ctrimble/combinatorics/Permutations.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/Permutations.html#86">86</a></td></tr><tr class="a"><td>com/github/ctrimble/combinatorics/PermutationsEngine.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/PermutationsEngine.html#33">33</a></td></tr><tr class="b"><td colspan='2'><div><pre>      last = Utils.newArray(componentType, rank);
+      domainRanks = domain.toRankArray();
+      state = new TypePermutationState[domainRanks.length];
+      int ni = 0;
+      for (int ri = 0; ri &lt; domainRanks.length; ri++) {
+        state[ri] = new TypePermutationState();
+        state[ri].count = Math.min(domainRanks[ri], rank - ni);
+        state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
+        for (int j = 0; j &lt; state[ri].entryState.length; j++) {
+          state[ri].entryState[j] = new EntryPermutationState(j);
+          if (j &lt; state[ri].count) {</pre></div></td></tr></table><table border="0" class="zebra-striped"><tr class="a"><th>File</th><th>Line</th></tr><tr class="b"><td>com/github/ctrimble/combinatorics/Permutations.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/Permutations.html#261">261</a></td></tr><tr class="a"><td>com/github/ctrimble/combinatorics/PermutationsEngine.java</td><td><a href="./xref/com/github/ctrimble/combinatorics/PermutationsEngine.html#209">209</a></td></tr><tr class="b"><td colspan='2'><div><pre>      handler.end();
+    }
+  }
+
+  private static class TypePermutationState {
+    public Direction direction = Direction.DOWN;
+    public EntryPermutationState[] entryState;
+    public int count = 0; // the number of entries being used.
+    public int toRight = 0; // the number of items that can occur to the right.
+                            // Would be better with the rank array.
+    public String toString() {
+      return &quot;{direction:&quot; + direction + &quot;, entries:&quot; + Arrays.toString(entryState) + &quot;}&quot;;
+    }
+  }
+
+  private static class EntryPermutationState {
+    public EntryPermutationState(int index) {
+      this.index = index;
+    }
+    public Direction direction = Direction.DOWN;
+    public int index = 0;
+    public String toString() {
+      return &quot;{direction:&quot; + direction + &quot;, index:&quot; + index + &quot;}&quot;;
+    }
+  }
+
+  private static enum Direction {
+    UP, DOWN
+  }
+}</pre></div></td></tr></table></div>
                   </div>
       </div>
     </div>

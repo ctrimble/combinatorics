@@ -1,5 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
+<duplication lines="124" tokens="928">
+<file line="116" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java"/>
+<file line="57" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/PermutationsEngine.java"/>
+<codefragment>
+<![CDATA[
+        int windowEnd = last.length;
+        int swapSource = 0;
+        int swapTarget = 0;
+        TYPE : for (int i = 0; i < state.length; i++) {
+          switch (state[i].direction) {
+            case DOWN :
+              // scan the entries from back to front, looking for the first item
+              // to move.
+              ENTRY : for (int j = state[i].count - 1; j >= 0; j--) {
+                switch (state[i].entryState[j].direction) {
+                  case DOWN :
+                    if (state[i].entryState[j].index < (windowEnd - 1) - ((state[i].count - 1) - j)) {
+                      // track the source index for the swap.
+                      swapSource = windowStart + state[i].entryState[j].index;
+
+                      // increment the index and deal with moving over like
+                      // elements
+                      state[i].entryState[j].index++;
+                      for (; j < state[i].count - 1 && state[i].entryState[j].index == state[i].entryState[j + 1].index; j++) {
+                        state[i].entryState[j + 1].index++;
+                        state[i].entryState[j + 1].direction = Direction.DOWN;
+                      }
+
+                      // track the target index for the swap.
+                      swapTarget = windowStart + state[i].entryState[j].index;
+                      break TYPE;
+                    }
+                    state[i].entryState[j].direction = Direction.UP;
+                    break;
+                  case UP :
+                    int startIndex = j;
+                    for (; state[i].entryState[j].index == state[i].entryState[j - 1].index + 1; j--) {
+                      // if this entry is moving down, then switch case
+                      // statements.
+                      if (state[i].entryState[j - 1].direction == Direction.DOWN) {
+                        continue ENTRY;
+                      }
+                    }
+                    swapSource = windowStart + state[i].entryState[startIndex].index;
+                    state[i].entryState[j].direction = Direction.UP;
+                    state[i].entryState[j].index--;
+                    swapTarget = windowStart + state[i].entryState[j].index;
+                    for (j++; j <= startIndex; j++) {
+                      state[i].entryState[j].direction = Direction.DOWN;
+                      state[i].entryState[j].index--;
+                    }
+                    break TYPE;
+                }
+              }
+              // none of the entries can move down, switch directions.
+              state[i].direction = Direction.UP;
+              windowEnd -= state[i].count;
+              if (i < state.length - 1)
+                continue TYPE;
+              break;
+            case UP :
+              // scan the entries from front to back, looking for the first item
+              // to move.
+              ENTRY : for (int j = 0; j < state[i].count; j++) {
+                switch (state[i].entryState[j].direction) {
+                  case UP :
+                    if (state[i].entryState[j].index > j) {
+                      // track the source index of the swap.
+                      swapSource = state[i].entryState[j].index + windowStart;
+
+                      // decrement the index and deal with moving over like
+                      // elements.
+                      state[i].entryState[j].index--;
+                      for (; j > 0 && state[i].entryState[j].index == state[i].entryState[j - 1].index; j--) {
+                        state[i].entryState[j - 1].index--;
+                        state[i].entryState[j - 1].direction = Direction.UP;
+                      }
+
+                      // track the target index for the swap.
+                      swapTarget = state[i].entryState[j].index + windowStart;
+                      break TYPE;
+                    }
+                    state[i].entryState[j].direction = Direction.DOWN;
+                    break;
+                  case DOWN :
+                    int startIndex = j;
+                    for (; state[i].entryState[j].index == state[i].entryState[j + 1].index - 1; j++) {
+                      // if this entry is moving down, then switch case
+                      // statements.
+                      if (state[i].entryState[j + 1].direction == Direction.UP) {
+                        continue ENTRY;
+                      }
+                    }
+                    swapSource = windowStart + state[i].entryState[startIndex].index;
+                    state[i].entryState[j].direction = Direction.DOWN;
+                    state[i].entryState[j].index++;
+                    swapTarget = windowStart + state[i].entryState[j].index;
+                    for (j--; j >= startIndex; j--) {
+                      state[i].entryState[j].direction = Direction.UP;
+                      state[i].entryState[j].index++;
+                    }
+                    break TYPE;
+                }
+              }
+              state[i].direction = Direction.DOWN;
+              windowStart += state[i].count;
+              if (i < state.length - 1)
+                continue TYPE;
+              break;
+          }
+
+          // end of permutations for this combination reached. Advance to the
+          // next
+          // combination.
+          int cur = state.length - 1;
+          int remaining = 0;
+
+          // move cur backwards to find the next item to update.
+          for (; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining + 1); remaining += state[cur--].count);
+
+          // decrement the items at cur.
+          state[cur].count--;
+          remaining++;
+
+          // move forward and update all of the counts.
+          for (cur++; cur < state.length; cur++) {
+            state[cur].count = Math.min(remaining, domainRanks[cur]);
+            remaining -= state[cur].count;
+          }
+]]>
+</codefragment>
+</duplication>
+<duplication lines="26" tokens="141">
+<file line="104" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Combinations.java"/>
+<file line="40" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombinationsEngine.java"/>
+<codefragment>
+<![CDATA[
+    for (long index = 1; index < size; index++) {
+
+      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION:
+      // (3,2,0,1,1)
+      // Position | 0 | 1 | 2 | 3 | 4
+      // Index | 0 | 3 | 5 | 5 | 6
+      // Count | 3 | 2 | 0 | 1 | 1
+      // ToRight | 9 | 6 | 5 | 2 | 0
+
+      // advance the indices.
+      int cur = domainRanks.length - 1;
+      int remaining = 0;
+
+      // move cur backwards to find the next item to update.
+      for (; cur > 0 && (indices[cur].count == 0 || indices[cur].toRight < remaining + 1); remaining += indices[cur--].count);
+
+      // decrement the items at cur.
+      indices[cur].count--;
+      remaining++;
+
+      // move forward and update indices and next.
+      for (cur++; cur < indices.length; cur++) {
+        indices[cur].count = Math.min(remaining, domainRanks[cur]);
+        indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;
+        remaining -= indices[cur].count;
+        for (int i = 0; i < indices[cur].count; i++) {
+]]>
+</codefragment>
+</duplication>
 <duplication lines="32" tokens="137">
 <file line="61" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombMathUtilsImpl.java"/>
 <file line="230" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombMathUtilsImpl.java"/>
@@ -37,6 +203,63 @@
         int nextK = pc.k - (e*pc.dmk);
         int nextDmk = pc.dmk-1;
         long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);
+]]>
+</codefragment>
+</duplication>
+<duplication lines="11" tokens="128">
+<file line="86" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java"/>
+<file line="33" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/PermutationsEngine.java"/>
+<codefragment>
+<![CDATA[
+      last = Utils.newArray(componentType, rank);
+      domainRanks = domain.toRankArray();
+      state = new TypePermutationState[domainRanks.length];
+      int ni = 0;
+      for (int ri = 0; ri < domainRanks.length; ri++) {
+        state[ri] = new TypePermutationState();
+        state[ri].count = Math.min(domainRanks[ri], rank - ni);
+        state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
+        for (int j = 0; j < state[ri].entryState.length; j++) {
+          state[ri].entryState[j] = new EntryPermutationState(j);
+          if (j < state[ri].count) {
+]]>
+</codefragment>
+</duplication>
+<duplication lines="30" tokens="111">
+<file line="261" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java"/>
+<file line="209" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/PermutationsEngine.java"/>
+<codefragment>
+<![CDATA[
+      handler.end();
+    }
+  }
+
+  private static class TypePermutationState {
+    public Direction direction = Direction.DOWN;
+    public EntryPermutationState[] entryState;
+    public int count = 0; // the number of entries being used.
+    public int toRight = 0; // the number of items that can occur to the right.
+                            // Would be better with the rank array.
+    public String toString() {
+      return "{direction:" + direction + ", entries:" + Arrays.toString(entryState) + "}";
+    }
+  }
+
+  private static class EntryPermutationState {
+    public EntryPermutationState(int index) {
+      this.index = index;
+    }
+    public Direction direction = Direction.DOWN;
+    public int index = 0;
+    public String toString() {
+      return "{direction:" + direction + ", index:" + index + "}";
+    }
+  }
+
+  private static enum Direction {
+    UP, DOWN
+  }
+}
 ]]>
 </codefragment>
 </duplication>
