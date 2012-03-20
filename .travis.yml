@@ -3,7 +3,7 @@ before_install:
   - mkdir -p target/parent-pom
   - git clone git://github.com/ctrimble/parent-pom.git target/parent-pom
   - pushd target/parent-pom
-  - mvn install
+  - mvn install --quiet -DskipTests=true
   - popd
 notifications:
   email:
