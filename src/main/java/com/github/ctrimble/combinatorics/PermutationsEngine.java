@@ -46,7 +46,7 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
         }
       }
       for (int i = state.length - 2; i >= 0; i--) {
-        state[i].toRight = state[i].entryState.length + state[i + 1].toRight;
+        state[i].toRight = state[i + 1].entryState.length + state[i + 1].toRight;
       }
 
       handler.init(last);
