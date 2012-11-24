@@ -234,7 +234,6 @@ public abstract class AbstractPermutationsIteratorTest
   
   @SuppressWarnings("unchecked")
   @Test
- // @Ignore
   public void threeOneOnePermFour() {
     List<List<Integer>> actual = createPermutations(list(ONE, ONE, ONE, TWO, THREE), 4);
     List<List<Integer>> expected = list(
@@ -260,6 +259,151 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, ONE, THREE, TWO));
     
     assertEquals(expected.size(), actual.size());
+    List<List<Integer>> testList = new ArrayList<List<Integer>>();
+    testList.addAll(expected);
+    testList.removeAll(actual);
+    
+    assertEquals("Elements are missing.", new ArrayList<List<Integer>>(), testList);
+    
+    testList.clear();
+    testList.addAll(actual);
+    testList.removeAll(expected);
+    
+    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);   
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void oneTwoThreeFourFivePermThree() {
+    List<List<Integer>> actual = createPermutations(list(ONE, TWO, THREE, FOUR, FIVE), 3);
+    List<List<Integer>> expected = list(
+        // permutations with ONE as smallest value.
+        list(ONE, TWO, THREE),
+        list(TWO, ONE, THREE),
+        list(TWO, THREE, ONE),
+        list(THREE, TWO, ONE),
+        list(THREE, ONE, TWO),
+        list(ONE, THREE, TWO),
+        list(ONE, TWO, FOUR),
+        list(TWO, ONE, FOUR),
+        list(TWO, FOUR, ONE),
+        list(FOUR, TWO, ONE),
+        list(FOUR, ONE, TWO),
+        list(ONE, FOUR, TWO),
+        list(ONE, TWO, FIVE),
+        list(TWO, ONE, FIVE),
+        list(TWO, FIVE, ONE),
+        list(FIVE, TWO, ONE),
+        list(FIVE, ONE, TWO),
+        list(ONE, FIVE, TWO),
+        list(ONE, THREE, FOUR),
+        list(THREE, ONE, FOUR),
+        list(THREE, FOUR, ONE),
+        list(FOUR, THREE, ONE),
+        list(FOUR, ONE, THREE),
+        list(ONE, FOUR, THREE),
+        list(ONE, THREE, FIVE),
+        list(THREE, ONE, FIVE),
+        list(THREE, FIVE, ONE),
+        list(FIVE, THREE, ONE),
+        list(FIVE, ONE, THREE),
+        list(ONE, FIVE, THREE),  
+        list(ONE, FOUR, FIVE),
+        list(FOUR, ONE, FIVE),
+        list(FOUR, FIVE, ONE),
+        list(FIVE, FOUR, ONE),
+        list(FIVE, ONE, FOUR),
+        list(ONE, FIVE, FOUR),
+        
+        // permutations with TWO as smallest value
+        list(TWO, THREE, FOUR),
+        list(THREE, TWO, FOUR),
+        list(THREE, FOUR, TWO),
+        list(FOUR, THREE, TWO),
+        list(FOUR, TWO, THREE),
+        list(TWO, FOUR, THREE), 
+        list(TWO, THREE, FIVE),
+        list(THREE, TWO, FIVE),
+        list(THREE, FIVE, TWO),
+        list(FIVE, THREE, TWO),
+        list(FIVE, TWO, THREE),
+        list(TWO, FIVE, THREE),
+        list(TWO, FOUR, FIVE),
+        list(FOUR, TWO, FIVE),
+        list(FOUR, FIVE, TWO),
+        list(FIVE, FOUR, TWO),
+        list(FIVE, TWO, FOUR),
+        list(TWO, FIVE, FOUR),
+        
+        // permutations with THREE as smallest value
+        list(THREE, FOUR, FIVE),
+        list(FOUR, THREE, FIVE),
+        list(FOUR, FIVE, THREE),
+        list(FIVE, FOUR, THREE),
+        list(FIVE, THREE, FOUR),
+        list(THREE, FIVE, FOUR) 
+        );
+        
+        assertEquals(expected.size(), actual.size());
+    List<List<Integer>> testList = new ArrayList<List<Integer>>();
+    testList.addAll(expected);
+    testList.removeAll(actual);
+    
+    assertEquals("Elements are missing.", new ArrayList<List<Integer>>(), testList);
+    
+    testList.clear();
+    testList.addAll(actual);
+    testList.removeAll(expected);
+    
+    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);   
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void oneTwoThreeFourFourPermThree() {
+    List<List<Integer>> actual = createPermutations(list(ONE, TWO, THREE, FOUR, FOUR), 3);
+    List<List<Integer>> expected = list(
+        // permutations with ONE as smallest value.
+        list(ONE, TWO, THREE),
+        list(TWO, ONE, THREE),
+        list(TWO, THREE, ONE),
+        list(THREE, TWO, ONE),
+        list(THREE, ONE, TWO),
+        list(ONE, THREE, TWO),
+        list(ONE, TWO, FOUR),
+        list(TWO, ONE, FOUR),
+        list(TWO, FOUR, ONE),
+        list(FOUR, TWO, ONE),
+        list(FOUR, ONE, TWO),
+        list(ONE, FOUR, TWO),
+        list(ONE, THREE, FOUR),
+        list(THREE, ONE, FOUR),
+        list(THREE, FOUR, ONE),
+        list(FOUR, THREE, ONE),
+        list(FOUR, ONE, THREE),
+        list(ONE, FOUR, THREE),
+        list(ONE, FOUR, FOUR),
+        list(FOUR, ONE, FOUR),
+        list(FOUR, FOUR, ONE),
+        
+        // permutations with TWO as smallest value
+        list(TWO, THREE, FOUR),
+        list(THREE, TWO, FOUR),
+        list(THREE, FOUR, TWO),
+        list(FOUR, THREE, TWO),
+        list(FOUR, TWO, THREE),
+        list(TWO, FOUR, THREE), 
+        list(TWO, FOUR, FOUR),
+        list(FOUR, TWO, FOUR),
+        list(FOUR, FOUR, TWO),
+        
+        // permutations with THREE as smallest value
+        list(THREE, FOUR, FOUR),
+        list(FOUR, THREE, FOUR),
+        list(FOUR, FOUR, THREE)
+        );
+        
+        assertEquals(expected.size(), actual.size());
     List<List<Integer>> testList = new ArrayList<List<Integer>>();
     testList.addAll(expected);
     testList.removeAll(actual);

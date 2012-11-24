@@ -71,6 +71,26 @@ public class Permutations<T>
 
     protected PermutationIterator(int nextIndex) {
       super(nextIndex);
+      
+      // initialize our internal state.
+      next = newComponentArray(rank);
+      domainRanks = domain.toRankArray();
+      state = new TypePermutationState[domainRanks.length];
+      int ni = 0; // index into the next solution array.
+      for( int dri = 0; dri < domainRanks.length; dri++) {
+        state[dri] = new TypePermutationState();
+        state[dri].count = Math.min(domainRanks[dri], rank-ni);
+        state[dri].entryState = new EntryPermutationState[domainRanks[dri]];
+        for( int j = 0; j < state[dri].entryState.length; j++ ) {
+          state[dri].entryState[j] = new EntryPermutationState(j);
+          if( j < state[dri].count ) {
+            next[ni++] = domain.get(dri).get(j);         
+          }
+        }
+      }
+      for( int i = state.length - 2; i >= 0; i-- ) {
+        state[i].toRight = state[i].entryState.length + state[i+1].toRight;
+      }
     }
 
     /**
@@ -82,26 +102,6 @@ public class Permutations<T>
     public T[] next() {
       if( nextIndex >= size ) throw new NoSuchElementException();
       // if the index is 0, build the next array and the iteration state.
-      if( nextIndex == 0 ) {
-        next = newComponentArray(rank);
-        domainRanks = domain.toRankArray();
-        state = new TypePermutationState[domainRanks.length];
-        int ni = 0;
-        for( int ri = 0; ri < domainRanks.length; ri++) {
-          state[ri] = new TypePermutationState();
-          state[ri].count = Math.min(domainRanks[ri], rank-ni);
-          state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
-          for( int j = 0; j < state[ri].entryState.length; j++ ) {
-            state[ri].entryState[j] = new EntryPermutationState(j);
-            if( j < state[ri].count ) {
-              next[ni++] = domain.get(ri).get(j);         
-            }
-          }
-        }
-        for( int i = state.length - 2; i >= 0; i-- ) {
-          state[i].toRight = state[i].entryState.length + state[i+1].toRight;
-        }
-      }
       nextIndex++;
 
       // clone the next array into the previous array.
@@ -123,7 +123,7 @@ public class Permutations<T>
             ENTRY: for( int j = state[i].count-1; j >= 0; j-- ) {
               switch (state[i].entryState[j].direction) {
                 case DOWN:
-                  if( state[i].entryState[j].index < (windowEnd - 1) - ((state[i].count-1)-j) ) {
+                  if( state[i].entryState[j].index < (windowEnd - windowStart - 1) - ((state[i].count-1)-j) ) {
                     // track the source index for the swap.
                     swapSource = windowStart + state[i].entryState[j].index;
                        

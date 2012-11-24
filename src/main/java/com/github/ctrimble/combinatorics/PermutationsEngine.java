@@ -65,7 +65,7 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
               ENTRY : for (int j = state[i].count - 1; j >= 0; j--) {
                 switch (state[i].entryState[j].direction) {
                   case DOWN :
-                    if (state[i].entryState[j].index < (windowEnd - 1) - ((state[i].count - 1) - j)) {
+                    if (state[i].entryState[j].index < (windowEnd - windowStart - 1) - ((state[i].count - 1) - j)) {
                       // track the source index for the swap.
                       swapSource = windowStart + state[i].entryState[j].index;
 
