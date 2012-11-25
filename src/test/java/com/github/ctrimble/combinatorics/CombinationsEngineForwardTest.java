@@ -8,7 +8,8 @@ public class CombinationsEngineForwardTest extends AbstractCombinationIteratorTe
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
-    CombinationsEngine<Integer> combinationEngine = new CombinationsEngine<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
+    CombinatoricFactory factory = new CombinatoricFactoryImpl();
+    CombinatoricEngine<Integer> combinationEngine = factory.createCombinationsEngine(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
     combinationEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {

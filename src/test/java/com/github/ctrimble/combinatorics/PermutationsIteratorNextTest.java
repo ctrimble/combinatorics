@@ -24,7 +24,8 @@ public class PermutationsIteratorNextTest
 
   @Override
   public List<List<Integer>> createPermutations(List<Integer> elements, int k) {
-    Permutations<Integer> permutations = new Permutations<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
+    CombinatoricFactory factory = new CombinatoricFactoryImpl();
+    Combinatoric<Integer> permutations = factory.createPermutations(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     List<List<Integer>> result = new ArrayList<List<Integer>>();
     for( Integer[] element : permutations ) {
       result.add(Arrays.asList(element));

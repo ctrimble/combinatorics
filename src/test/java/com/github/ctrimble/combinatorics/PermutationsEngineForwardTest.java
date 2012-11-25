@@ -8,7 +8,8 @@ public class PermutationsEngineForwardTest extends AbstractPermutationsIteratorT
 
   @Override
   public List<List<Integer>> createPermutations(List<Integer> elements, int k) {
-    PermutationsEngine<Integer> permutationsEngine = new PermutationsEngine<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
+    CombinatoricFactory factory = new CombinatoricFactoryImpl();
+    CombinatoricEngine<Integer> permutationsEngine = factory.createPermutationsEngine(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
     permutationsEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {

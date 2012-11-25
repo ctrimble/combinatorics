@@ -25,9 +25,10 @@ public class CombinationIteratorPreviousTest
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
-    Combinations<Integer> combination = new Combinations<Integer>(k, (Integer[])elements.toArray(new Integer[elements.size()]), new CombMathUtilsImpl());
+    CombinatoricFactory factory = new CombinatoricFactoryImpl();
+    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     FastList<List<Integer>> result = new FastList<List<Integer>>();
-    CombinatoricIterator<Integer> iterator = combination.iterator();
+    CombinatoricIterator<Integer> iterator = combinations.iterator();
     
     // move to the end
     while( iterator.hasNext() ) { iterator.next(); }
