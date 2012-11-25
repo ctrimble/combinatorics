@@ -3,11 +3,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.github.ctrimble</groupId>
-    <artifactId>ctrimble</artifactId>
+    <groupId>com.xiantrimble</groupId>
+    <artifactId>oss-parent</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
-  <groupId>com.github.ctrimble.combinatorics</groupId>
+  <groupId>com.xiantrimble.combinatorics</groupId>
   <artifactId>combinatorics</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>

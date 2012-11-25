@@ -15,7 +15,7 @@
   To use this project, add the following dependency to your project.
 
         <dependency>
-          <groupId>com.github.ctrimble.combinatorics</groupId>
+          <groupId>com.xiantrimble.combinatorics</groupId>
           <artifactId>combinatorics</artifactId>
           <version>0.1.0-SNAPSHOT</version>
         <dependency>
@@ -33,9 +33,9 @@
   for a given domain and rank (length).  In the following example, we will count the number of
   permutations and combinations of length 6 for the set {1,1,1,1,2,2,2,3,3,4}:
   
-        import com.github.ctrimble.combinatorics.CombinatoricFactory;
-        import com.github.ctrimble.combinatorics.CombinatoricFactoryImpl;
-        import com.github.ctrimble.combinatorics.CombMathUtils;
+        import com.xiantrimble.combinatorics.CombinatoricFactory;
+        import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+        import com.xiantrimble.combinatorics.CombMathUtils;
         ...
         int rank = 6;
         int[] domain = {1,1,1,1,2,2,2,3,3,4};
@@ -61,9 +61,9 @@
   can represent.  Here is an example of iterating all combinations and permutations of length 6 for the
   set {1,1,1,2,2,2,3,3,4}:
 
-        import com.github.ctrimble.combinatorics.CombinatoricFactory;
-        import com.github.ctrimble.combinatorics.CombinatoricFactoryImpl;
-        import com.github.ctrimble.combinatorics.Combinatoric;
+        import com.xiantrimble.combinatorics.CombinatoricFactory;
+        import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+        import com.xiantrimble.combinatorics.Combinatoric;
         ...
         int rank = 6;
         int[] domain = {1,1,1,1,2,2,2,3,3,4};
@@ -91,9 +91,9 @@
         
         import java.util.ArrayList;
         import java.util.List;
-        import com.github.ctrimble.combinatorics.CombinatoricFactory;
-        import com.github.ctrimble.combinatorics.CombinatoricFactoryImpl;
-        import com.github.ctrimble.combinatorics.CombinatoricEngine;
+        import com.xiantrimble.combinatorics.CombinatoricFactory;
+        import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+        import com.xiantrimble.combinatorics.CombinatoricEngine;
         ...
         int rank = 6;
         int[] domain = {1,1,1,1,2,2,2,3,3,4};

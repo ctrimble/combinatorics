@@ -19,8 +19,8 @@ The Combinatoric Factory
   To use this package, you will first need to get an instance of CombinatoricsFactory.
 
 +------------------------------------------------------------------+
-import com.github.ctrimble.combinatorics.CombinatoricFactory;
-import com.github.ctrimble.combinatorics.CombinatoricFactoryImpl;
+import com.xiantrimble.combinatorics.CombinatoricFactory;
+import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 
 ...
 
@@ -38,7 +38,7 @@ Combinatoric Collections
 * Combination Collection Example
 
 +------------------------------------------------------------------+
-import com.github.ctrimble.combinatorics.Combinatoric;
+import com.xiantrimble.combinatorics.Combinatoric;
 
 ...
 
@@ -53,7 +53,7 @@ for( Integer[] combination : combinations ) {
 * Permutation Collection Example
 
 +------------------------------------------------------------------+
-import com.github.ctrimble.combinatorics.Combinatoric;
+import com.xiantrimble.combinatorics.Combinatoric;
 
 ...
 
@@ -87,8 +87,8 @@ Combinatoric Engines and Handlers
 * Combination Engine Example
 
 +------------------------------------------------------------------+
-import com.github.ctrimble.combinatorics.CombinatoricEngine;
-import com.github.ctrimble.combinatorics.AbstractCombinatoricHandler;
+import com.xiantrimble.combinatorics.CombinatoricEngine;
+import com.xiantrimble.combinatorics.AbstractCombinatoricHandler;
 
 ...
 
@@ -126,8 +126,8 @@ engine.execute();
 * Permutation Engine Example
 
 +------------------------------------------------------------------+
-import com.github.ctrimble.combinatorics.CombinatoricEngine;
-import com.github.ctrimble.combinatorics.AbstractCombinatoricHandler;
+import com.xiantrimble.combinatorics.CombinatoricEngine;
+import com.xiantrimble.combinatorics.AbstractCombinatoricHandler;
 
 ...
 
