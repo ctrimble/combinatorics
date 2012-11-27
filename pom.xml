@@ -28,6 +28,19 @@
     <connection>scm:git:git://github.com/ctrimble/combinatorics</connection>
     <developerConnection>scm:git:git://github.com/ctrimble/combinatorics</developerConnection>
   </scm>
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
   <dependencyManagement>
     <dependencies>
       <dependency>

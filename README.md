@@ -1,6 +1,8 @@
 # Java Combinatorics
 
-  A combinatorics library for Java, with a focus on fast iteration.  
+  A combinatorics library for Java, with a focus on fast iteration.
+
+  [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/7c662a63fdd203d3ed95c0e01662fbf6 "githalytics.com")](http://githalytics.com/ctrimble/combinatorics)
 
 ## Building from Source
 
