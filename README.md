@@ -4,6 +4,10 @@
   [![Build Status](https://secure.travis-ci.org/ctrimble/combinatorics.png?branch=master)](https://travis-ci.org/ctrimble/combinatorics)
   [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/7c662a63fdd203d3ed95c0e01662fbf6 "githalytics.com")](http://githalytics.com/ctrimble/combinatorics)
 
+## Status
+
+  This project is now working for forward iteration.  The process of getting a release on maven central has started.
+
 ## Building from Source
 
   To build this project, you will need [Maven 3.0](http://maven.apache.org/), Java 1.6 or higher installed, and [my parent pom](https://github.com/ctrimble/parent-pom) installed in your local repository.
@@ -22,11 +26,6 @@
           <version>0.1.0-SNAPSHOT</version>
         <dependency>
         
-## Status
-
-  This project is now working, but will be repackaged soon.  The repackaging will
-  only affect imports and the group id.
-
 ## Some Basic Examples
 
 ### Counting Combinations and Permutations
