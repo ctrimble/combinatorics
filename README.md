@@ -31,14 +31,14 @@
 ### Counting Combinations and Permutations
 
   This package provides a math utility class for computing the number of permutations or combinations
-  for a given domain and rank (length).  In the following example, we will count the number of
+  for a given domain and length (k).  In the following example, we will count the number of
   permutations and combinations of length 6 for the set {1,1,1,1,2,2,2,3,3,4}:
   
         import com.xiantrimble.combinatorics.CombinatoricFactory;
         import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
         import com.xiantrimble.combinatorics.CombMathUtils;
         ...
-        int rank = 6;
+        int k = 6;
         int[] domain = {1,1,1,1,2,2,2,3,3,4};
 
         // create a factory and get the utilities.
@@ -46,18 +46,18 @@
         CombMathUtils utils = factory.getMathUtils();
         
         // the math utils operate on ranks of the domain, not the actual domain.
-        int[] domainRanks = factory.createMultiset(rank, domain).getRankArray();
+        int[] domainRanks = factory.createMultiset(k, domain).getRankArray();
         
-        // the number of combinations of length 6
-        int combinationCount = utils.c(rank, domainRanks);
+        // the number of combinations of length k
+        int combinationCount = utils.c(k, domainRanks);
         
-        // the number of permutations of length 6
-        int permutationCount = utils.p(rank, domainRanks);
+        // the number of permutations of length k
+        int permutationCount = utils.p(k, domainRanks);
 
 ### Iterating Combinations and Permutations
 
   Combinations and Permutations in this package are represented by the Combinatoric interface.  This
-  interface extends from java.util.List and adds methods to get the rank and domain for the collection.
+  interface extends from java.util.List and adds methods to get the length and domain for the collection.
   It also adds access to a long size, since combinations and permutations are often larger than an int
   can represent.  Here is an example of iterating all combinations and permutations of length 6 for the
   set {1,1,1,2,2,2,3,3,4}:
@@ -66,18 +66,18 @@
         import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
         import com.xiantrimble.combinatorics.Combinatoric;
         ...
-        int rank = 6;
+        int k = 6;
         int[] domain = {1,1,1,1,2,2,2,3,3,4};
 
         // create a factory and get the utilities.
         CombinatoricFactory factory = new CombinatoricFactoryImpl();
-        Combinatoric<Integer> combinations = factory.createCombinations(6,  domain);
+        Combinatoric<Integer> combinations = factory.createCombinations(k,  domain);
 
         for( Integer[] combination : combinations ) {
           System.out.println(Arrays.toString(combination));
         }
         
-        Combinatoric<Integer> permutations = factory.createPermutations(6,  domain);
+        Combinatoric<Integer> permutations = factory.createPermutations(k,  domain);
 
         for( Integer[] permutation : permutations ) {
           System.out.println(Arrays.toString(permutation));
@@ -96,14 +96,14 @@
         import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
         import com.xiantrimble.combinatorics.CombinatoricEngine;
         ...
-        int rank = 6;
+        int k = 6;
         int[] domain = {1,1,1,1,2,2,2,3,3,4};
         
 	    CombinatoricFactory factory = new CombinatoricFactoryImpl();
-	    CombinatoricEngine<Integer> permutationsEngine = factory.createPermutationsEngine(rank,  domain);
+	    CombinatoricEngine<Integer> permutationsEngine = factory.createPermutationsEngine(k,  domain);
 	    
 	    final List<List<Integer>> result = new ArrayList<List<Integer>>();
-	    final Integer[] state = new Integer[rank];
+	    final Integer[] state = new Integer[k];
 	    permutationsEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {
 	      @Override
 	      public void evaluate() {
