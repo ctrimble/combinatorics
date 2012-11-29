@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.xiantrimble</groupId>
     <artifactId>oss-parent</artifactId>
-    <version>1-SNAPSHOT</version>
+    <version>1</version>
   </parent>
   <groupId>com.xiantrimble.combinatorics</groupId>
   <artifactId>combinatorics</artifactId>
@@ -13,21 +13,17 @@
   <packaging>bundle</packaging>
   <name>Java Combinatorics Library</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
-  <properties>
-    <java.source.version>1.6</java.source.version>
-    <java.target.version>1.6</java.target.version>
-    <slf4j.version>1.5.10</slf4j.version>
-    <jersey.version>1.11</jersey.version>
-    <asm.version>3.1</asm.version>
-    <ehcache.version>2.5.0</ehcache.version>
-    <jetty.version>7.4.5.v20110725</jetty.version>
-    <javolution.version>5.5.1</javolution.version>
-    <orientdb.version>1.0rc6</orientdb.version>
-  </properties>
+
   <scm>
-    <connection>scm:git:git://github.com/ctrimble/combinatorics</connection>
-    <developerConnection>scm:git:git://github.com/ctrimble/combinatorics</developerConnection>
+    <connection>scm:git:git@github.com:ctrimble/combinatorics.git</connection>
+    <developerConnection>scm:git:git@github.com:ctrimble/combinatorics.git</developerConnection>
+    <url>git@github.com:ctrimble/combinatorics.git</url>
   </scm>
+
+  <properties>
+    <javolution.version>5.5.1</javolution.version>
+  </properties>
+
   <repositories>
     <repository>
       <releases>
@@ -41,6 +37,7 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
