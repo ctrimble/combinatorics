@@ -46,13 +46,13 @@
         CombMathUtils utils = factory.getMathUtils();
         
         // the math utils operate on ranks of the domain, not the actual domain.
-        int[] domainRanks = factory.createMultiset(k, domain).getRankArray();
+        int[] multiset = factory.createGroupedDomain(k, domain).toMultiset();
         
         // the number of combinations of length k
-        int combinationCount = utils.c(k, domainRanks);
+        int combinationCount = utils.c(k, multiset);
         
         // the number of permutations of length k
-        int permutationCount = utils.p(k, domainRanks);
+        int permutationCount = utils.p(k, multiset);
 
 ### Iterating Combinations and Permutations
 
