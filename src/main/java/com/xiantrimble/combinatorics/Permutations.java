@@ -46,14 +46,14 @@ public class Permutations<T>
   }
 
   /**
-   * Computes the number of permutations for the specified rank and domain.
+   * Computes the number of permutations for the specified length and domain.
    * 
-   * @param rank the rank of the permutation.
+   * @param k the length of the permutation.
    * @param domain the multiset containing the elements to be permuted.
    */
   @Override
-  protected long computeSize(int rank, Multiset<T> domain) {
-    return mathUtils.p(rank, domain.toRankArray());
+  protected long computeSize(int k, Multiset<T> domain) {
+    return mathUtils.p(k, domain.toRankArray());
   }
   
   /**

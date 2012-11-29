@@ -195,7 +195,7 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
           }
 
           // for now, totally reset next. Making this an incremental update will
-          // help when the rank is much smaller than the number of entries.
+          // help when the length is much smaller than the number of entries.
           ni = 0;
           for (int ri = 0; ri < domainRanks.length; ri++) {
             state[ri].direction = Direction.DOWN;

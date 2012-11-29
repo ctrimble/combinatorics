@@ -33,7 +33,7 @@ public class FastMultiset<E>
   implements Multiset<E>
 {
   /** The total of all the element ranks of this multiset. */
-  protected int rank = 0;
+  protected int k = 0;
   /** The class for the elements in this multiset. */
   protected Class<E> componentType;
 
@@ -58,7 +58,7 @@ public class FastMultiset<E>
     componentType = Utils.getComponentType(domain);
     E[] newDomain = Arrays.copyOf(domain, domain.length);
     Arrays.sort(newDomain);
-    rank = 0;
+    k = 0;
     for( int i = 0; i < newDomain.length;) {
       int cur = i;
       FastList<E> elements = new FastList<E>();
@@ -68,13 +68,13 @@ public class FastMultiset<E>
         }
       }
       add(elements.unmodifiable());
-      rank += elements.size();
+      k += elements.size();
     }
   }
 
   @Override
   public int getRank() {
-    return rank;
+    return k;
   }
 
   @Override

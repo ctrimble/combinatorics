@@ -45,14 +45,14 @@ public class Combinations<T>
   }
 
   /**
-   * Computes the number of combinations for the specified rank and domain.
+   * Computes the number of combinations for the specified length and domain.
    * 
-   * @param rank the rank of the permutation.
-   * @param domain the multiset containing the elements to be permuted.
+   * @param k the length of the combinations.
+   * @param domain the multiset containing the elements to be combined.
    */
   @Override
-  protected long computeSize(int rank, Multiset<T> domain) {
-    return mathUtils.c(rank, domain.toRankArray());
+  protected long computeSize(int k, Multiset<T> domain) {
+    return mathUtils.c(k, domain.toRankArray());
   }
   
   /**
