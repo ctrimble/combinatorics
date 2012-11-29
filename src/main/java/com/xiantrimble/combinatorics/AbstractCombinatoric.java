@@ -28,18 +28,18 @@ import java.util.AbstractList;
 public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     implements Combinatoric<T> {
 
-  protected int rank;
+  protected int k;
   protected Multiset<T> domain;
   protected T[][] domainValues;
   protected long size;
   protected CombMathUtils mathUtils;
   protected Class<T> componentType;
 
-  protected AbstractCombinatoric(int rank, T[] domain, CombMathUtils mathUtils) {
-    this.rank = rank;
-    this.domain = new FastMultiset<T>(rank, domain);
+  protected AbstractCombinatoric(int k, T[] domain, CombMathUtils mathUtils) {
+    this.k = k;
+    this.domain = new FastMultiset<T>(k, domain);
     this.mathUtils = mathUtils;
-    this.size = computeSize(this.rank, this.domain);
+    this.size = computeSize(this.k, this.domain);
     this.componentType = getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
   }
@@ -61,8 +61,8 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   }
 
   @Override
-  public int getRank() {
-    return rank;
+  public int getK() {
+    return k;
   }
 
   @Override

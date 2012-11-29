@@ -32,12 +32,12 @@ public class Permutations<T>
   /**
    * Creates a new Permutations object over the domain.
    * 
-   * @param rank the length of the permutations.
+   * @param k the length of the permutations.
    * @param domain the elements that make up the permutations.
    * @param mathUtils an instance of the math utilities.
    */
-  protected Permutations(int rank, T[] domain, CombMathUtils mathUtils) {
-    super(rank, domain, mathUtils);
+  protected Permutations(int k, T[] domain, CombMathUtils mathUtils) {
+    super(k, domain, mathUtils);
   }
  
   @Override
@@ -73,13 +73,13 @@ public class Permutations<T>
       super(nextIndex);
       
       // initialize our internal state.
-      next = newComponentArray(rank);
+      next = newComponentArray(k);
       domainRanks = domain.toRankArray();
       state = new TypePermutationState[domainRanks.length];
       int ni = 0; // index into the next solution array.
       for( int dri = 0; dri < domainRanks.length; dri++) {
         state[dri] = new TypePermutationState();
-        state[dri].count = Math.min(domainRanks[dri], rank-ni);
+        state[dri].count = Math.min(domainRanks[dri], k-ni);
         state[dri].entryState = new EntryPermutationState[domainRanks[dri]];
         for( int j = 0; j < state[dri].entryState.length; j++ ) {
           state[dri].entryState[j] = new EntryPermutationState(j);

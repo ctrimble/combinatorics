@@ -45,8 +45,8 @@ public class CombinationsBenchmark<T>
     
     protected CombinationIterator(long nextIndex) {
       super(nextIndex);
-      next = newComponentArray(rank);
-      previous = newComponentArray(rank);
+      next = newComponentArray(k);
+      previous = newComponentArray(k);
       domainRanks = domain.toRankArray();
       indices = new DomainPointer[domainRanks.length];
       indices[indices.length-1] = new DomainPointer();
@@ -62,9 +62,9 @@ public class CombinationsBenchmark<T>
       
       // reset the next array if needed.
       if( nextIndex == 0 ) {
-        for(int i = 0, used = 0; i < indices.length && used < rank; used += domainRanks[i++]) {
+        for(int i = 0, used = 0; i < indices.length && used < k; used += domainRanks[i++]) {
           indices[i].index = used;
-          indices[i].count = Math.min(rank-used, domainRanks[i]);
+          indices[i].count = Math.min(k-used, domainRanks[i]);
           for( int j = 0; j < indices[i].count; j++ ) {
             next[indices[i].index+j] = domainValues[i][j];
           }

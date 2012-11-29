@@ -21,13 +21,13 @@ public class CombinatoricFactoryImpl
   private CombMathUtils mathUtils = new CombMathUtilsImpl();
   
   @Override
-  public <T> Combinations<T> createCombinations(int rank, T... domain) {
-    return new Combinations<T>(rank, domain, getMathUtils());
+  public <T> Combinations<T> createCombinations(int k, T... domain) {
+    return new Combinations<T>(k, domain, getMathUtils());
   }
 
   @Override
-  public <T> Permutations<T> createPermutations(int rank, T... domain) {
-    return new Permutations<T>(rank, domain, getMathUtils());
+  public <T> Permutations<T> createPermutations(int k, T... domain) {
+    return new Permutations<T>(k, domain, getMathUtils());
   }
 
   @Override
@@ -36,8 +36,8 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> Multiset<T> createMultiset(int maxElementRank, T... domain) {
-    return new FastMultiset<T>(maxElementRank, domain);
+  public <T> Multiset<T> createMultiset(int maxElementK, T... domain) {
+    return new FastMultiset<T>(maxElementK, domain);
   }
 
   @Override
@@ -46,13 +46,13 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> CombinationsEngine<T> createCombinationsEngine(int rank, T... domain) {
-    return new CombinationsEngine<T>(rank, domain, getMathUtils());
+  public <T> CombinationsEngine<T> createCombinationsEngine(int k, T... domain) {
+    return new CombinationsEngine<T>(k, domain, getMathUtils());
   }
 
   @Override
-  public <T> PermutationsEngine<T> createPermutationsEngine(int rank, T... domain) {
-    return new PermutationsEngine<T>(rank, domain, getMathUtils());
+  public <T> PermutationsEngine<T> createPermutationsEngine(int k, T... domain) {
+    return new PermutationsEngine<T>(k, domain, getMathUtils());
   }
 
 }

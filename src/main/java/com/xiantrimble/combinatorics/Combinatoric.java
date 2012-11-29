@@ -31,7 +31,7 @@ public interface Combinatoric<T> extends List<T[]> {
    * 
    * @return the number of elements in each combination or permutation.
    */
-  public int getRank();
+  public int getK();
 
   /**
    * The elements that are combined or permuted by this combinatoric collection.

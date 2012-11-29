@@ -21,11 +21,11 @@ package com.xiantrimble.combinatorics;
  *
  */
 public interface CombinatoricFactory {
-  public <T> Combinatoric<T> createCombinations(int rank, T... domain);
-  public <T> CombinatoricEngine<T> createCombinationsEngine(int rank, T... domain);
-  public <T> Combinatoric<T> createPermutations(int rank, T... domain);
-  public <T> CombinatoricEngine<T> createPermutationsEngine(int rank, T...domain );
+  public <T> Combinatoric<T> createCombinations(int k, T... domain);
+  public <T> CombinatoricEngine<T> createCombinationsEngine(int k, T... domain);
+  public <T> Combinatoric<T> createPermutations(int k, T... domain);
+  public <T> CombinatoricEngine<T> createPermutationsEngine(int k, T...domain );
   public <T> Multiset<T> createMultiset(T... domain);
-  public <T> Multiset<T> createMultiset(int maxElementRank, T... domain);
+  public <T> Multiset<T> createMultiset(int maxElementK, T... domain);
   public CombMathUtils getMathUtils();
 }

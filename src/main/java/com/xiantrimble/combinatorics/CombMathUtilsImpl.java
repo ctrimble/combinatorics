@@ -215,8 +215,8 @@ public class CombMathUtilsImpl
   }
 
   @Override
-  public long p(int rank, int... rankArray) {
-    return p(rank, createDistinctM(rankArray));
+  public long p(int k, int... m) {
+    return p(k, createDistinctM(m));
   }
   
   private long p(int k, DistinctM dm) {

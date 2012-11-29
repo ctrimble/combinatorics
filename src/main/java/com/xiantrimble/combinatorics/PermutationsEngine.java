@@ -22,21 +22,21 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
   protected int[] domainRanks;
   protected T[] last;
 
-  protected PermutationsEngine(int rank, T[] domain, CombMathUtils mathUtils) {
-    super(rank, domain, mathUtils);
+  protected PermutationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
+    super(k, domain, mathUtils);
   }
 
   /**
-   * Computes the number of permutations for the specified rank and domain.
+   * Computes the number of permutations for the specified length and domain.
    * 
-   * @param rank
-   *          the rank of the permutation.
+   * @param k
+   *          the length of the permutations.
    * @param domain
    *          the multiset containing the elements to be permuted.
    */
   @Override
-  protected long computeSize(int rank, Multiset<T> domain) {
-    return mathUtils.p(rank, domain.toRankArray());
+  protected long computeSize(int k, Multiset<T> domain) {
+    return mathUtils.p(k, domain.toRankArray());
   }
 
   @Override
@@ -45,13 +45,13 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
 
     try {
 
-      last = Utils.newArray(componentType, rank);
+      last = Utils.newArray(componentType, k);
       domainRanks = domain.toRankArray();
       state = new TypePermutationState[domainRanks.length];
       int ni = 0;
       for (int ri = 0; ri < domainRanks.length; ri++) {
         state[ri] = new TypePermutationState();
-        state[ri].count = Math.min(domainRanks[ri], rank - ni);
+        state[ri].count = Math.min(domainRanks[ri], k - ni);
         state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
         for (int j = 0; j < state[ri].entryState.length; j++) {
           state[ri].entryState[j] = new EntryPermutationState(j);

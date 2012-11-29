@@ -19,18 +19,18 @@ public abstract class AbstractCombinatoricEngine<T>
     implements CombinatoricEngine<T>
 {
   protected CombinatoricHandler<T> handler;
-  protected int rank;
+  protected int k;
   protected Multiset<T> domain;
   protected T[][] domainValues;
   protected long size;
   protected CombMathUtils mathUtils;
   protected Class<T> componentType;
 
-  protected AbstractCombinatoricEngine(int rank, T[] domain, CombMathUtils mathUtils) {
-    this.rank = rank;
-    this.domain = new FastMultiset<T>(rank, domain);
+  protected AbstractCombinatoricEngine(int k, T[] domain, CombMathUtils mathUtils) {
+    this.k = k;
+    this.domain = new FastMultiset<T>(k, domain);
     this.mathUtils = mathUtils;
-    this.size = computeSize(this.rank, this.domain);
+    this.size = computeSize(this.k, this.domain);
     this.componentType = Utils.getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
   }
