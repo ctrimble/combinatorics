@@ -36,9 +36,9 @@ public interface Combinatoric<T> extends List<T[]> {
   /**
    * The elements that are combined or permuted by this combinatoric collection.
    * 
-   * @return the elements that are combined or permuted by this combinatoric collection, as a multiset.
+   * @return the elements that are combined or permuted by this combinatoric collection.
    */
-  public Multiset<T> getDomain();
+  public GroupedDomain<T> getDomain();
 
   /**
    * The size of this combinatoric collection, as a long.

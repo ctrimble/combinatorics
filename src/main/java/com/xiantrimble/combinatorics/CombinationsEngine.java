@@ -17,18 +17,18 @@ package com.xiantrimble.combinatorics;
 
 public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
   protected T[] last;
-  protected int[] domainRanks;
+  protected int[] multiset;
   protected DomainPointer[] indices;
   
   protected CombinationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
     last = Utils.newArray(componentType, k);
-    domainRanks = this.domain.toRankArray();
-    indices = new DomainPointer[domainRanks.length];
+    multiset = this.domain.toMultiset();
+    indices = new DomainPointer[multiset.length];
     indices[indices.length-1] = new DomainPointer();
-    for( int i = domainRanks.length-1; i > 0; i-- ) {
+    for( int i = multiset.length-1; i > 0; i-- ) {
       indices[i-1] = new DomainPointer();
-      indices[i-1].toRight = domainRanks[i] + indices[i].toRight;
+      indices[i-1].toRight = multiset[i] + indices[i].toRight;
     }
   }
 
@@ -41,9 +41,9 @@ public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
     try {
     
     // initialize the state and notify the handler.
-    for(int i = 0, used = 0; i < indices.length && used < k; used += domainRanks[i++]) {
+    for(int i = 0, used = 0; i < indices.length && used < k; used += multiset[i++]) {
       indices[i].index = used;
-      indices[i].count = Math.min(k-used, domainRanks[i]);
+      indices[i].count = Math.min(k-used, multiset[i]);
       for( int j = 0; j < indices[i].count; j++ ) {
         last[indices[i].index+j] = domainValues[i][j];
       }
@@ -62,7 +62,7 @@ public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
       // ToRight | 9 | 6 | 5 | 2 | 0
 
       // advance the indices.
-      int cur = domainRanks.length - 1;
+      int cur = multiset.length - 1;
       int remaining = 0;
 
       // move cur backwards to find the next item to update.
@@ -74,7 +74,7 @@ public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
 
       // move forward and update indices and next.
       for (cur++; cur < indices.length; cur++) {
-        indices[cur].count = Math.min(remaining, domainRanks[cur]);
+        indices[cur].count = Math.min(remaining, multiset[cur]);
         indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;
         remaining -= indices[cur].count;
         for (int i = 0; i < indices[cur].count; i++) {
@@ -101,8 +101,8 @@ public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
    * @param domain the multiset containing the elements to be combined.
    */
   @Override
-  protected long computeSize(int k, Multiset<T> domain) {
-    return mathUtils.c(k, domain.toRankArray());
+  protected long computeSize(int k, GroupedDomain<T> domain) {
+    return mathUtils.c(k, domain.toMultiset());
   }
 
   /**

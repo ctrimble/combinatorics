@@ -35,8 +35,8 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
    *          the multiset containing the elements to be permuted.
    */
   @Override
-  protected long computeSize(int k, Multiset<T> domain) {
-    return mathUtils.p(k, domain.toRankArray());
+  protected long computeSize(int k, GroupedDomain<T> domain) {
+    return mathUtils.p(k, domain.toMultiset());
   }
 
   @Override
@@ -46,7 +46,7 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
     try {
 
       last = Utils.newArray(componentType, k);
-      domainRanks = domain.toRankArray();
+      domainRanks = domain.toMultiset();
       state = new TypePermutationState[domainRanks.length];
       int ni = 0;
       for (int ri = 0; ri < domainRanks.length; ri++) {

@@ -29,7 +29,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     implements Combinatoric<T> {
 
   protected int k;
-  protected Multiset<T> domain;
+  protected GroupedDomain<T> domain;
   protected T[][] domainValues;
   protected long size;
   protected CombMathUtils mathUtils;
@@ -37,7 +37,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
 
   protected AbstractCombinatoric(int k, T[] domain, CombMathUtils mathUtils) {
     this.k = k;
-    this.domain = new FastMultiset<T>(k, domain);
+    this.domain = new FastGroupedDomain<T>(k, domain);
     this.mathUtils = mathUtils;
     this.size = computeSize(this.k, this.domain);
     this.componentType = getComponentType(domain);
@@ -66,7 +66,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   }
 
   @Override
-  public Multiset<T> getDomain() {
+  public GroupedDomain<T> getDomain() {
     return domain;
   }
 
@@ -93,7 +93,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   }
 
   public abstract CombinatoricIterator<T> iterator();
-  protected abstract long computeSize(int rank, Multiset<T> domain);
+  protected abstract long computeSize(int rank, GroupedDomain<T> domain);
 
   protected abstract class AbstractCombinatoricIterator
       implements CombinatoricIterator<T>

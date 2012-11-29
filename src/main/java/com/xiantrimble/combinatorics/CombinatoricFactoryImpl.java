@@ -31,13 +31,13 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> Multiset<T> createMultiset(T... domain) {
-    return new FastMultiset<T>(domain);
+  public <T> GroupedDomain<T> createGroupedDomain(T... domain) {
+    return new FastGroupedDomain<T>(domain);
   }
 
   @Override
-  public <T> Multiset<T> createMultiset(int maxElementK, T... domain) {
-    return new FastMultiset<T>(maxElementK, domain);
+  public <T> GroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
+    return new FastGroupedDomain<T>(maxElementK, domain);
   }
 
   @Override

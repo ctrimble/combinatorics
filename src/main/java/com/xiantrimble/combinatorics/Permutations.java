@@ -52,8 +52,8 @@ public class Permutations<T>
    * @param domain the multiset containing the elements to be permuted.
    */
   @Override
-  protected long computeSize(int k, Multiset<T> domain) {
-    return mathUtils.p(k, domain.toRankArray());
+  protected long computeSize(int k, GroupedDomain<T> domain) {
+    return mathUtils.p(k, domain.toMultiset());
   }
   
   /**
@@ -74,7 +74,7 @@ public class Permutations<T>
       
       // initialize our internal state.
       next = newComponentArray(k);
-      domainRanks = domain.toRankArray();
+      domainRanks = domain.toMultiset();
       state = new TypePermutationState[domainRanks.length];
       int ni = 0; // index into the next solution array.
       for( int dri = 0; dri < domainRanks.length; dri++) {

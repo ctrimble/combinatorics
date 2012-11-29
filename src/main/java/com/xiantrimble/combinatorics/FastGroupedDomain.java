@@ -21,39 +21,39 @@ import java.util.List;
 import javolution.util.FastList;
 
 /**
- * An implementation of Multiset, based on Javolutions FastList.
+ * An implementation of GroupedDomain, based on Javolutions FastList.
  * 
  * @author Christian Trimble
  *
  * @param <E> the element type of the domain.
  */
 @SuppressWarnings("serial")
-public class FastMultiset<E>
+public class FastGroupedDomain<E>
   extends FastList<List<E>>
-  implements Multiset<E>
+  implements GroupedDomain<E>
 {
-  /** The total of all the element ranks of this multiset. */
+  /** The total of all the element ranks of this grouped domain. */
   protected int k = 0;
-  /** The class for the elements in this multiset. */
+  /** The class for the elements in this grouped domain. */
   protected Class<E> componentType;
 
   /**
-   * Creates a new FastMultiset for the specified domain.
+   * Creates a new FastGroupedDomain for the specified domain.
    * 
-   * @param domain the elements that make up this multiset.
+   * @param domain the elements that make up this grouped domain.
    */
-  public FastMultiset(E[] domain) {
+  public FastGroupedDomain(E[] domain) {
     this(Integer.MAX_VALUE, domain);
   }
   
   /**
    * Creates a new FastMultiSet for the specified domain.  If any type has more than maxTypeRank elements,
-   * then those elements will be excluded from the multiset.
+   * then those elements will be excluded from the grouped domain.
    * 
    * @param maxTypeRank the maximum number of elements for any unique value in the domain.
-   * @param domain the elements that make up this multiset.
+   * @param domain the elements that make up this grouped domain.
    */
-  public FastMultiset(int maxTypeRank, E[] domain)
+  public FastGroupedDomain(int maxTypeRank, E[] domain)
   {
     componentType = Utils.getComponentType(domain);
     E[] newDomain = Arrays.copyOf(domain, domain.length);
@@ -73,12 +73,12 @@ public class FastMultiset<E>
   }
 
   @Override
-  public int getRank() {
+  public int totalSize() {
     return k;
   }
 
   @Override
-  public int[] toRankArray() {
+  public int[] toMultiset() {
     int[] rankArray = new int[size()];
     int i = 0;
     for(List<E> element: this) {

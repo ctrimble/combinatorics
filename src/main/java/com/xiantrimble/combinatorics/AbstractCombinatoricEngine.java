@@ -20,7 +20,7 @@ public abstract class AbstractCombinatoricEngine<T>
 {
   protected CombinatoricHandler<T> handler;
   protected int k;
-  protected Multiset<T> domain;
+  protected GroupedDomain<T> domain;
   protected T[][] domainValues;
   protected long size;
   protected CombMathUtils mathUtils;
@@ -28,7 +28,7 @@ public abstract class AbstractCombinatoricEngine<T>
 
   protected AbstractCombinatoricEngine(int k, T[] domain, CombMathUtils mathUtils) {
     this.k = k;
-    this.domain = new FastMultiset<T>(k, domain);
+    this.domain = new FastGroupedDomain<T>(k, domain);
     this.mathUtils = mathUtils;
     this.size = computeSize(this.k, this.domain);
     this.componentType = Utils.getComponentType(domain);
@@ -49,5 +49,5 @@ public abstract class AbstractCombinatoricEngine<T>
     return (int) size;
   }
 
-  protected abstract long computeSize(int rank, Multiset<T> domain);
+  protected abstract long computeSize(int rank, GroupedDomain<T> domain);
 }

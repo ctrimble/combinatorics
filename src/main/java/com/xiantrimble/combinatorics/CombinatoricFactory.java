@@ -25,7 +25,7 @@ public interface CombinatoricFactory {
   public <T> CombinatoricEngine<T> createCombinationsEngine(int k, T... domain);
   public <T> Combinatoric<T> createPermutations(int k, T... domain);
   public <T> CombinatoricEngine<T> createPermutationsEngine(int k, T...domain );
-  public <T> Multiset<T> createMultiset(T... domain);
-  public <T> Multiset<T> createMultiset(int maxElementK, T... domain);
+  public <T> GroupedDomain<T> createGroupedDomain(T... domain);
+  public <T> GroupedDomain<T> createGroupedDomain(int maxElementK, T... domain);
   public CombMathUtils getMathUtils();
 }

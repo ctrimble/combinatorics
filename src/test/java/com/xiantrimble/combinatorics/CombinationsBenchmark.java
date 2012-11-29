@@ -31,8 +31,8 @@ public class CombinationsBenchmark<T>
   }
 
   @Override
-  protected long computeSize(int k, Multiset<T> domain) {
-    return mathUtils.c(k, domain.toRankArray());
+  protected long computeSize(int k, GroupedDomain<T> domain) {
+    return mathUtils.c(k, domain.toMultiset());
   }
   
   protected class CombinationIterator
@@ -47,7 +47,7 @@ public class CombinationsBenchmark<T>
       super(nextIndex);
       next = newComponentArray(k);
       previous = newComponentArray(k);
-      domainRanks = domain.toRankArray();
+      domainRanks = domain.toMultiset();
       indices = new DomainPointer[domainRanks.length];
       indices[indices.length-1] = new DomainPointer();
       for( int i = domainRanks.length-1; i > 0; i-- ) {
