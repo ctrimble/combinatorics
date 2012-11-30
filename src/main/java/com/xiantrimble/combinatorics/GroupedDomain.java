@@ -34,11 +34,11 @@ public interface GroupedDomain<E> extends List<List<E>>
   public int totalSize();
   
   /**
-   * Returns an array based multiset for this domain object.
+   * Returns a multiplicity array for this domain object.
    * 
-   * @return an array based multiset for this domain object.
+   * @return a multiplicity array for this domain object.
    */
-  public int[] toMultiset();
+  public int[] toMultiplicity();
   
   /**
    * Returns a two dimensional array representation of this grouped domain.

@@ -36,14 +36,12 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
   /**
    * Computes the number of permutations for the specified length and domain.
    * 
-   * @param k
-   *          the length of the permutations.
-   * @param domain
-   *          the multiset containing the elements to be permuted.
+   * @param k the length of the permutations.
+   * @param domain the elements to be permuted.
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.p(k, domain.toMultiset());
+    return mathUtils.p(k, domain.toMultiplicity());
   }
 
   @Override
@@ -53,7 +51,7 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
     try {
 
       last = Utils.newArray(componentType, k);
-      domainRanks = domain.toMultiset();
+      domainRanks = domain.toMultiplicity();
       state = new TypePermutationState[domainRanks.length];
       int ni = 0;
       for (int ri = 0; ri < domainRanks.length; ri++) {

@@ -58,8 +58,14 @@ public class CombinationCountTest {
     params.add(combinationParams(31, 10, 9, 3, 1, 1, 1));
     params.add(combinationParams(24, 10, 10, 2, 1, 1, 1));
     params.add(combinationParams(16, 10, 11, 1, 1, 1, 1));
-
     
+    // make sure that having more than k elements of one type does not change the answer.
+    params.add(combinationParams(16, 10, 10, 1, 1, 1, 1));
+    params.add(combinationParams(16, 10, 11, 1, 1, 1, 1));
+    params.add(combinationParams(16, 10, 12, 1, 1, 1, 1));
+    params.add(combinationParams(16, 10, 13, 1, 1, 1, 1));
+    params.add(combinationParams(16, 10, 14, 1, 1, 1, 1));
+ 
     params.add(combinationParams(467954, 50, 30, 25, 20, 15, 10, 5));
     
     return params;

@@ -32,7 +32,7 @@ public class CombinationsBenchmark<T>
 
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.c(k, domain.toMultiset());
+    return mathUtils.c(k, domain.toMultiplicity());
   }
   
   protected class CombinationIterator
@@ -40,19 +40,19 @@ public class CombinationsBenchmark<T>
   {
     protected T[] next;
     protected T[] previous;
-    protected int[] domainRanks;
+    protected int[] domainMultiplicity;
     protected DomainPointer[] indices;
     
     protected CombinationIterator(long nextIndex) {
       super(nextIndex);
       next = newComponentArray(k);
       previous = newComponentArray(k);
-      domainRanks = domain.toMultiset();
-      indices = new DomainPointer[domainRanks.length];
+      domainMultiplicity = domain.toMultiplicity();
+      indices = new DomainPointer[domainMultiplicity.length];
       indices[indices.length-1] = new DomainPointer();
-      for( int i = domainRanks.length-1; i > 0; i-- ) {
+      for( int i = domainMultiplicity.length-1; i > 0; i-- ) {
         indices[i-1] = new DomainPointer();
-        indices[i-1].toRight = domainRanks[i] + indices[i].toRight;
+        indices[i-1].toRight = domainMultiplicity[i] + indices[i].toRight;
       }      
     }
 
@@ -62,9 +62,9 @@ public class CombinationsBenchmark<T>
       
       // reset the next array if needed.
       if( nextIndex == 0 ) {
-        for(int i = 0, used = 0; i < indices.length && used < k; used += domainRanks[i++]) {
+        for(int i = 0, used = 0; i < indices.length && used < k; used += domainMultiplicity[i++]) {
           indices[i].index = used;
-          indices[i].count = Math.min(k-used, domainRanks[i]);
+          indices[i].count = Math.min(k-used, domainMultiplicity[i]);
           for( int j = 0; j < indices[i].count; j++ ) {
             next[indices[i].index+j] = domainValues[i][j];
           }
@@ -84,7 +84,7 @@ public class CombinationsBenchmark<T>
       // ToRight   | 9 | 6 | 5 | 2 | 0
 
       // advance the indices.
-      int cur = domainRanks.length - 1;
+      int cur = domainMultiplicity.length - 1;
       int remaining = 0;
       
       // move cur backwards to find the next item to update.
@@ -96,7 +96,7 @@ public class CombinationsBenchmark<T>
       
       // move forward and update indices and next.
       for(cur++; cur < indices.length; cur++) {
-        indices[cur].count = Math.min(remaining, domainRanks[cur]);
+        indices[cur].count = Math.min(remaining, domainMultiplicity[cur]);
         indices[cur].index = indices[cur-1].index+indices[cur-1].count;
         remaining -= indices[cur].count;
         for( int i = 0; i < indices[cur].count; i++ ) {
@@ -125,11 +125,11 @@ public class CombinationsBenchmark<T>
       // ToRight   | 9 | 6 | 5 | 2 | 0
 
       // advance the indices.
-      int cur = domainRanks.length - 1;
+      int cur = domainMultiplicity.length - 1;
       int remaining = 0;
 
       // move cur backwards to find an item to increment.
-      for( ; cur > 0 && (remaining == 0 || indices[cur].count == domainRanks[cur]); remaining += indices[cur--].count );
+      for( ; cur > 0 && (remaining == 0 || indices[cur].count == domainMultiplicity[cur]); remaining += indices[cur--].count );
 
       // decrement the items at cur.
       indices[cur].count++;

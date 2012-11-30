@@ -24,20 +24,20 @@ package com.xiantrimble.combinatorics;
 public interface CombMathUtils {
 
   /**
-   * Returns the number of combinations of length k from a multiset.
+   * Returns the number of combinations of length k from a domain's multiplicity.
    * 
    * @param k the rank of the combinations to count.
-   * @param m the multiset of the domain elements.
-   * @return the number of combinations of length k from the multiset m.
+   * @param m the multiplicity of the domain elements.
+   * @return the number of combinations of length k from the domain multiplicity m.
    */
   long c(int k, int... m);
 
   /**
-   * Counts the number of permutations of length k from a multiset.
+   * Counts the number of permutations of length k from a domain's multiplicity.
    * 
    * @param k the rank of the permutations to count.
-   * @param m the multiset of the domain elements.
-   * @return the number of permutations of length k from the multiset m.
+   * @param m the multiplicity of the domain elements.
+   * @return the number of permutations of length k from the domain multiplicity m.
    */
   long p(int k, int... m);
   

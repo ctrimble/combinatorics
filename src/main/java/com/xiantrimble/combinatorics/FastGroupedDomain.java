@@ -78,7 +78,7 @@ public class FastGroupedDomain<E>
   }
 
   @Override
-  public int[] toMultiset() {
+  public int[] toMultiplicity() {
     int[] rankArray = new int[size()];
     int i = 0;
     for(List<E> element: this) {

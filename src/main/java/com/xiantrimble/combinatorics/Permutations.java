@@ -49,11 +49,11 @@ public class Permutations<T>
    * Computes the number of permutations for the specified length and domain.
    * 
    * @param k the length of the permutation.
-   * @param domain the multiset containing the elements to be permuted.
+   * @param domain the elements that make up the permutations.
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.p(k, domain.toMultiset());
+    return mathUtils.p(k, domain.toMultiplicity());
   }
   
   /**
@@ -65,7 +65,7 @@ public class Permutations<T>
     extends AbstractCombinatoricIterator
   {
     TypePermutationState[] state;
-    int[] domainRanks;
+    int[] domainMultiplicity;
     T[] next;
     T[] previous;
 
@@ -74,13 +74,13 @@ public class Permutations<T>
       
       // initialize our internal state.
       next = newComponentArray(k);
-      domainRanks = domain.toMultiset();
-      state = new TypePermutationState[domainRanks.length];
+      domainMultiplicity = domain.toMultiplicity();
+      state = new TypePermutationState[domainMultiplicity.length];
       int ni = 0; // index into the next solution array.
-      for( int dri = 0; dri < domainRanks.length; dri++) {
+      for( int dri = 0; dri < domainMultiplicity.length; dri++) {
         state[dri] = new TypePermutationState();
-        state[dri].count = Math.min(domainRanks[dri], k-ni);
-        state[dri].entryState = new EntryPermutationState[domainRanks[dri]];
+        state[dri].count = Math.min(domainMultiplicity[dri], k-ni);
+        state[dri].entryState = new EntryPermutationState[domainMultiplicity[dri]];
         for( int j = 0; j < state[dri].entryState.length; j++ ) {
           state[dri].entryState[j] = new EntryPermutationState(j);
           if( j < state[dri].count ) {
@@ -224,12 +224,12 @@ public class Permutations<T>
         
         // move forward and update all of the counts.
         for(cur++; cur < state.length; cur++) {
-          state[cur].count = Math.min(remaining, domainRanks[cur]);
+          state[cur].count = Math.min(remaining, domainMultiplicity[cur]);
           remaining -= state[cur].count;
         }
         
         // for now, totally reset next.  Making this an incremental update will help when the rank is much smaller than the number of entries.
-        for( int ri = 0, ni = 0;ri < domainRanks.length; ri++) {
+        for( int ri = 0, ni = 0;ri < domainMultiplicity.length; ri++) {
           state[ri].direction = Direction.DOWN;
           for( int k = 0; k < state[ri].entryState.length; k++ ) {
             state[ri].entryState[k].index = k;
