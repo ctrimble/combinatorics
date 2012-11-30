@@ -45,14 +45,14 @@
         CombinatoricFactory factory = new CombinatoricFactoryImpl();
         CombMathUtils utils = factory.getMathUtils();
         
-        // the math utils operate on ranks of the domain, not the actual domain.
-        int[] multiset = factory.createGroupedDomain(k, domain).toMultiset();
+        // the math utils operate on the multiplicity of the domain, not the actual domain.
+        int[] domainMultiplicity = factory.createGroupedDomain(k, domain).toMultiplicity();
         
         // the number of combinations of length k
-        int combinationCount = utils.c(k, multiset);
+        int combinationCount = utils.c(k, domainMultiplicity);
         
         // the number of permutations of length k
-        int permutationCount = utils.p(k, multiset);
+        int permutationCount = utils.p(k, domainMultiplicity);
 
 ### Iterating Combinations and Permutations
 
