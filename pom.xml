@@ -13,15 +13,27 @@
   <packaging>bundle</packaging>
   <name>Java Combinatorics Library</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
+  <url>https://github.com/${github.user}/${github.name}</url>
+
+  <ciManagement>
+    <system>Travis</system>
+    <url>https://travis-ci.org/${github.user}/${github.name}</url>
+  </ciManagement>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/${github.user}/${github.name}/issues</url>
+  </issueManagement>
 
   <scm>
-    <connection>scm:git:git@github.com:ctrimble/combinatorics.git</connection>
-    <developerConnection>scm:git:git@github.com:ctrimble/combinatorics.git</developerConnection>
-    <url>git@github.com:ctrimble/combinatorics.git</url>
+    <connection>scm:git:git://github.com/${github.user}/${github.name}.git</connection>
+    <developerConnection>scm:git:git@github.com:${github.user}/${github.name}.git</developerConnection>
+    <url>https://github.com/${github.user}/${github.name}</url>
   </scm>
 
   <properties>
-    <javolution.version>5.5.1</javolution.version>
+    <github.user>ctrimble</github.user>
+    <github.name>combinatorics</github.name>
   </properties>
 
   <repositories>
@@ -48,7 +60,7 @@
       <dependency>
         <groupId>javolution</groupId>
         <artifactId>javolution</artifactId>
-        <version>${javolution.version}</version>
+        <version>5.5.1</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
