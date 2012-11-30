@@ -15,6 +15,13 @@
  */
 package com.xiantrimble.combinatorics;
 
+/**
+ * A CombinatoricEngine implementation for combinations.
+ * 
+ * @author Chritian Trimble
+ *
+ * @param <T> the type of the elements being combined or permuted.
+ */
 public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
   protected T[] last;
   protected int[] multiset;

@@ -17,6 +17,7 @@ package com.xiantrimble.combinatorics;
 
 import java.lang.reflect.Array;
 import java.util.AbstractList;
+import static com.xiantrimble.combinatorics.Utils.getComponentType;
 
 /**
  * An abstract base class for combinatoric implementations.
@@ -28,13 +29,24 @@ import java.util.AbstractList;
 public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     implements Combinatoric<T> {
 
+  /** The length of each result. */
   protected int k;
+  /** The domain being operated on. */
   protected GroupedDomain<T> domain;
+  /** A view of the domain as a 2-dimensional array for fast lookups. */
   protected T[][] domainValues;
+  /** The length of this collection. */
   protected long size;
+  /** The math utilities used to compute the length. */
   protected CombMathUtils mathUtils;
+  /** The component type for the arrays that will be returned. */
   protected Class<T> componentType;
 
+  /**
+   * @param k the length of the results.
+   * @param domain the domain being operated on.
+   * @param mathUtils the math utilities class used to compute the size of this collection.
+   */
   protected AbstractCombinatoric(int k, T[] domain, CombMathUtils mathUtils) {
     this.k = k;
     this.domain = new FastGroupedDomain<T>(k, domain);
@@ -44,12 +56,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     this.domainValues = this.domain.toValueArray();
   }
   
-  @SuppressWarnings("unchecked")
-  protected static final <T> Class<T> getComponentType(T[] array) {
-    return (Class<T>)array.getClass().getComponentType();
-  }
-  
-  /**
+   /**
    * Returns a new array of type T with the length provided.
    * 
    * @return a new array of type T with the length provided.
@@ -60,21 +67,33 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     return (T[])Array.newInstance(componentType, length);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public int getK() {
     return k;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public GroupedDomain<T> getDomain() {
     return domain;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public long longSize() {
     return size;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public T[] get(int arg0) {
     if (arg0 == 0) {
@@ -84,6 +103,9 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public int size() {
     if (size >= Integer.MAX_VALUE) {
@@ -92,8 +114,19 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     return (int) size;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   public abstract CombinatoricIterator<T> iterator();
-  protected abstract long computeSize(int rank, GroupedDomain<T> domain);
+  
+  /**
+   * Computes the size of the result for the given length (k) and domain.
+   * 
+   * @param k the length of each result.
+   * @param domain the domain to operate on.
+   * @return
+   */
+  protected abstract long computeSize(int k, GroupedDomain<T> domain);
 
   protected abstract class AbstractCombinatoricIterator
       implements CombinatoricIterator<T>
@@ -105,21 +138,33 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       this.nextIndex = nextIndex;
     }
     
+    /**
+     * @throws UnsupportedOperationException
+     */
     @Override
     public void add(T[] e) {
       throw new UnsupportedOperationException();
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long nextLongIndex() {
       return nextIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long previousLongIndex() {
       return nextIndex-1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int nextIndex() {
       long nextLongIndex = nextLongIndex();
@@ -128,6 +173,9 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
           : (int) nextLongIndex;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int previousIndex() {
       long previousLongIndex = previousLongIndex();
@@ -136,23 +184,35 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
           : (int) previousLongIndex;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasNext()
     {
       return nextIndex < size;
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasPrevious()
     {
       return nextIndex > 0;
     }
 
+    /**
+     * @throws UnsupportedOperationException
+     */
     @Override
     public void remove() {
       throw new UnsupportedOperationException();
     }
 
+    /**
+     * @throws UnsupportedOperationException
+     */
     @Override
     public void set(T[] e) {
       throw new UnsupportedOperationException();

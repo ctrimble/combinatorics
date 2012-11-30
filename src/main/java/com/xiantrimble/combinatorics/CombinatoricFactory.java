@@ -17,8 +17,8 @@ package com.xiantrimble.combinatorics;
 
 /**
  * A factory for combination and permutation collections.
+ * 
  * @author Christian Trimble
- *
  */
 public interface CombinatoricFactory {
   public <T> Combinatoric<T> createCombinations(int k, T... domain);

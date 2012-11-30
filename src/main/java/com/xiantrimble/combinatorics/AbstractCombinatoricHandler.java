@@ -15,6 +15,13 @@
  */
 package com.xiantrimble.combinatorics;
 
+/**
+ * An abstract base for combinatoric handlers.  Provides no-ops for the start and stop events.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <T> the type of the elements being combined or permuted.
+ */
 public abstract class AbstractCombinatoricHandler<T> implements CombinatoricHandler<T> {
 
   /**

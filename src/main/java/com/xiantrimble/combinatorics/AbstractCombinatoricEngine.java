@@ -15,6 +15,13 @@
  */
 package com.xiantrimble.combinatorics;
 
+/**
+ * An abstract base class for CombinatoricEngine implementations.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <T> the type of the elements being combined or permuted.
+ */
 public abstract class AbstractCombinatoricEngine<T>
     implements CombinatoricEngine<T>
 {
@@ -47,6 +54,11 @@ public abstract class AbstractCombinatoricEngine<T>
       return Integer.MAX_VALUE;
     }
     return (int) size;
+  }
+  
+  @Override
+  public long longSize() {
+    return size;
   }
 
   protected abstract long computeSize(int rank, GroupedDomain<T> domain);

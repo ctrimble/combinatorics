@@ -27,6 +27,7 @@ import org.junit.rules.MethodRule;
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
+@SuppressWarnings("deprecation")
 public class CombinationsIterationPerformanceTest {
   
   public static CombMathUtils mathUtils = new CombMathUtilsImpl();

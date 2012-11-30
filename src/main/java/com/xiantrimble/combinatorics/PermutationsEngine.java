@@ -17,6 +17,13 @@ package com.xiantrimble.combinatorics;
 
 import java.util.Arrays;
 
+/**
+ * A CombinatoricEngine implementation for Permutations.
+ * 
+ * @author Christian Trimble
+ *
+ * @param <T> The type of element being permuted.
+ */
 public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
   protected TypePermutationState[] state;
   protected int[] domainRanks;

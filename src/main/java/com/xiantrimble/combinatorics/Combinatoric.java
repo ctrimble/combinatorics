@@ -23,7 +23,7 @@ import java.util.List;
  * 
  * @author Christian Trimble
  * 
- * @param <T> The type of element that is being permuted or combined.
+ * @param <T> the type of the elements being combined or permuted.
  */
 public interface Combinatoric<T> extends List<T[]> {
   /**

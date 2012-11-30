@@ -39,6 +39,9 @@ public class Combinations<T>
     super(k, domain, mathUtil);
   } 
   
+  /**
+   * Returns an iterator over this collection.
+   */
   @Override
   public CombinatoricIterator<T> iterator() {
     return new CombinationIterator(0);
@@ -82,6 +85,11 @@ public class Combinations<T>
       }      
     }
 
+    /**
+     * Returns the next combination of the elements.
+     * 
+     * @throws NoSuchElementException if the end of the elements has been reached.
+     */
     @Override
     public T[] next() {
       if( nextIndex >= size ) throw new NoSuchElementException(); // we may just want to do this in the next method.
@@ -134,6 +142,11 @@ public class Combinations<T>
       return Arrays.copyOf(previous, previous.length);
     }
 
+    /**
+     * Returns the previous result.
+     * 
+     * @throws NoSuchElementException if there is no previous result to return.
+     */
     @Override
     public T[] previous() {
       if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.

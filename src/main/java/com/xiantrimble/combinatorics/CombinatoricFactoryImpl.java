@@ -15,6 +15,11 @@
  */
 package com.xiantrimble.combinatorics;
 
+/**
+ * A basic implementation of the CombinatoricFactory.
+ * 
+ * @author Christian Trimble
+ */
 public class CombinatoricFactoryImpl
   implements CombinatoricFactory
 {
@@ -36,7 +41,7 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> GroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
+  public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
     return new FastGroupedDomain<T>(maxElementK, domain);
   }
 
