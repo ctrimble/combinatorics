@@ -15,6 +15,15 @@
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
   <url>https://github.com/${github.user}/${github.name}</url>
 
+  <developers>
+    <developer>
+      <id>ctrimble</id>
+      <name>Christian Trimble</name>
+      <email>xiantrimble@gmail.com</email>
+      <url>https://github.com/ctrimble</url>
+    </developer>
+  </developers>
+
   <ciManagement>
     <system>Travis</system>
     <url>https://travis-ci.org/${github.user}/${github.name}</url>
@@ -91,11 +100,6 @@
         <artifactId>org.osgi.compendium</artifactId>
         <version>4.2.0</version>
         <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>org.apache.felix.scr.annotations</artifactId>
-        <version>1.4.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
