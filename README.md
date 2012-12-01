@@ -6,11 +6,14 @@
 
 ## Status
 
-  This project is now working for forward iteration.  The process of getting a release on maven central has started.
+  This project is now working for forward iteration.  Upcoming improvements:
+  - backward iteration for permutations (working for combinations.)
+  - starting in the middle of an iteration.
+  - inlining of combinatoric engine handlers with ASM.
 
 ## Building from Source
 
-  To build this project, you will need [Maven 3.0](http://maven.apache.org/), Java 1.6 or higher installed, and [my parent pom](https://github.com/ctrimble/parent-pom) installed in your local repository.
+  To build this project, you will need [Maven 3.0](http://maven.apache.org/) and Java 1.6 or higher installed.
 
         git checkout git://github.com/ctrimble/combinatorics.git combinatorics
         cd combinatorics
@@ -23,7 +26,7 @@
         <dependency>
           <groupId>com.xiantrimble.combinatorics</groupId>
           <artifactId>combinatorics</artifactId>
-          <version>0.1.0-SNAPSHOT</version>
+          <version>0.1.0</version>
         <dependency>
         
 ## Some Basic Examples
