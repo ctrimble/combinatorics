@@ -46,6 +46,16 @@ public interface Combinatoric<T> extends List<T[]> {
    * @return the size of this combinatoric collection, as a long.
    */
   public long longSize();
+  
+  /**
+   * Returns the index of an element in this combinatoric collection.
+   */
+  public int indexOf( T[] element );
+  
+  /**
+   * Returns the index of an element in this combinatoric collection, as a long.
+   */
+  public long longIndexOf( T[] element );
 
   /**
    * The iterator for this combinatoric collection.

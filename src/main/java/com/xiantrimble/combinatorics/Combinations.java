@@ -58,6 +58,11 @@ public class Combinations<T>
     return mathUtils.c(k, domain.toMultiplicity());
   }
   
+  @Override
+  public long longIndexOf(T[] element) {
+    throw new UnsupportedOperationException();
+  }
+  
   /**
    * The iterator that produces the individual elements for this Combinations object.
    * 
@@ -212,4 +217,5 @@ public class Combinations<T>
       return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
     }
   }
+
 }

@@ -113,6 +113,18 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     }
     return (int) size;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int indexOf(T[] element) {
+    long longIndex = longIndexOf(element);
+    if (longIndex >= Integer.MAX_VALUE) {
+      return Integer.MAX_VALUE;
+    }
+    return (int) longIndex;
+  }
 
   /**
    * {@inheritDoc}

@@ -55,7 +55,12 @@ public class Permutations<T>
   protected long computeSize(int k, GroupedDomain<T> domain) {
     return mathUtils.p(k, domain.toMultiplicity());
   }
-  
+
+  @Override
+  public long longIndexOf(T[] element) {
+    throw new UnsupportedOperationException();
+  }
+
   /**
    * An iterator for this permutation.
    * 
@@ -290,4 +295,5 @@ public class Permutations<T>
   {
     UP,DOWN
   }
+
 }
