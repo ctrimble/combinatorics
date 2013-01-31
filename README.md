@@ -11,6 +11,11 @@
   - starting in the middle of an iteration.
   - inlining of combinatoric engine handlers with ASM.
 
+## Mailing List
+
+  If you are using this project, it would be great to hear from you.  I have set up a user mailing list on [Librelist](http://librelist.com/index.html)
+  for any questions or comments.  Simply email combinatorics@librelist.com to sign up.
+
 ## Building from Source
 
   To build this project, you will need [Maven 3.0](http://maven.apache.org/) and Java 1.6 or higher installed.
