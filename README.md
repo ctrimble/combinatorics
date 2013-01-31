@@ -13,7 +13,7 @@
 
 ## Mailing List
 
-  If you are using this project, it would be great to hear from you.  I have set up a user mailing list on [Librelist](http://librelist.com/index.html)
+  If you are using this project, it would be great to hear from you.  I have set up a user mailing list on [Librelist](http://librelist.com/browser/combinatorics/)
   for any questions or comments.  Simply email combinatorics@librelist.com to sign up.
 
 ## Building from Source
