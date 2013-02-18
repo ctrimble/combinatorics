@@ -60,7 +60,29 @@ public class Combinations<T>
   
   @Override
   public long longIndexOf(T[] element) {
-    throw new UnsupportedOperationException();
+    // build a multiplicity array for the input, with zeros for elements not present.
+    int[] elementMultiplicity = new int[domainValues.length];
+    for( int i = 0, elementIndex = 0; i < domainValues.length; i++ ) {
+      elementMultiplicity[i] = 0;
+      for(;elementIndex < element.length && element[elementIndex].equals(domainValues[i][0]);elementIndex++) {
+        elementMultiplicity[i]++;
+      }
+    }
+    
+    // use the multiplicities to abstractly roll the index up.
+    // for each element type, compute the number of combinations that are not in the input elements.
+    int[] domainMultiplicity = domain.toMultiplicity();
+    long index = 0;
+    int remaining = k;
+    for( int i = 0; i < domainValues.length-1 && remaining > 0; i++ ) {
+      int[] remainingMultiplicity = Arrays.copyOfRange(domainMultiplicity, i+1, domainMultiplicity.length);
+      for( int j = domainValues[i].length; j > 0 && elementMultiplicity[i] < j; j-- ) {
+        index += mathUtils.c(remaining-j, remainingMultiplicity);
+      }
+      remaining -= elementMultiplicity[i];
+    }
+    
+    return index;
   }
   
   /**
