@@ -45,7 +45,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(THREE, TWO, ONE),
         list(THREE, ONE, TWO),
         list(ONE, THREE, TWO));
-    assertEquals(expected, actual);
+    assertSameContent(expected, actual);
   }
   
   @SuppressWarnings("unchecked")
@@ -56,7 +56,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, ONE, TWO),
         list(ONE, TWO, ONE),
         list(TWO, ONE, ONE));
-    assertEquals(expected, actual);    
+    assertSameContent(expected, actual);    
   }
   
   @SuppressWarnings("unchecked")
@@ -85,11 +85,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, THREE, ONE, ONE, TWO),
         list(ONE, ONE, ONE, THREE, TWO));
     
-    assertEquals("The results are not the same size.", expected.size(), actual.size());
-    
-    for( int i = 0; i < expected.size(); i++ ) {
-      assertEquals("The elements at index "+i+" are not equal.", expected.get(i), actual.get(i));
-    }  
+    assertSameContent(expected, actual);
   }
   
   @SuppressWarnings("unchecked")
@@ -224,12 +220,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, ONE, TWO, ONE, FOUR, THREE),
         list(ONE, ONE, ONE, TWO, FOUR, THREE)
 );
-    
-    assertEquals("The results are not the same size.", expected.size(), actual.size());
-    
-    for( int i = 0; i < expected.size(); i++ ) {
-      assertEquals("The elements at index "+i+" are not equal.", expected.get(i), actual.get(i));
-    } 
+    assertSameContent(expected, actual);
   }
   
   @SuppressWarnings("unchecked")
@@ -258,18 +249,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(THREE, ONE, ONE, TWO),
         list(ONE, ONE, THREE, TWO));
     
-    assertEquals(expected.size(), actual.size());
-    List<List<Integer>> testList = new ArrayList<List<Integer>>();
-    testList.addAll(expected);
-    testList.removeAll(actual);
-    
-    assertEquals("Elements are missing.", new ArrayList<List<Integer>>(), testList);
-    
-    testList.clear();
-    testList.addAll(actual);
-    testList.removeAll(expected);
-    
-    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);   
+    assertSameContent(expected, actual);
   }
   
   @SuppressWarnings("unchecked")
@@ -344,18 +324,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(THREE, FIVE, FOUR) 
         );
         
-        assertEquals(expected.size(), actual.size());
-    List<List<Integer>> testList = new ArrayList<List<Integer>>();
-    testList.addAll(expected);
-    testList.removeAll(actual);
-    
-    assertEquals("Elements are missing.", new ArrayList<List<Integer>>(), testList);
-    
-    testList.clear();
-    testList.addAll(actual);
-    testList.removeAll(expected);
-    
-    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);   
+    assertSameContent(expected, actual);
   }
   
   @SuppressWarnings("unchecked")
@@ -403,8 +372,12 @@ public abstract class AbstractPermutationsIteratorTest
         list(FOUR, FOUR, THREE)
         );
         
-        assertEquals(expected.size(), actual.size());
-    List<List<Integer>> testList = new ArrayList<List<Integer>>();
+    assertSameContent(expected, actual);
+  }
+  
+  private <T> void assertSameContent( List<T> expected, List<T> actual ) {
+    assertEquals(expected.size(), actual.size());
+    List<T> testList = new ArrayList<T>();
     testList.addAll(expected);
     testList.removeAll(actual);
     
@@ -414,7 +387,7 @@ public abstract class AbstractPermutationsIteratorTest
     testList.addAll(actual);
     testList.removeAll(expected);
     
-    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);   
+    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);       
   }
   
   public abstract List<List<Integer>> createPermutations(
