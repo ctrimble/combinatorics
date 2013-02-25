@@ -3,9 +3,6 @@ package com.xiantrimble.combinatorics;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-import com.xiantrimble.combinatorics.Permutations.Direction;
-
-
 public class Permutations2<T>
 extends AbstractCombinatoric<T> {
 

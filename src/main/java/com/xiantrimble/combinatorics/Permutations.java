@@ -58,7 +58,7 @@ public class Permutations<T>
 
   @Override
   public long longIndexOf(T[] element) {
-    throw new UnsupportedOperationException("Permutations do not yet support indexOf operations.");
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -149,7 +149,6 @@ public class Permutations<T>
                     int startIndex = j;
                     for(; state[i].entryState[j].index == state[i].entryState[j-1].index+1; j-- ) {
                       // if this entry is moving down, then switch case statements.
-                      state[i].entryState[j].direction = Direction.DOWN;
                       if( state[i].entryState[j-1].direction == Direction.DOWN ) {
                         continue ENTRY;
                       }
@@ -167,7 +166,6 @@ public class Permutations<T>
               }
             // none of the entries can move down, switch directions.
             state[i].direction = Direction.UP;
-            state[i].entryState[state[i].entryState.length-1].direction = Direction.UP;
             windowEnd -= state[i].count;
             if( i < state.length - 1 ) continue TYPE;
             break;
@@ -197,7 +195,6 @@ public class Permutations<T>
                   int startIndex = j;
                   for(; state[i].entryState[j].index == state[i].entryState[j+1].index-1; j++ ) {
                     // if this entry is moving down, then switch case statements.
-                    state[i].entryState[j].direction = Direction.UP;
                     if( state[i].entryState[j+1].direction == Direction.UP ) {
                       continue ENTRY;
                     }
@@ -214,7 +211,6 @@ public class Permutations<T>
               }
             }
             state[i].direction = Direction.DOWN;
-            state[i].entryState[0].direction = Direction.DOWN;
             windowStart += state[i].count;
             if( i < state.length - 1 ) continue TYPE;
             break;
@@ -295,7 +291,7 @@ public class Permutations<T>
     }
   }
   
-  static enum Direction
+  private static enum Direction
   {
     UP,DOWN
   }
