@@ -10,10 +10,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static com.xiantrimble.combinatorics.CombinationsIndexOfTest.Element.*;
+import static com.xiantrimble.combinatorics.PermutationsIndexOfTest.Element.*;
 
 @RunWith(Parameterized.class)
-public class CombinationsIndexOfTest {
+public class PermutationsIndexOfTest {
   public static enum Element {
     ONE,
     TWO,
@@ -25,15 +25,24 @@ public class CombinationsIndexOfTest {
 
   private Combinatoric<Element> combinatoric;
 
-  public CombinationsIndexOfTest( Combinatoric<Element> combinatoric ) {
+  public PermutationsIndexOfTest( Combinatoric<Element> combinatoric ) {
     this.combinatoric = combinatoric;
   }
+  
   @Test
   public void iterationMatchesIndexOf() {
     int index = 0;
     for( Element[] element : combinatoric) {
       long indexOf = combinatoric.longIndexOf(element);
-      assertEquals(index, indexOf);
+      //System.out.println("index "+index+" "+Arrays.toString(element));
+      try {
+        assertEquals(index, indexOf);
+      }
+      catch( AssertionError ae ) {
+        // handle for debugger.
+        combinatoric.longIndexOf(element);
+        throw ae;
+      }
       index++;
     }
   }
@@ -41,20 +50,20 @@ public class CombinationsIndexOfTest {
   @Parameters
   public static Collection<Object[]> parameters() {
     return Arrays.asList(new Object[][] {
-        { combinations( 1, ONE ) },
-        { combinations( 1, ONE, TWO ) },
-        { combinations( 1, ONE, TWO, TWO ) },
-        { combinations( 1, ONE, ONE, TWO ) },
-        { combinations( 2, ONE, TWO, TWO ) },
-        { combinations( 2, ONE, ONE, TWO ) },
-        { combinations( 3, ONE, ONE, TWO ) },
-        { combinations( 2, ONE, TWO, THREE) },
-        { combinations( 3, ONE, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) }
-
+        { permutaitons( 1, ONE ) },
+        { permutaitons( 2, ONE, TWO ) },
+        { permutaitons( 3, ONE, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) },
+        { permutaitons( 10, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) }
     });
   }
   
   public static <E> Combinatoric<E> combinations(int k, E... domain) {
     return factory.createCombinations(k, domain);
   }
+  
+  public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
+    //return factory.createPermutations(k, domain);
+    return new Permutations2(k, domain, factory.getMathUtils());
+  }  
 }
+

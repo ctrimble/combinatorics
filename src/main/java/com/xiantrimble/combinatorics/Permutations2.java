@@ -23,7 +23,110 @@ extends AbstractCombinatoric<T> {
 
   @Override
   public long longIndexOf(T[] element) {
-    return 0;
+    long index = 0;
+    
+    // compute what combination the element is in and advance the index to that combination.
+    GroupedDomain<T> elementDomain = new FastGroupedDomain<T>(element);
+    T[][] elementValues = elementDomain.toValueArray();
+    int[] elementMultiplicity = elementDomain.toMultiplicity();
+    int[] workingMultiplicity = domainMultiplicity.clone();
+    int[] currentMultiplicity = new int[domainMultiplicity.length];
+    int inCurrentMultiplicity = 0;
+    
+    int workingK = k;
+    PAST_COMBINATIONS: for( int i = 0, j = 0; i < domainValues.length-1 && j < elementValues.length && workingK > 0; i++) {
+      boolean onElement = elementValues[j][0].equals(domainValues[i][0]);
+      int startM = Math.min(domainMultiplicity[i], k-inCurrentMultiplicity);
+      int stopM = !onElement ? 0 : elementMultiplicity[j];
+      workingMultiplicity[i] = 0;
+      
+      // TODO: There would be a performance gain by creating a p(k, minMultiplicity, maxMultiplicity) function for this.
+      for( int m = startM; m > stopM; m-- ) {
+          currentMultiplicity[i] = m;
+          currentMultiplicity[i+1] = k-inCurrentMultiplicity-m;
+          long currentP = mathUtils.p(k, currentMultiplicity);
+          long remainingP = mathUtils.p(k-(inCurrentMultiplicity+m), workingMultiplicity);
+          index += currentP * remainingP;
+      }
+      
+      if( onElement ) {
+      currentMultiplicity[i] = elementValues[j].length;
+      inCurrentMultiplicity += elementValues[j].length;      
+      j++;
+      }
+      else {
+        currentMultiplicity[i] = 0;
+      }
+    }
+    
+    // assert, we are at the start index for element's combination.  Now advance to element's permutation.
+    
+    T[] workingElement = element.clone();
+    long localIndex = 0;
+    // we are now on the proper state for this index.  On even cycles we are moving down.
+    for( int i = elementValues.length-2; i >= 0; i-- ) {
+      int aCount = elementMultiplicity[i];
+      int bCount = elementMultiplicity[i+1];
+      T aElement = elementValues[i][0];
+      T bElement = elementValues[i+1][0];
+      long typePerms = mathUtils.p(aCount+bCount, new int[]{ aCount, bCount});
+      boolean typeDown = localIndex % 2 == 0;
+      localIndex *= typePerms;
+      boolean elementDown = true;
+      int aIndex = 0;
+      int subElementIndex = 0;
+      long subLocalIndex = 0;
+      ELEMENT: for( int elementIndex = 0; elementIndex < workingElement.length; elementIndex++ ) {
+        boolean isA = workingElement[elementIndex].equals(aElement);
+        boolean isB = workingElement[elementIndex].equals(bElement);
+        if( !isA && !isB ) continue ELEMENT;
+        
+        // advance the index.
+        
+        // if the element is moving down, then add permutations for the b elements.
+        if( elementDown && isB && aCount != 0 ) {
+          subLocalIndex += mathUtils.p(aCount-1+bCount, new int[] {aCount-1, bCount} );
+        }
+        // if the element is moving up, then add permutations for the a elements.
+        else if( !elementDown && isA && bCount != 0 ) {
+          subLocalIndex += mathUtils.p(aCount+bCount-1, new int[] {aCount, bCount-1} );
+        }
+        
+        // if the last element moved multiple, we are done.
+        /*
+        if(isA && ((subElementIndex % 2) != (aIndex % 2)) ^ !elementDown) {
+          for( ;elementIndex < workingElement.length; elementIndex++ ) {
+            if( workingElement[elementIndex].equals(bElement) ) workingElement[elementIndex] = aElement;
+          }
+          if( !elementDown ) subLocalIndex++;
+          break ELEMENT;
+        }
+        */
+        
+        if( isA ) {
+          elementDown = (aIndex % 2) == (subElementIndex % 2);
+          aCount--;
+          aIndex++;
+        }
+        else {
+          bCount--;
+          workingElement[elementIndex] = aElement;
+        }
+        subElementIndex++;
+      }
+      
+      if( typeDown ) {
+        localIndex += subLocalIndex;
+      }
+      else {
+        localIndex += (typePerms-1) - subLocalIndex;
+      }
+      elementMultiplicity[i]+=elementMultiplicity[i+1];
+    }
+    
+    index += localIndex;
+    
+    return index;
   }
 
   @Override
@@ -40,7 +143,6 @@ extends AbstractCombinatoric<T> {
     extends AbstractCombinatoricIterator {
 
     TypePermutationState[] state;
-    int[] domainMultiplicity;
     T[] next;
     T[] previous;
     long pastCombSize = 0;
@@ -50,22 +152,17 @@ extends AbstractCombinatoric<T> {
   
       // initialize our internal state.
       next = newComponentArray(k);
-      domainMultiplicity = domain.toMultiplicity();
       state = new TypePermutationState[domainMultiplicity.length];
       int ni = 0; // index into the next solution array.
       for( int dri = 0; dri < domainMultiplicity.length; dri++) {
         state[dri] = new TypePermutationState();
         state[dri].count = Math.min(domainMultiplicity[dri], k-ni);
-        state[dri].entryState = new EntryPermutationState[domainMultiplicity[dri]];
-        for( int j = 0; j < state[dri].entryState.length; j++ ) {
-          state[dri].entryState[j] = new EntryPermutationState(j);
-          if( j < state[dri].count ) {
-            next[ni++] = domain.get(dri).get(j);         
-          }
+        for( int j = 0; j < state[dri].count; j++ ) {
+          next[ni++] = domain.get(dri).get(j);
         }
       }
       for( int i = state.length - 2; i >= 0; i-- ) {
-        state[i].toRight = state[i+1].entryState.length + state[i+1].toRight;
+        state[i].toRight = domainMultiplicity[i+1] + state[i+1].toRight;
         state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
         state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
       }
@@ -110,13 +207,9 @@ extends AbstractCombinatoric<T> {
         int aIndex = 0;
         ELEMENT: for( int elementIndex = 0; elementIndex < windowEnd - windowStart; elementIndex++) {
           long perms = elementDown ? mathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount}) : mathUtils.p(aCount+bCount-1, new int[]{ aCount, bCount-1});
-          //long perms = mathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount});
-          //if( (typeIndex < perms && down) || (typeIndex > perms && !down)) {
           if( typeIndex == perms ) {
             boolean moveMultiple = ((elementIndex % 2) != (aIndex % 2)) ^ !elementDown;
             // this is the element, find the source and target.
-            //int source = down ? windowStart + elementIndex : windowEnd - (elementIndex+1);
-            //int target = down ? windowStart + (moveMultiple ? elementIndex + aCount : elementIndex+1 ) : windowEnd - ((moveMultiple ? elementIndex + aCount : elementIndex+1)+1);
             int source = windowStart + elementIndex;
             int target = windowStart + (moveMultiple ? elementIndex + aCount : elementIndex+1 );
             T temp = next[source];
@@ -157,21 +250,15 @@ extends AbstractCombinatoric<T> {
         remaining -= state[cur].count;
       }
       
+      for( int ri = 0, ni = 0;ri < domainMultiplicity.length; ri++) {
+        for( int j = 0; j < state[ri].count; j++ ) {
+          next[ni++] = domain.get(ri).get(j);
+        }
+      }
+      
       for( int i = state.length - 2; i >= 0; i-- ) {
         state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
         state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
-      }
-      
-      // for now, totally reset next.  Making this an incremental update will help when the rank is much smaller than the number of entries.
-      for( int ri = 0, ni = 0;ri < domainMultiplicity.length; ri++) {
-        state[ri].direction = Direction.DOWN;
-        for( int k = 0; k < state[ri].entryState.length; k++ ) {
-          state[ri].entryState[k].index = k;
-          state[ri].entryState[k].direction = Direction.DOWN;
-          if( k < state[ri].count ) {
-            next[ni++] = domain.get(ri).get(k);         
-          }
-        }
       }
       
       return previous;
@@ -186,31 +273,17 @@ extends AbstractCombinatoric<T> {
 
   private static class TypePermutationState
   {
+    /* The number of elements in the current combination, that fall to the right of this element type.*/
     public int activeToRight = 0;
+    /* The total number of permutations between this type and all remaining types together. */
     public long perms = 0;
-    public Direction direction = Direction.DOWN;
-    public EntryPermutationState[] entryState;
+    /* The number of this type in the current combination. */
     public int count = 0; // the number of entries being used.
-    public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
+    /* The total number of elements that fall to the right of this element type. */
+    public int toRight = 0;
     public String toString() {
-      return "{direction:"+direction+", entries:"+Arrays.toString(entryState)+"}";
+      //return "{direction:"+direction+", entries:"+Arrays.toString(entryState)+"}";
+      return String.format("{count: %d, perms: %d, toRight: %d, activeToRight: %d}", count, perms, toRight, activeToRight);
     }
-  }
-  
-  private static class EntryPermutationState
-  {
-    public EntryPermutationState(int index) {
-      this.index = index;
-    }
-    public Direction direction = Direction.DOWN;
-    public int index = 0;
-    public String toString() {
-      return "{direction:"+direction+", index:"+index+"}";
-    }
-  }
-  
-  static enum Direction
-  {
-    UP,DOWN
   }
 }

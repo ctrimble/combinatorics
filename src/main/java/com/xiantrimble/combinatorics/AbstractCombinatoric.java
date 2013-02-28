@@ -35,6 +35,8 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   protected GroupedDomain<T> domain;
   /** A view of the domain as a 2-dimensional array for fast lookups. */
   protected T[][] domainValues;
+  /** A view of the domain multiplicity. */
+  int[] domainMultiplicity;
   /** The length of this collection. */
   protected long size;
   /** The math utilities used to compute the length. */
@@ -54,6 +56,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     this.size = computeSize(this.k, this.domain);
     this.componentType = getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
+    this.domainMultiplicity = this.domain.toMultiplicity();
   }
   
    /**
