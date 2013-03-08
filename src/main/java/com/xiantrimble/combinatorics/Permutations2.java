@@ -16,9 +16,13 @@ extends AbstractCombinatoric<T> {
   }
   
   public T[] get( long index ) {
+    CombinatoricIterator<T> iterator = iterator();
     
+    for( long i = 0; i < index-1; i++ ) {
+      iterator.next();
+    }
     // iterate over domain, and start building up the state from back to front.
-    return null;
+    return iterator.next();
   }
 
   @Override

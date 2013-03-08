@@ -71,13 +71,14 @@ public class Combinations<T>
     
     // use the multiplicities to abstractly roll the index up.
     // for each element type, compute the number of combinations that are not in the input elements.
-    int[] domainMultiplicity = domain.toMultiplicity();
+    int[] domainMultiplicity = this.domainMultiplicity.clone();
     long index = 0;
     int remaining = k;
     for( int i = 0; i < domainValues.length-1 && remaining > 0; i++ ) {
-      int[] remainingMultiplicity = Arrays.copyOfRange(domainMultiplicity, i+1, domainMultiplicity.length);
+      domainMultiplicity[i] = 0;
+      //int[] remainingMultiplicity = Arrays.copyOfRange(domainMultiplicity, i+1, domainMultiplicity.length);
       for( int j = domainValues[i].length; j > 0 && elementMultiplicity[i] < j; j-- ) {
-        index += mathUtils.c(remaining-j, remainingMultiplicity);
+        index += mathUtils.c(remaining-j, domainMultiplicity);
       }
       remaining -= elementMultiplicity[i];
     }
