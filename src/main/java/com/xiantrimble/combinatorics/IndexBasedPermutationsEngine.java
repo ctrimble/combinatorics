@@ -25,12 +25,12 @@ import java.util.NoSuchElementException;
  *
  * @param <T> The type of element being permuted.
  */
-public class PermutationsEngine2<T> extends AbstractCombinatoricEngine<T> {
+public class IndexBasedPermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
   protected TypePermutationState[] state;
   protected int[] domainRanks;
   protected T[] last;
 
-  protected PermutationsEngine2(int k, T[] domain, CombMathUtils mathUtils) {
+  protected IndexBasedPermutationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
   }
 

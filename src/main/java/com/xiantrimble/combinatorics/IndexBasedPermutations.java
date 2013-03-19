@@ -3,10 +3,10 @@ package com.xiantrimble.combinatorics;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-public class Permutations2<T>
+public class IndexBasedPermutations<T>
 extends AbstractCombinatoric<T> {
 
-  protected Permutations2(int k, T[] domain, CombMathUtils mathUtils) {
+  protected IndexBasedPermutations(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
   }
   
@@ -123,7 +123,7 @@ extends AbstractCombinatoric<T> {
 
   @Override
   public CombinatoricIterator<T> iterator() {
-    return new Permutation2Iterator(0);
+    return new IndexBasedPermutationIterator(0);
   }
 
   @Override
@@ -131,7 +131,7 @@ extends AbstractCombinatoric<T> {
     return mathUtils.p(k, domain.toMultiplicity());
   }
   
-  public class Permutation2Iterator
+  public class IndexBasedPermutationIterator
     extends AbstractCombinatoricIterator {
 
     TypePermutationState[] state;
@@ -139,7 +139,7 @@ extends AbstractCombinatoric<T> {
     T[] previous;
     long pastCombSize = 0;
     
-    protected Permutation2Iterator(long nextIndex) {
+    protected IndexBasedPermutationIterator(long nextIndex) {
       super(nextIndex);
   
       // initialize our internal state.

@@ -25,7 +25,7 @@ public class Permutations2IteratorNextTest
   @Override
   public List<List<Integer>> createPermutations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> permutations = new Permutations2<Integer>(k,  (Integer[])elements.toArray(new Integer[elements.size()]), factory.getMathUtils());
+    Combinatoric<Integer> permutations = new IndexBasedPermutations<Integer>(k,  (Integer[])elements.toArray(new Integer[elements.size()]), factory.getMathUtils());
     List<List<Integer>> result = new ArrayList<List<Integer>>();
     for( Integer[] element : permutations ) {
       result.add(Arrays.asList(element));

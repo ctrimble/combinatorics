@@ -63,7 +63,7 @@ public class PermutationsIndexOfTest {
   
   public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
     //return factory.createPermutations(k, domain);
-    return new Permutations2(k, domain, factory.getMathUtils());
+    return new IndexBasedPermutations(k, domain, factory.getMathUtils());
   }  
 }
 
