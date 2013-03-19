@@ -75,8 +75,22 @@ public class Combinations<T>
     long index = 0;
     int remaining = k;
     for( int i = 0; i < domainValues.length-1 && remaining > 0; i++ ) {
-      domainMultiplicity[i] = 0;
-      //int[] remainingMultiplicity = Arrays.copyOfRange(domainMultiplicity, i+1, domainMultiplicity.length);
+      // for empty elements.
+      int emptyElementStart = i;
+      int passedElements = 0;
+      while( elementMultiplicity[i] == 0 ) {
+        i++;
+        passedElements += domainMultiplicity[i];
+      }
+      if( emptyElementStart != i ) {
+        for( int j = 1; j <= Math.min(remaining, passedElements); j++ ) {
+          index += mathUtils.c(j, Arrays.copyOfRange(domainMultiplicity, emptyElementStart, i)) * mathUtils.c(remaining-j, Arrays.copyOfRange(domainMultiplicity, i, domainMultiplicity.length));
+        }
+      }
+      for( int w = emptyElementStart; w <= i; w++) {
+        domainMultiplicity[w] = 0;
+      }
+      // domainMultiplicity[i] = 0;
       for( int j = domainValues[i].length; j > 0 && elementMultiplicity[i] < j; j-- ) {
         index += mathUtils.c(remaining-j, domainMultiplicity);
       }

@@ -31,15 +31,14 @@ extends AbstractCombinatoric<T> {
     
     // compute what combination the element is in and advance the index to that combination.
     GroupedDomain<T> elementDomain = new FastGroupedDomain<T>(element);
-    T[][] elementValues = elementDomain.toValueArray();
     int[] elementMultiplicity = elementDomain.toMultiplicity();
     int[] workingMultiplicity = domainMultiplicity.clone();
     int[] currentMultiplicity = new int[domainMultiplicity.length];
     int inCurrentMultiplicity = 0;
     
     int workingK = k;
-    PAST_COMBINATIONS: for( int i = 0, j = 0; i < domainValues.length-1 && j < elementValues.length && workingK > 0; i++) {
-      boolean onElement = elementValues[j][0].equals(domainValues[i][0]);
+    PAST_COMBINATIONS: for( int i = 0, j = 0; i < domainValues.length-1 && j < elementDomain.size() && workingK > 0; i++) {
+      boolean onElement = elementDomain.get(j).get(0).equals(domainValues[i][0]);
       int startM = Math.min(domainMultiplicity[i], k-inCurrentMultiplicity);
       int stopM = !onElement ? 0 : elementMultiplicity[j];
       workingMultiplicity[i] = 0;
@@ -54,8 +53,8 @@ extends AbstractCombinatoric<T> {
       }
       
       if( onElement ) {
-      currentMultiplicity[i] = elementValues[j].length;
-      inCurrentMultiplicity += elementValues[j].length;      
+      currentMultiplicity[i] = elementMultiplicity[j];
+      inCurrentMultiplicity += elementMultiplicity[j];      
       j++;
       }
       else {
@@ -68,11 +67,11 @@ extends AbstractCombinatoric<T> {
     T[] workingElement = element.clone();
     long localIndex = 0;
     // we are now on the proper state for this index.  On even cycles we are moving down.
-    for( int i = elementValues.length-2; i >= 0; i-- ) {
+    for( int i = elementDomain.size()-2; i >= 0; i-- ) {
       int aCount = elementMultiplicity[i];
       int bCount = elementMultiplicity[i+1];
-      T aElement = elementValues[i][0];
-      T bElement = elementValues[i+1][0];
+      T aElement = elementDomain.get(i).get(0);
+      T bElement = elementDomain.get(i+1).get(0);
       long typePerms = mathUtils.p(aCount+bCount, new int[]{ aCount, bCount});
       boolean typeDown = localIndex % 2 == 0;
       localIndex *= typePerms;
