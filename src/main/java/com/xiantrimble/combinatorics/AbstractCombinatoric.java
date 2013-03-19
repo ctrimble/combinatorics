@@ -17,6 +17,8 @@ package com.xiantrimble.combinatorics;
 
 import java.lang.reflect.Array;
 import java.util.AbstractList;
+import java.util.Iterator;
+
 import static com.xiantrimble.combinatorics.Utils.getComponentType;
 
 /**
@@ -35,6 +37,8 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   protected GroupedDomain<T> domain;
   /** A view of the domain as a 2-dimensional array for fast lookups. */
   protected T[][] domainValues;
+  /** A view of the domain multiplicity. */
+  protected int[] domainMultiplicity;
   /** The length of this collection. */
   protected long size;
   /** The math utilities used to compute the length. */
@@ -54,6 +58,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     this.size = computeSize(this.k, this.domain);
     this.componentType = getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
+    this.domainMultiplicity = this.domain.toMultiplicity();
   }
   
    /**
@@ -96,11 +101,12 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   @Override
   public T[] get(int arg0) {
-    if (arg0 == 0) {
-      return iterator().next();
-    } else {
-      return subList(arg0, size()).iterator().next();
+    int index = 0;
+    Iterator<T[]> iterator = iterator();
+    for( int i = 0; i < arg0; i++ ) {
+      iterator.next();
     }
+    return iterator.next();
   }
 
   /**
@@ -112,6 +118,18 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       return Integer.MAX_VALUE;
     }
     return (int) size;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int indexOf(T[] element) {
+    long longIndex = longIndexOf(element);
+    if (longIndex >= Integer.MAX_VALUE) {
+      return Integer.MAX_VALUE;
+    }
+    return (int) longIndex;
   }
 
   /**

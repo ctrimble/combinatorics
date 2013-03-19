@@ -31,8 +31,8 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> Permutations<T> createPermutations(int k, T... domain) {
-    return new Permutations<T>(k, domain, getMathUtils());
+  public <T> IndexBasedPermutations<T> createPermutations(int k, T... domain) {
+    return new IndexBasedPermutations<T>(k, domain, getMathUtils());
   }
 
   @Override
@@ -56,8 +56,8 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> PermutationsEngine<T> createPermutationsEngine(int k, T... domain) {
-    return new PermutationsEngine<T>(k, domain, getMathUtils());
+  public <T> IndexBasedPermutationsEngine<T> createPermutationsEngine(int k, T... domain) {
+    return new IndexBasedPermutationsEngine<T>(k, domain, getMathUtils());
   }
 
 }

@@ -18,6 +18,7 @@ package com.xiantrimble.combinatorics;
 import java.util.Arrays;
 import org.apache.commons.math.util.MathUtils;
 
+import javolution.context.ArrayFactory;
 import javolution.context.ObjectFactory;
 import javolution.lang.Reusable;
 import javolution.util.FastList;
@@ -31,6 +32,7 @@ public class CombMathUtilsImpl
   implements CombMathUtils
 {
   private static ObjectFactory<PartialCombinationCount> pccFactory = ObjectFactory.getInstance(PartialCombinationCount.class);
+  private static ObjectFactory<FastList> stackFactory = ObjectFactory.getInstance(FastList.class);
   
   @Override
   public long c(int k, int... m) {
@@ -39,25 +41,12 @@ public class CombMathUtilsImpl
   
   private static long c(int k, DistinctM dm)
   {
-    //System.out.print("k:"+k+", dm:[");
-    //DistinctM dmOut = dm;
-    //do {
-    //  System.out.print(dmOut);
-    //  if( dmOut.next != null ) {
-    //    System.out.print(",");
-    //  }
-    //  dmOut = dmOut.next;
-    //}
-    //while( dmOut != null );
-
-    //System.out.println("]");
     long result = 0;
     
     // create a stack for the calculation.
-    FastList<PartialCombinationCount> stack = new FastList<PartialCombinationCount>();
+    FastList<PartialCombinationCount> stack = stackFactory.object();
     
     // add the initial partial combination.
-    // 
     stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1));
     
     while( !stack.isEmpty() ) {
@@ -75,11 +64,9 @@ public class CombMathUtilsImpl
       
       // get the current distinct m
       DistinctM cdm = pc.dm;
-      //System.out.println(cdm);
       
       // if there could never be an answer, then bail out.
       if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
-        //System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
         pccFactory.recycle(pc);
         continue;
       }
@@ -89,7 +76,6 @@ public class CombMathUtilsImpl
         int nextK = pc.k - (e*pc.dmk);
         int nextDmk = pc.dmk-1;
         long nextSize = pc.size * MathUtils.binomialCoefficient(pc.dm.count + pc.ldm, e);
-        //System.out.println("e:"+e+", nextK:"+nextK+", nextDmk:"+nextDmk+", nextDmi:"+nextDmi+", nextSize:"+nextSize);
         
         // if nextK is zero, then this set of combinations is complete.
         if( nextK == 0 ) {
@@ -115,7 +101,8 @@ public class CombMathUtilsImpl
       pccFactory.recycle(pc);
     }
     
-    //System.out.println("Result: "+result);
+    stackFactory.recycle(stack);
+    
     return result;
   }
   
@@ -199,6 +186,11 @@ public class CombMathUtilsImpl
   private static DistinctM createDistinctM(int[] m)
   {
     int[] mSorted = Arrays.copyOf(m, m.length);
+    // HPROC is telling me this is a problem, but the built in array factory
+    // produces arrays that are not the exact length specified.  Something should
+    // be done to recycle this memory.
+    // int[] mSorted = ArrayFactory.INTS_FACTORY.array(m.length);
+    // for( int i = 0; i < m.length; i++) { mSorted[i] = m[i]; }
     Arrays.sort(mSorted);
 
     // group the distinct values.
@@ -211,6 +203,10 @@ public class CombMathUtilsImpl
       rn += (mSorted[i]*count);
       i += count;
     }
+    
+    // Add recycling code here when debugged.
+    // ArrayFactory.INTS_FACTORY.recycle(mSorted);
+    
     return head;
   }
 
@@ -223,7 +219,7 @@ public class CombMathUtilsImpl
     long result = 0;
     
     // create a stack for the calculation.
-    FastList<PartialCombinationCount> stack = new FastList<PartialCombinationCount>();
+    FastList<PartialCombinationCount> stack = stackFactory.object();
     
     // add the initial partial combination.
     // 
@@ -286,6 +282,8 @@ public class CombMathUtilsImpl
       }
       pccFactory.recycle(pc);
     }
+    
+    stackFactory.recycle(stack);
     
     //System.out.println("Result: "+result);
     return result;

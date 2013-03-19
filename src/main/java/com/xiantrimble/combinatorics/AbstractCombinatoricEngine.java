@@ -29,6 +29,7 @@ public abstract class AbstractCombinatoricEngine<T>
   protected int k;
   protected GroupedDomain<T> domain;
   protected T[][] domainValues;
+  protected int[] domainMultiplicity;
   protected long size;
   protected CombMathUtils mathUtils;
   protected Class<T> componentType;
@@ -40,6 +41,7 @@ public abstract class AbstractCombinatoricEngine<T>
     this.size = computeSize(this.k, this.domain);
     this.componentType = Utils.getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
+    this.domainMultiplicity = this.domain.toMultiplicity();
   }
 
   @Override

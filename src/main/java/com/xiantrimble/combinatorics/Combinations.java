@@ -58,6 +58,48 @@ public class Combinations<T>
     return mathUtils.c(k, domain.toMultiplicity());
   }
   
+  @Override
+  public long longIndexOf(T[] element) {
+    // build a multiplicity array for the input, with zeros for elements not present.
+    int[] elementMultiplicity = new int[domainValues.length];
+    for( int i = 0, elementIndex = 0; i < domainValues.length; i++ ) {
+      elementMultiplicity[i] = 0;
+      for(;elementIndex < element.length && element[elementIndex].equals(domainValues[i][0]);elementIndex++) {
+        elementMultiplicity[i]++;
+      }
+    }
+    
+    // use the multiplicities to abstractly roll the index up.
+    // for each element type, compute the number of combinations that are not in the input elements.
+    int[] domainMultiplicity = this.domainMultiplicity.clone();
+    long index = 0;
+    int remaining = k;
+    for( int i = 0; i < domainValues.length-1 && remaining > 0; i++ ) {
+      // for empty elements.
+      int emptyElementStart = i;
+      int passedElements = 0;
+      while( elementMultiplicity[i] == 0 ) {
+        i++;
+        passedElements += domainMultiplicity[i];
+      }
+      if( emptyElementStart != i ) {
+        for( int j = 1; j <= Math.min(remaining, passedElements); j++ ) {
+          index += mathUtils.c(j, Arrays.copyOfRange(domainMultiplicity, emptyElementStart, i)) * mathUtils.c(remaining-j, Arrays.copyOfRange(domainMultiplicity, i, domainMultiplicity.length));
+        }
+      }
+      for( int w = emptyElementStart; w <= i; w++) {
+        domainMultiplicity[w] = 0;
+      }
+      // domainMultiplicity[i] = 0;
+      for( int j = domainValues[i].length; j > 0 && elementMultiplicity[i] < j; j-- ) {
+        index += mathUtils.c(remaining-j, domainMultiplicity);
+      }
+      remaining -= elementMultiplicity[i];
+    }
+    
+    return index;
+  }
+  
   /**
    * The iterator that produces the individual elements for this Combinations object.
    * 
@@ -212,4 +254,5 @@ public class Combinations<T>
       return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
     }
   }
+
 }

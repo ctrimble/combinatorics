@@ -162,4 +162,9 @@ public class CombinationsBenchmark<T>
       return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
     }
   }
+
+  @Override
+  public long longIndexOf(T[] element) {
+    throw new UnsupportedOperationException("longIndexOf(T[]) not implemented yet.");
+  }
 }
