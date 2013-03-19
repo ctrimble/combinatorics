@@ -186,8 +186,11 @@ public class CombMathUtilsImpl
   private static DistinctM createDistinctM(int[] m)
   {
     int[] mSorted = Arrays.copyOf(m, m.length);
-    //int[] mSorted = ArrayFactory.INTS_FACTORY.array(m.length);
-    //for( int i = 0; i < m.length; i++) { mSorted[i] = m[i]; }
+    // HPROC is telling me this is a problem, but the built in array factory
+    // produces arrays that are not the exact length specified.  Something should
+    // be done to recycle this memory.
+    // int[] mSorted = ArrayFactory.INTS_FACTORY.array(m.length);
+    // for( int i = 0; i < m.length; i++) { mSorted[i] = m[i]; }
     Arrays.sort(mSorted);
 
     // group the distinct values.
@@ -201,7 +204,9 @@ public class CombMathUtilsImpl
       i += count;
     }
     
-    //ArrayFactory.INTS_FACTORY.recycle(mSorted);
+    // Add recycling code here when debugged.
+    // ArrayFactory.INTS_FACTORY.recycle(mSorted);
+    
     return head;
   }
 
@@ -214,7 +219,6 @@ public class CombMathUtilsImpl
     long result = 0;
     
     // create a stack for the calculation.
-    //FastList<PartialCombinationCount> stack = new FastList<PartialCombinationCount>();
     FastList<PartialCombinationCount> stack = stackFactory.object();
     
     // add the initial partial combination.

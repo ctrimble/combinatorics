@@ -95,17 +95,6 @@ extends AbstractCombinatoric<T> {
           subLocalIndex += mathUtils.p(aCount+bCount-1, new int[] {aCount, bCount-1} );
         }
         
-        // if the last element moved multiple, we are done.
-        /*
-        if(isA && ((subElementIndex % 2) != (aIndex % 2)) ^ !elementDown) {
-          for( ;elementIndex < workingElement.length; elementIndex++ ) {
-            if( workingElement[elementIndex].equals(bElement) ) workingElement[elementIndex] = aElement;
-          }
-          if( !elementDown ) subLocalIndex++;
-          break ELEMENT;
-        }
-        */
-        
         if( isA ) {
           elementDown = (aIndex % 2) == (subElementIndex % 2);
           aCount--;
@@ -269,7 +258,7 @@ extends AbstractCombinatoric<T> {
 
     @Override
     public T[] previous() {
-      return null;
+      throw new UnsupportedOperationException("Previous is currently not supported by this iterator.");
     }
     
   }

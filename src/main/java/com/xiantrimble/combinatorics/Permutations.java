@@ -56,6 +56,9 @@ public class Permutations<T>
     return mathUtils.p(k, domain.toMultiplicity());
   }
 
+  /**
+   * This operation is currently unsupported by this permutations implementation.
+   */
   @Override
   public long longIndexOf(T[] element) {
     throw new UnsupportedOperationException();
