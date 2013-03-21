@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
-<duplication lines="124" tokens="928">
-<file line="116" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java"/>
-<file line="57" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/PermutationsEngine.java"/>
+<duplication lines="122" tokens="916">
+<file line="124" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/Permutations.java"/>
+<file line="77" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/PermutationsEngine.java"/>
 <codefragment>
 <![CDATA[
         int windowEnd = last.length;
@@ -16,7 +16,7 @@
               ENTRY : for (int j = state[i].count - 1; j >= 0; j--) {
                 switch (state[i].entryState[j].direction) {
                   case DOWN :
-                    if (state[i].entryState[j].index < (windowEnd - 1) - ((state[i].count - 1) - j)) {
+                    if (state[i].entryState[j].index < (windowEnd - windowStart - 1) - ((state[i].count - 1) - j)) {
                       // track the source index for the swap.
                       swapSource = windowStart + state[i].entryState[j].index;
 
@@ -127,48 +127,90 @@
           // move forward and update all of the counts.
           for (cur++; cur < state.length; cur++) {
             state[cur].count = Math.min(remaining, domainRanks[cur]);
-            remaining -= state[cur].count;
-          }
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="26" tokens="141">
-<file line="104" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Combinations.java"/>
-<file line="40" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombinationsEngine.java"/>
+<duplication lines="27" tokens="279">
+<file line="196" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutations.java"/>
+<file line="75" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutationsEngine.java"/>
 <codefragment>
 <![CDATA[
-    for (long index = 1; index < size; index++) {
-
-      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION:
-      // (3,2,0,1,1)
-      // Position | 0 | 1 | 2 | 3 | 4
-      // Index | 0 | 3 | 5 | 5 | 6
-      // Count | 3 | 2 | 0 | 1 | 1
-      // ToRight | 9 | 6 | 5 | 2 | 0
-
-      // advance the indices.
-      int cur = domainRanks.length - 1;
+      int windowEnd = last.length;
+      TYPE: for( int i = 0; i < state.length-1; i++) {
+        if( state[i].count == 0 ) continue TYPE;
+        long typeCycles = index / (state[i].perms);
+        long typeIndex = index % (state[i].perms);
+        if( typeIndex == 0 ) {
+          index = typeCycles;
+          windowStart = typeCycles % 2 == 1 ? windowStart : windowStart + state[i].count;
+          windowEnd = typeCycles % 2 == 0 ? windowEnd : windowEnd - state[i].count;
+          continue TYPE;
+        }
+        
+        // we are now on the proper state for this index.  On even cycles we are moving down.
+        boolean down = typeCycles % 2 == 0;
+        typeIndex = down ? typeIndex : (state[i].perms) - typeIndex;
+        boolean elementDown = true;
+        int aCount = state[i].count;
+        int bCount = state[i].activeToRight;
+        int aIndex = 0;
+        ELEMENT: for( int elementIndex = 0; elementIndex < windowEnd - windowStart; elementIndex++) {
+          long perms = elementDown ? mathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount}) : mathUtils.p(aCount+bCount-1, new int[]{ aCount, bCount-1});
+          if( typeIndex == perms ) {
+            boolean moveMultiple = ((elementIndex % 2) != (aIndex % 2)) ^ !elementDown;
+            // this is the element, find the source and target.
+            int source = windowStart + elementIndex;
+            int target = windowStart + (moveMultiple ? elementIndex + aCount : elementIndex+1 );
+            T temp = last[source];
+]]>
+</codefragment>
+</duplication>
+<duplication lines="35" tokens="167">
+<file line="226" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutations.java"/>
+<file line="107" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutationsEngine.java"/>
+<codefragment>
+<![CDATA[
+          }
+          else if( typeIndex < perms ^ !elementDown ) {
+            typeIndex = elementDown ? typeIndex : typeIndex - perms;
+            elementDown = (aIndex % 2) == (elementIndex % 2);
+            aCount--;
+            aIndex++;
+            continue ELEMENT;
+          }
+          else {
+            typeIndex = elementDown ? typeIndex - perms : typeIndex;
+            bCount--;
+            continue ELEMENT;
+          }
+        }
+      }
+      
+      pastCombSize = nextIndex;
+      // end of permutations for this combination reached.  Advance to the next combination.
+      int cur = state.length - 1;
       int remaining = 0;
-
+      
       // move cur backwards to find the next item to update.
-      for (; cur > 0 && (indices[cur].count == 0 || indices[cur].toRight < remaining + 1); remaining += indices[cur--].count);
-
+      for( ; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining+1); remaining += state[cur--].count ); // back cur up to a position to increment.
+      
       // decrement the items at cur.
-      indices[cur].count--;
+      state[cur].count--;
       remaining++;
-
-      // move forward and update indices and next.
-      for (cur++; cur < indices.length; cur++) {
-        indices[cur].count = Math.min(remaining, domainRanks[cur]);
-        indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;
-        remaining -= indices[cur].count;
-        for (int i = 0; i < indices[cur].count; i++) {
+      
+      // move forward and update all of the counts.
+      for(cur++; cur < state.length; cur++) {
+        state[cur].count = Math.min(remaining, domainMultiplicity[cur]);
+        remaining -= state[cur].count;
+      }
+      
+      for( int ri = 0, ni2 = 0;ri < domainMultiplicity.length; ri++) {
 ]]>
 </codefragment>
 </duplication>
 <duplication lines="32" tokens="137">
-<file line="61" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombMathUtilsImpl.java"/>
-<file line="230" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/CombMathUtilsImpl.java"/>
+<file line="50" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/CombMathUtilsImpl.java"/>
+<file line="226" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/CombMathUtilsImpl.java"/>
 <codefragment>
 <![CDATA[
     stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
@@ -206,28 +248,51 @@
 ]]>
 </codefragment>
 </duplication>
-<duplication lines="11" tokens="128">
-<file line="86" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java"/>
-<file line="33" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/PermutationsEngine.java"/>
+<duplication lines="8" tokens="127">
+<file line="168" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutations.java"/>
+<file line="61" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutationsEngine.java"/>
 <codefragment>
 <![CDATA[
-      last = Utils.newArray(componentType, rank);
-      domainRanks = domain.toRankArray();
-      state = new TypePermutationState[domainRanks.length];
-      int ni = 0;
-      for (int ri = 0; ri < domainRanks.length; ri++) {
-        state[ri] = new TypePermutationState();
-        state[ri].count = Math.min(domainRanks[ri], rank - ni);
-        state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
-        for (int j = 0; j < state[ri].entryState.length; j++) {
-          state[ri].entryState[j] = new EntryPermutationState(j);
-          if (j < state[ri].count) {
+          last[ni++] = domain.get(dri).get(j);
+        }
+      }
+      for( int i = state.length - 2; i >= 0; i-- ) {
+        state[i].toRight = domainMultiplicity[i+1] + state[i+1].toRight;
+        state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
+        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+      }
+]]>
+</codefragment>
+</duplication>
+<duplication lines="18" tokens="117">
+<file line="244" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutations.java"/>
+<file line="223" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/Permutations.java"/>
+<codefragment>
+<![CDATA[
+        int cur = state.length - 1;
+        int remaining = 0;
+        
+        // move cur backwards to find the next item to update.
+        for( ; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining+1); remaining += state[cur--].count ); // back cur up to a position to increment.
+        
+        // decrement the items at cur.
+        state[cur].count--;
+        remaining++;
+        
+        // move forward and update all of the counts.
+        for(cur++; cur < state.length; cur++) {
+          state[cur].count = Math.min(remaining, domainMultiplicity[cur]);
+          remaining -= state[cur].count;
+        }
+        
+        // for now, totally reset next.  Making this an incremental update will help when the rank is much smaller than the number of entries.
+        for( int ri = 0, ni = 0;ri < domainMultiplicity.length; ri++) {
 ]]>
 </codefragment>
 </duplication>
 <duplication lines="30" tokens="111">
-<file line="261" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/Permutations.java"/>
-<file line="209" path="/Users/ctrimble/svn/minime/combinatorics-git/src/main/java/com/github/ctrimble/combinatorics/PermutationsEngine.java"/>
+<file line="269" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/Permutations.java"/>
+<file line="229" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/PermutationsEngine.java"/>
 <codefragment>
 <![CDATA[
       handler.end();
@@ -260,6 +325,83 @@
     UP, DOWN
   }
 }
+]]>
+</codefragment>
+</duplication>
+<duplication lines="18" tokens="105">
+<file line="125" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutationsEngine.java"/>
+<file line="223" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/Permutations.java"/>
+<codefragment>
+<![CDATA[
+        int cur = state.length - 1;
+        int remaining = 0;
+        
+        // move cur backwards to find the next item to update.
+        for( ; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining+1); remaining += state[cur--].count ); // back cur up to a position to increment.
+        
+        // decrement the items at cur.
+        state[cur].count--;
+        remaining++;
+        
+        // move forward and update all of the counts.
+        for(cur++; cur < state.length; cur++) {
+          state[cur].count = Math.min(remaining, domainMultiplicity[cur]);
+          remaining -= state[cur].count;
+        }
+        
+        // for now, totally reset next.  Making this an incremental update will help when the rank is much smaller than the number of entries.
+        for( int ri = 0, ni = 0;ri < domainMultiplicity.length; ri++) {
+]]>
+</codefragment>
+</duplication>
+<duplication lines="27" tokens="103">
+<file line="163" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutationsEngine.java"/>
+<file line="276" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/Permutations.java"/>
+<codefragment>
+<![CDATA[
+    public Direction direction = Direction.DOWN;
+    public EntryPermutationState[] entryState;
+    public int count = 0; // the number of entries being used.
+    public int toRight = 0; // the number of items that can occur to the right.  Would be better with the rank array.
+    public String toString() {
+      return "{direction:"+direction+", entries:"+Arrays.toString(entryState)+"}";
+    }
+  }
+  
+  private static class EntryPermutationState
+  {
+    public EntryPermutationState(int index) {
+      this.index = index;
+    }
+    public Direction direction = Direction.DOWN;
+    public int index = 0;
+    public String toString() {
+      return "{direction:"+direction+", index:"+index+"}";
+    }
+  }
+  
+  private static enum Direction
+  {
+    UP,DOWN
+  }
+
+}
+]]>
+</codefragment>
+</duplication>
+<duplication lines="8" tokens="103">
+<file line="262" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutations.java"/>
+<file line="143" path="/Users/ctrimble/git/combinatorics/src/main/java/com/xiantrimble/combinatorics/IndexBasedPermutationsEngine.java"/>
+<codefragment>
+<![CDATA[
+          last[ni2++] = domain.get(ri).get(j);
+        }
+      }
+      
+      for( int i = state.length - 2; i >= 0; i-- ) {
+        state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
+        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+      }
 ]]>
 </codefragment>
 </duplication>
