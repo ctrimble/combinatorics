@@ -195,7 +195,7 @@
           <plugin>
             <groupId>com.github.github</groupId>
             <artifactId>site-maven-plugin</artifactId>
-            <version>0.5</version>
+            <version>0.6</version>
             <configuration>
               <repositoryName>combinatorics</repositoryName>
               <repositoryOwner>ctrimble</repositoryOwner>
