@@ -34,6 +34,17 @@
           <version>0.2.0</version>
         <dependency>
         
+## Installing the CLI
+
+  I have included a homebrew formula for installing the CLI for this project.  You can install the cli by
+  first installing my tap:
+  
+    brew tap ctrimble/homebrew-tap
+    
+  and then install the comb command:
+  
+    brew install --HEAD comb
+        
 ## Some Basic Examples
 
 ### Counting Combinations and Permutations
