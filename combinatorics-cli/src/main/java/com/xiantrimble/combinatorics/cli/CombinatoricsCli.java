@@ -10,18 +10,31 @@ import com.beust.jcommander.Parameters;
 
 public class CombinatoricsCli {
   public static void main( String[] argv ) {
-    Runnable command = parse(argv, new CommandGenerate(), new CommandCount());
-    command.run();
+    try {
+      Runnable command = parse(argv, new CommandGenerate(), new CommandCount());
+      command.run();
+    }
+    catch( Throwable t ) {
+      System.err.println("error: "+t.getMessage());
+    }
   }
   
   public static Runnable parse( String[] argv, Runnable... commands ) {
     
     final JCommander jc = new JCommander();
+    jc.setProgramName("comb");
     for( Runnable command : commands ) {
       jc.addCommand(command);
     }
     
-    jc.parse(argv);
+    try {
+      jc.parse(argv);
+    }
+    catch( Throwable t ) {
+      System.err.println("error: "+ t.getMessage());
+      jc.usage();
+      System.exit(1);
+    }
     
     String parsedCommand = jc.getParsedCommand();
     for( Runnable command : commands ) {

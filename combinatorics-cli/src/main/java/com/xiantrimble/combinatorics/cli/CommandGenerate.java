@@ -6,19 +6,20 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+import com.beust.jcommander.ParametersDelegate;
 import com.xiantrimble.combinatorics.Combinatoric;
 import com.xiantrimble.combinatorics.CombinatoricFactory;
 import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 
-@Parameters(commandNames = "generate", commandDescription = "Output cominbations of length k")
+@Parameters(commandNames = "generate", commandDescription = "Generates combinations or permutations of length k")
 public class CommandGenerate
   implements Runnable
 {
   @Parameter(names="-k", description="The length of the elements")
   public int k;
   
-  @Parameter(names="-t", description="The type of combinatoric to generate (c or p)")
-  public String type;
+  @ParametersDelegate
+  public TypeDelegate type = new TypeDelegate();
   
   @Parameter(names="-d", description="The domain", variableArity=true)
   public List<String> domain;
@@ -27,10 +28,10 @@ public class CommandGenerate
   public void run() {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
     Combinatoric<String> combinatoric = null;
-    if( "c".equals(type) ) {
+    if( type.combination ) {
       combinatoric = factory.createCombinations(k, domain.toArray(new String[domain.size()]));
     }
-    else if( "p".equals(type) ) {
+    else if( type.permutation ) {
       combinatoric = factory.createPermutations(k, domain.toArray(new String[domain.size()]));
     }
     else {
