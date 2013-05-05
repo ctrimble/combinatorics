@@ -7,10 +7,10 @@
     <version>1</version>
   </parent>
   <groupId>com.xiantrimble.combinatorics</groupId>
-  <artifactId>combinatorics</artifactId>
+  <artifactId>combinatorics-parent</artifactId>
   <version>0.3.0-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-  <name>Java Combinatorics Library</name>
+  <packaging>pom</packaging>
+  <name>Java Combinatorics Library :: Parent</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
   <url>https://github.com/${github.user}/${github.name}</url>
 
@@ -104,40 +104,9 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
         <version>3.1</version>
-        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javolution</groupId>
-      <artifactId>javolution</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.carrotsearch</groupId>
-      <artifactId>junit-benchmarks</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
   <build>
     <pluginManagement>
       <plugins>
@@ -151,38 +120,39 @@
           <artifactId>maven-bundle-plugin</artifactId>
           <version>2.0.1</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.3.7</version>
+          <extensions>true</extensions>
+          <!--
+          <executions>
+            <execution>
+              <id>bundle-manifest</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>manifest</goal>
+              </goals>
+            </execution>
+          </executions>
+          -->
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <docfilessubdirs>true</docfilessubdirs>
+            <links>
+              <link>http://commons.apache.org/math/apidocs</link>
+              <link>http://javolution.org/target/site/apidocs</link>
+              <link>http://docs.oracle.com/javase/6/docs/api</link>
+            </links>
+            <linksource>true</linksource>
+            <quiet>true</quiet>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <docfilessubdirs>true</docfilessubdirs>
-          <links>
-            <link>http://commons.apache.org/math/apidocs</link>
-            <link>http://javolution.org/target/site/apidocs</link>
-            <link>http://docs.oracle.com/javase/6/docs/api</link>
-          </links>
-          <linksource>true</linksource>
-          <quiet>true</quiet>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
   <profiles>
     <profile>
@@ -226,4 +196,8 @@
       </plugin>
     </plugins>
   </reporting>
+  <modules>
+    <module>combinatorics</module>
+    <module>combinatorics-cli</module>
+  </modules>
 </project>
