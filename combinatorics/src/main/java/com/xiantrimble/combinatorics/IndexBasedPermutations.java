@@ -21,9 +21,31 @@ import java.util.NoSuchElementException;
 public class IndexBasedPermutations<T>
 extends AbstractCombinatoric<T> {
 
+	protected TypeBoundaries[] typeBoundaries = null;
+
   protected IndexBasedPermutations(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
+    
+    typeBoundaries = new TypeBoundaries[domain.length-k+1];
+
+    int[] tempMultiplicity = this.domainMultiplicity.clone();
+    long lastEnd = 0;
+    int typeIndex = 0;
+    int typeCount = tempMultiplicity[typeIndex];
+    tempMultiplicity[typeIndex] = 0;
+    for( int i = 0; i < typeBoundaries.length; i++ ) {
+    	typeBoundaries[i] = new TypeBoundaries();
+    	typeBoundaries[i].typeIndex = typeIndex;
+    	typeBoundaries[i].count = typeCount;
+    	typeBoundaries[i].end = lastEnd += (mathUtils.p(k, new int[] { typeCount, k-typeCount}) * mathUtils.p(k-typeCount, tempMultiplicity));
+    	if( --typeCount == 0) {
+    		typeIndex++;
+    		typeCount = tempMultiplicity[typeIndex];
+    		tempMultiplicity[typeIndex] = 0;
+    	}
+    }
   }
+
   
   @Override
   public T[] get( int index ) {
@@ -31,13 +53,7 @@ extends AbstractCombinatoric<T> {
   }
   
   public T[] get( long index ) {
-    CombinatoricIterator<T> iterator = iterator();
-    
-    for( long i = 0; i < index-1; i++ ) {
-      iterator.next();
-    }
-    // iterate over domain, and start building up the state from back to front.
-    return iterator.next();
+  	return iterator(index).next();
   }
 
   @Override
@@ -140,6 +156,10 @@ extends AbstractCombinatoric<T> {
   public CombinatoricIterator<T> iterator() {
     return new IndexBasedPermutationIterator(0);
   }
+  
+  public CombinatoricIterator<T> iterator(long index) {
+    return new IndexBasedPermutationIterator(index);
+  }
 
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
@@ -173,6 +193,68 @@ extends AbstractCombinatoric<T> {
         state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
         state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
       }
+      
+      // if we are after the first element, then return.
+      if( nextIndex == 0 ) return;
+      
+      // advance to the combination just before next index.
+    	int typeBoundary = 0;
+    	for( ; typeBoundary < typeBoundaries.length && this.nextIndex > typeBoundaries[typeBoundary].end; typeBoundary++ );
+    	pastCombSize = typeBoundary == 0 ? 0 : typeBoundaries[typeBoundary-1].end;
+    	ni = 0;
+      for( int dri = 0; dri < domainMultiplicity.length; dri++) {
+      	if( dri < typeBoundaries[typeBoundary].typeIndex ) {
+      		state[dri].count = 0;
+      	}
+      	else if( dri == typeBoundaries[typeBoundary].typeIndex ) {
+      		state[dri].count = Math.min(typeBoundaries[typeBoundary].count, k-ni);
+      	}
+      	else {
+          state[dri].count = Math.min(domainMultiplicity[dri], k-ni);
+      	}
+        for( int j = 0; j < state[dri].count; j++ ) {
+          next[ni++] = domain.get(dri).get(j);
+        }
+      }
+      for( int i = state.length - 2; i >= 0; i-- ) {
+        state[i].toRight = domainMultiplicity[i+1] + state[i+1].toRight;
+        state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
+        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+        
+        if( state[i].count == 0 ) continue;
+        
+        // sort the number top state[i].count elements into the elements below.
+        // get the index for permutations of the ith type. 
+        // state[i].perms * n + subIndex = nextIndex
+        // subIndex = nextIndex - (state[i].perms * cycles)
+        // cycles = (nextIndex - nextIndex % state[i].perms) / state[i].perms;
+        // subIndex = nextIndex - (nextIndex - nextIndex % state[i].perms)
+        // subIndex = nextIndex % state[i].perms
+        long subIndex = this.nextIndex % state[i].perms;
+        long cycles = this.nextIndex / state[i].perms;
+        subIndex = cycles % 2 == 0 ? subIndex : state[i].perms - subIndex;
+        int activeToRight = state[i].activeToRight;
+        int remaining = state[i].count;
+        while( remaining > 0 && activeToRight > 0 ) {
+          long perms = mathUtils.p(activeToRight+remaining-1, new int[]{ remaining-1, activeToRight});
+          if( subIndex >= perms ) {
+        		T temp = next[k-(activeToRight+remaining)];
+        	  next[k-(activeToRight+remaining)] = next[k-activeToRight];
+        	  next[k-activeToRight] = temp;
+        	  activeToRight--;
+        	  subIndex -= perms;
+        	}
+        	else {
+        		remaining--;
+        	}
+        }
+        
+      }
+      
+      // ASSERT: the state is updated and next contains the correct elements, but in the start order for this combination.
+      
+      // work from back to front, sorting the elements as we go.
+      
     }
 
     @Override

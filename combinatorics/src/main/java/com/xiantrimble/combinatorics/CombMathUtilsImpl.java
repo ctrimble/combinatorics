@@ -41,6 +41,8 @@ public class CombMathUtilsImpl
   
   private static long c(int k, DistinctM dm)
   {
+  	if( dm == null ) return 0;
+  	if( k == 0 ) return 1;
     long result = 0;
     
     // create a stack for the calculation.
@@ -199,7 +201,7 @@ public class CombMathUtilsImpl
     for( int i = 0; i < mSorted.length; ) {
       int count = 1;
       for( ; i + count < mSorted.length && mSorted[i] == mSorted[i+count];count++);
-      head = new DistinctM(mSorted[i], count, rn, head);
+      head =  mSorted[i] == 0 ? head :new DistinctM(mSorted[i], count, rn, head);
       rn += (mSorted[i]*count);
       i += count;
     }
@@ -216,6 +218,8 @@ public class CombMathUtilsImpl
   }
   
   private long p(int k, DistinctM dm) {
+  	if( dm == null ) return 0;
+  	if( k == 0 ) return 1;
     long result = 0;
     
     // create a stack for the calculation.

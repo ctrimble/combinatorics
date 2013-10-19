@@ -101,9 +101,13 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   @Override
   public T[] get(int arg0) {
-    int index = 0;
+  	return get((long)arg0);
+  }
+  
+  public T[] get(long arg0) {
+    long index = 0;
     Iterator<T[]> iterator = iterator();
-    for( int i = 0; i < arg0; i++ ) {
+    for( long i = 0; i < arg0; i++ ) {
       iterator.next();
     }
     return iterator.next();
