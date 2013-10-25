@@ -139,6 +139,10 @@ extends AbstractCombinatoric<T> {
   public CombinatoricIterator<T> iterator(long index) {
     return new IndexBasedPermutationIterator(index, size);
   }
+  
+  public CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
+    return new IndexBasedPermutationIterator(fromIndex, toIndex);
+  }
 
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
@@ -281,13 +285,13 @@ extends AbstractCombinatoric<T> {
     public T[] next() {
       // mod the next index + 1 by the number of permutations for this state.  If it is
       // zero, move down a state.
-      if( nextIndex >= size ) {
+      if( nextIndex >= endIndex ) {
         throw new NoSuchElementException("Reached the end of iteration.");
       }
       nextIndex++;
       previous = next;
       
-      if( nextIndex == size ) {
+      if( nextIndex == endIndex ) {
         next = null;
         return previous;
       }

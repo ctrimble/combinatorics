@@ -299,4 +299,9 @@ public class Permutations<T>
     UP,DOWN
   }
 
+	@Override
+  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
+	  throw new UnsupportedOperationException();
+  }
+
 }
