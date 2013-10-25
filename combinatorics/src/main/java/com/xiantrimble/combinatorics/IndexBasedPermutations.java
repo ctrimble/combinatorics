@@ -21,29 +21,8 @@ import java.util.NoSuchElementException;
 public class IndexBasedPermutations<T>
 extends AbstractCombinatoric<T> {
 
-	protected TypeBoundaries[] typeBoundaries = null;
-
   protected IndexBasedPermutations(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
-    
-    typeBoundaries = new TypeBoundaries[domain.length-k+1];
-
-    int[] tempMultiplicity = this.domainMultiplicity.clone();
-    long lastEnd = 0;
-    int typeIndex = 0;
-    int typeCount = tempMultiplicity[typeIndex];
-    tempMultiplicity[typeIndex] = 0;
-    for( int i = 0; i < typeBoundaries.length; i++ ) {
-    	typeBoundaries[i] = new TypeBoundaries();
-    	typeBoundaries[i].typeIndex = typeIndex;
-    	typeBoundaries[i].count = typeCount;
-    	typeBoundaries[i].end = lastEnd += (mathUtils.p(k, new int[] { typeCount, k-typeCount}) * mathUtils.p(k-typeCount, tempMultiplicity));
-    	if( --typeCount == 0) {
-    		typeIndex++;
-    		typeCount = tempMultiplicity[typeIndex];
-    		tempMultiplicity[typeIndex] = 0;
-    	}
-    }
   }
 
   
@@ -154,11 +133,11 @@ extends AbstractCombinatoric<T> {
 
   @Override
   public CombinatoricIterator<T> iterator() {
-    return new IndexBasedPermutationIterator(0);
+    return new IndexBasedPermutationIterator(0, size);
   }
   
   public CombinatoricIterator<T> iterator(long index) {
-    return new IndexBasedPermutationIterator(index);
+    return new IndexBasedPermutationIterator(index, size);
   }
 
   @Override
@@ -174,88 +153,129 @@ extends AbstractCombinatoric<T> {
     T[] previous;
     long pastCombSize = 0;
     
-    protected IndexBasedPermutationIterator(long nextIndex) {
-      super(nextIndex);
+    protected IndexBasedPermutationIterator(long startIndex, long endIndex) {
+      super(0);
   
       // initialize our internal state.
       next = newComponentArray(k);
       state = new TypePermutationState[domainMultiplicity.length];
+      
       int ni = 0; // index into the next solution array.
-      for( int dri = 0; dri < domainMultiplicity.length; dri++) {
+      int toRight = domain.totalSize();
+      long currentPerms = 1;
+      pastCombSize = 0;
+      
+      TYPE: for( int dri = 0; dri < domainMultiplicity.length; dri++) {
         state[dri] = new TypePermutationState();
-        state[dri].count = Math.min(domainMultiplicity[dri], k-ni);
-        for( int j = 0; j < state[dri].count; j++ ) {
-          next[ni++] = domain.get(dri).get(j);
-        }
-      }
-      for( int i = state.length - 2; i >= 0; i-- ) {
-        state[i].toRight = domainMultiplicity[i+1] + state[i+1].toRight;
-        state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
-        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
-      }
-      
-      // if we are after the first element, then return.
-      if( nextIndex == 0 ) return;
-      
-      // advance to the combination just before next index.
-    	int typeBoundary = 0;
-    	for( ; typeBoundary < typeBoundaries.length && this.nextIndex > typeBoundaries[typeBoundary].end; typeBoundary++ );
-    	pastCombSize = typeBoundary == 0 ? 0 : typeBoundaries[typeBoundary-1].end;
-    	ni = 0;
-      for( int dri = 0; dri < domainMultiplicity.length; dri++) {
-      	if( dri < typeBoundaries[typeBoundary].typeIndex ) {
-      		state[dri].count = 0;
-      	}
-      	else if( dri == typeBoundaries[typeBoundary].typeIndex ) {
-      		state[dri].count = Math.min(typeBoundaries[typeBoundary].count, k-ni);
-      	}
-      	else {
-          state[dri].count = Math.min(domainMultiplicity[dri], k-ni);
-      	}
-        for( int j = 0; j < state[dri].count; j++ ) {
-          next[ni++] = domain.get(dri).get(j);
-        }
-      }
-      for( int i = state.length - 2; i >= 0; i-- ) {
-        state[i].toRight = domainMultiplicity[i+1] + state[i+1].toRight;
-        state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
-        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+        state[dri].toRight = (toRight-=domainMultiplicity[dri]);
+        for( int j = Math.min(domainMultiplicity[dri], k-ni); j >= 0; j-- ) { 
+          state[dri].count = j;
+          state[dri].activeToRight = k-ni-state[dri].count;
+          state[dri].perms = mathUtils.pAll(state[dri].count, state[dri].activeToRight);
+          state[dri].permsToRight = mathUtils.p(state[dri].activeToRight, domainMultiplicity, dri+1, domainMultiplicity.length);
+          state[dri].permsToLeft = dri == 0 ? 1 : state[dri-1].permsToLeft * state[dri-1].perms;
         
-        if( state[i].count == 0 ) continue;
-        
-        // sort the number top state[i].count elements into the elements below.
-        // get the index for permutations of the ith type. 
-        // state[i].perms * n + subIndex = nextIndex
-        // subIndex = nextIndex - (state[i].perms * cycles)
-        // cycles = (nextIndex - nextIndex % state[i].perms) / state[i].perms;
-        // subIndex = nextIndex - (nextIndex - nextIndex % state[i].perms)
-        // subIndex = nextIndex % state[i].perms
-        long subIndex = this.nextIndex % state[i].perms;
-        long cycles = this.nextIndex / state[i].perms;
-        subIndex = cycles % 2 == 0 ? subIndex : state[i].perms - subIndex;
-        int activeToRight = state[i].activeToRight;
-        int remaining = state[i].count;
-        while( remaining > 0 && activeToRight > 0 ) {
-          long perms = mathUtils.p(activeToRight+remaining-1, new int[]{ remaining-1, activeToRight});
-          if( subIndex >= perms ) {
-        		T temp = next[k-(activeToRight+remaining)];
-        	  next[k-(activeToRight+remaining)] = next[k-activeToRight];
-        	  next[k-activeToRight] = temp;
-        	  activeToRight--;
-        	  subIndex -= perms;
-        	}
-        	else {
-        		remaining--;
-        	}
+          // if the next index is past this permutation, then add to the past perms.
+          if( pastCombSize + (currentPerms * state[dri].perms * state[dri].permsToRight) <= startIndex) {
+            	pastCombSize += currentPerms * state[dri].perms * state[dri].permsToRight;
+          }
+          // consume this count.
+          else {
+          	currentPerms *= state[dri].perms;
+          	for( int n = 0; n < state[dri].count; n++) {
+          		next[ni++] = domainValues[dri][n];
+          	}
+          	continue TYPE;
+          }
         }
-        
       }
       
       // ASSERT: the state is updated and next contains the correct elements, but in the start order for this combination.
-      
-      // work from back to front, sorting the elements as we go.
-      
+      // This does not work properly when internal elements are rising.
+      //  0 ) O O O _ _ _ <- if target is greater than p( 5, {2, 3} ), then swap 0 with 3 and change current index to (current index + p(remaining-1+toRight {remaining-1, toRight}) - 1 + p(remaining+toRight-2, {remaining-1, toRight-1}), otherwise reduce remaining.
+      //  1 ) O O _ O _ _
+      //  2 ) O O _ _ 0 _
+      //  3 ) O O _ _ _ O
+      //  4 ) O _ O _ _ O NOTE: this case is having problems.  It is returning (O _ O O _ _), because the direction of elements is not being respected.
+      //  5 ) O _ O _ O _
+      //  6 ) O _ O O _ _ <- current index - target index < 0, then remaining--, else swap element and 
+      //  7 ) O _ _ O O _
+      //  8 ) O _ _ O _ O
+      //  9 ) O _ _ _ O O <- advance to the index we are actually on ( index + p( 4, {2, 2}) ) when toRight (2) is even.
+      // 10 ) _ O _ _ O O
+      // 11 ) _ O _ O _ O
+      // 12 ) _ O _ O O _
+      // 13 ) _ O O O _ _ <- if the target index is less, then leave index and move to 12, otherwise, swap index + remaining.
+      // 14 ) _ _ O O O _
+      // 15 ) _ _ O O _ O
+      // 15 ) _ _ O _ O O
+      // 15 ) _ _ _ O O O
+      // 16 ) X X _ O O O <- a swap happens.
+      long index = startIndex - pastCombSize;
+      nextIndex = pastCombSize;
+      int windowStart = next.length;
+      int windowEnd = next.length;
+      long windowIndex = 0;
+      long windowTarget = 0;
+      TYPE: for( int i = state.length - 1; i >= 0; i-- ) {
+      	if( state[i].count == 0 ) continue;
+      	
+      	// increase the window.
+      	boolean atStart = windowIndex % 2 == 0;
+      	windowStart -= state[i].count;
+      	windowIndex *= state[i].perms;
+      	windowIndex += atStart ? 0 : state[i].perms - 1;
+      	windowTarget = index / state[i].permsToLeft;
+      	
+      	if( i == state.length - 1 ) continue;
+      	
+      	int remaining = state[i].count;
+      	toRight = state[i].activeToRight;
+      	
+      	WINDOW: for( int windowCur = windowStart; windowCur < next.length; windowCur++ ) {
+      	  if( windowIndex == windowTarget ) continue TYPE;
+      	
+      	  // when we need to move forward.
+        	if( windowIndex < windowTarget && atStart ) {
+        		if( windowIndex + mathUtils.pAll(remaining-1, toRight) > windowTarget ) {
+        			remaining--;
+        			continue WINDOW;
+        		}
+        		else {
+        			swap(next, windowCur, windowCur+remaining);
+        			windowIndex += mathUtils.pAll(remaining-1, toRight) + mathUtils.pAll(remaining-1, toRight-1) - 1;
+        			toRight--;
+        			atStart = remaining == 1;
+        		}
+        	}
+        	else if( windowIndex < windowTarget ) {
+        		swap(next, windowCur, windowCur+remaining);
+        		windowIndex++;
+        	  toRight--;
+        	  atStart = true;
+        	}
+        	else if( windowIndex > windowTarget && !atStart ) {
+        		if( windowIndex - mathUtils.pAll(remaining-1, toRight) >= windowTarget ) {
+        			swap(next, windowCur, windowCur+remaining);
+        			windowIndex -= (mathUtils.pAll(remaining-1, toRight) + mathUtils.pAll(remaining-1, toRight-1) - 1);
+        			toRight--;
+        			atStart = remaining != 1;
+        		}
+        		else {
+        			remaining--;
+        		}
+        	}
+        	else {
+        		swap(next, windowCur, windowCur+remaining);
+        		windowIndex--;
+        		toRight--;
+        		atStart = false;
+        	}
+      	}     	
+      }
     }
+  
+
 
     @Override
     public T[] next() {
@@ -359,10 +379,18 @@ extends AbstractCombinatoric<T> {
     }
     
   }
+  
+  public static <T> void swap( final T[] elements, final int a, final int b ) {
+ 		T temp = elements[a];
+ 		elements[a] = elements[b];
+ 		elements[b] = temp;
+  }
 
   private static class TypePermutationState
   {
-    /* The number of elements in the current combination, that fall to the right of this element type.*/
+    public long permsToLeft;
+		public long permsToRight;
+		/* The number of elements in the current combination, that fall to the right of this element type.*/
     public int activeToRight = 0;
     /* The total number of permutations between this type and all remaining types together. */
     public long perms = 0;
@@ -372,7 +400,7 @@ extends AbstractCombinatoric<T> {
     public int toRight = 0;
     public String toString() {
       //return "{direction:"+direction+", entries:"+Arrays.toString(entryState)+"}";
-      return String.format("{count: %d, perms: %d, toRight: %d, activeToRight: %d}", count, perms, toRight, activeToRight);
+      return String.format("{count: %d, perms: %d, toRight: %d, permsToRight: %d, permsToLeft: %d, activeToRight: %d}", count, perms, toRight, permsToRight, permsToLeft, activeToRight);
     }
   }
 }

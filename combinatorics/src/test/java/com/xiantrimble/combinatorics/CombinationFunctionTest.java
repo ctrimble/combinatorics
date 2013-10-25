@@ -24,7 +24,7 @@ public class CombinationFunctionTest {
   			{ 1, new int[] { 1, 1 }, 0, 2, 2 },
   			{ 1, new int[] { 1, 0 }, 0, 2, 1 },
   			{ 0, new int[] { 1, 0 }, 0, 2, 1 },
-  			{ 0, new int[] { 0, 0 }, 0, 2, 0 }
+  			{ 0, new int[] { 0, 0 }, 0, 2, 1 }
   	});
   }
 	private int k;

@@ -46,8 +46,8 @@ public class CombMathUtilsImpl
 
   private static long c(int k, DistinctM dm)
   {
-  	if( dm == null ) return 0;
   	if( k == 0 ) return 1;
+  	if( dm == null ) return 0;
     long result = 0;
     
     // create a stack for the calculation.
@@ -124,8 +124,8 @@ public class CombMathUtilsImpl
 	}
 	
 	public int compareC(int k, DistinctM dm, long value) {
+  	if( k == 0 ) return 1 < value ? -1 : 1 == value ? 0 : 1;
 	  	if( dm == null ) return 0 < value ? -1 : 0 == value ? 0 : 1;
-	  	if( k == 0 ) return 1 < value ? -1 : 1 == value ? 0 : 1;
 	    long result = 0;
 	    
 	    // create a stack for the calculation.
@@ -312,8 +312,8 @@ public class CombMathUtilsImpl
   }
   
   private long p(int k, DistinctM dm) {
-  	if( dm == null ) return 0;
   	if( k == 0 ) return 1;
+  	if( dm == null ) return 0;
     long result = 0;
     
     // create a stack for the calculation.
@@ -399,8 +399,8 @@ public class CombMathUtilsImpl
   }
 	
   private int compareP(int k, DistinctM dm, long value) {
-  	if( dm == null ) return 0 < value ? -1 : value == 0 ? 0 : 1;
   	if( k == 0 ) return 1 < value ? -1 : value == 1 ? 0 : 1;
+  	if( dm == null ) return 0 < value ? -1 : value == 0 ? 0 : 1;
     long result = 0;
     
     // create a stack for the calculation.
@@ -478,14 +478,14 @@ public class CombMathUtilsImpl
 	@Override
   public long cAll(int... m) {
 		int total = 0;
-		for(int i = 0; i < m.length; i++, total+=m[i]);
+		for(int i = 0; i < m.length; total+=m[i], i++);
 	  return c(total, createDistinctM(m, 0, m.length));
   }
 
 	@Override
   public long pAll(int... m) {
 		int total = 0;
-		for(int i = 0; i < m.length; i++, total+=m[i]);
+		for(int i = 0; i < m.length; total+=m[i], i++ );
 	  return p(total, createDistinctM(m, 0, m.length));
   }
 }
