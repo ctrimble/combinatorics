@@ -16,6 +16,7 @@
 package com.xiantrimble.combinatorics;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -49,17 +50,18 @@ public class PermutationsIndexOfTest {
     int index = 0;
     for( Element[] element : combinatoric) {
       long indexOf = combinatoric.longIndexOf(element);
-      //System.out.println("index "+index+" "+Arrays.toString(element));
-      try {
-        assertEquals(index, indexOf);
-      }
-      catch( AssertionError ae ) {
-        // handle for debugger.
-        combinatoric.longIndexOf(element);
-        throw ae;
-      }
+      assertEquals(index, indexOf);
       index++;
     }
+  }
+  
+  @Test
+  public void shouldBeInverseOfGet() {
+           for( Element[] element : combinatoric ) {
+                   long index = combinatoric.longIndexOf(element);
+                   Element[] roundTrip = combinatoric.get(index);
+                   assertThat(String.format("indexOf is the inverse of get at %d", index), roundTrip, is(element));
+           }
   }
 
   @Parameters

@@ -31,6 +31,46 @@ class CombMathUtilsBenchmark
   implements CombMathUtils
 {
   @Override
+  public long c(int k, int[] m, int offset, int length) {
+	  throw new UnsupportedOperationException();
+  }
+
+	@Override
+  public int compareC(int k, int[] m, int offset, int length, long value) {
+	  throw new UnsupportedOperationException();
+  }
+
+	@Override
+  public int compareC(int k, int[] m, long value) {
+	  throw new UnsupportedOperationException();
+  }
+
+	@Override
+  public long p(int k, int[] m, int offset, int length) {
+	  throw new UnsupportedOperationException();
+  }
+
+	@Override
+  public int compareP(int k, int[] m, int offset, int length, long value) {
+	  throw new UnsupportedOperationException();
+  }
+
+	@Override
+  public int compareP(int k, int[] m, long value) {
+	  throw new UnsupportedOperationException();
+  }
+	
+	@Override
+  public long cAll(int... m) {
+		throw new UnsupportedOperationException();
+  }
+
+	@Override
+  public long pAll(int... m) {
+		throw new UnsupportedOperationException();
+  }
+
+	@Override
   public long c(int k, int... m) {
     // sort m
     int[] mSorted = Arrays.copyOf(m, m.length);
@@ -169,4 +209,5 @@ class CombMathUtilsBenchmark
       return "{value:"+value+", count:"+count+"}";
     }
   }
+
 }

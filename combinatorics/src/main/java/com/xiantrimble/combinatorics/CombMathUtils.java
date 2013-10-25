@@ -31,6 +31,23 @@ public interface CombMathUtils {
    * @return the number of combinations of length k from the domain multiplicity m.
    */
   long c(int k, int... m);
+  
+  long cAll( int... m );
+  
+  /**
+   * Returns the number of combinations of length k from a domain's multiplicity.
+   * 
+   * @param k
+   * @param m
+   * @param from
+   * @param to
+   * @return
+   */
+  long c(int k, int[] m, int from, int to);
+  
+  int compareC(int k, int[] m, int from, int to, long value );
+  
+  int compareC(int k, int[] m, long value);
 
   /**
    * Counts the number of permutations of length k from a domain's multiplicity.
@@ -41,5 +58,12 @@ public interface CombMathUtils {
    */
   long p(int k, int... m);
   
+  long pAll( int... m );
+  
+  long p(int k, int[] m, int from, int to );
+  
+  int compareP( int k, int[] m, int from, int to, long value );
+  
+  int compareP( int k, int[] m, long value );
 }
   

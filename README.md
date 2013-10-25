@@ -8,7 +8,6 @@
 
   This project is now working for forward iteration.  Upcoming improvements:
   - backward iteration for permutations (working for combinations.)
-  - starting in the middle of an iteration.
   - inlining of combinatoric engine handlers with ASM.
 
 ## Mailing List

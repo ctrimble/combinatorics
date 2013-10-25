@@ -63,4 +63,8 @@ public interface Combinatoric<T> extends List<T[]> {
    * @return the iterator for this combinatoric collection.
    */
   public CombinatoricIterator<T> iterator();
+
+	public T[] get(long index);
+	
+	public Combinatoric<T> subList( long fromIndex, long toIndex );
 }

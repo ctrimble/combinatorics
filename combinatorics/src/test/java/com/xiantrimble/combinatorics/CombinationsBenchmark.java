@@ -167,4 +167,9 @@ public class CombinationsBenchmark<T>
   public long longIndexOf(T[] element) {
     throw new UnsupportedOperationException("longIndexOf(T[]) not implemented yet.");
   }
+
+	@Override
+  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
+	  throw new UnsupportedOperationException();
+  }
 }

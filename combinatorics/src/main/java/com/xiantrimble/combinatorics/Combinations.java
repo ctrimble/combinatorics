@@ -44,7 +44,13 @@ public class Combinations<T>
    */
   @Override
   public CombinatoricIterator<T> iterator() {
-    return new CombinationIterator(0);
+    return new CombinationIterator(0, size);
+  }
+  
+
+	@Override
+  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
+		return new CombinationIterator(fromIndex, toIndex);
   }
 
   /**
@@ -114,8 +120,8 @@ public class Combinations<T>
     protected int[] domainMultiplicity;
     protected DomainPointer[] indices;
     
-    protected CombinationIterator(long nextIndex) {
-      super(nextIndex);
+    protected CombinationIterator(long nextIndex, long endIndex) {
+      super(nextIndex, endIndex);
       next = newComponentArray(k);
       previous = newComponentArray(k);
       domainMultiplicity = domain.toMultiplicity();
@@ -134,7 +140,7 @@ public class Combinations<T>
      */
     @Override
     public T[] next() {
-      if( nextIndex >= size ) throw new NoSuchElementException(); // we may just want to do this in the next method.
+      if( nextIndex >= endIndex ) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // reset the next array if needed.
       if( nextIndex == 0 ) {
@@ -151,7 +157,7 @@ public class Combinations<T>
       for( int i = 0; i < next.length; i++ ) previous[i] = next[i];
       nextIndex++;
       
-      if( nextIndex != size ) {
+      if( nextIndex != endIndex ) {
       
       // DIAGRAM OF INDICIES ARRAY: DOMAIN MULTIPLICITY: (3,3,1,3,2), CURRENT COMBINATION MULTIPLICITY: (3,2,0,1,1)
       // Position  | 0 | 1 | 2 | 3 | 4
@@ -254,5 +260,6 @@ public class Combinations<T>
       return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
     }
   }
+
 
 }
