@@ -153,6 +153,23 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>com.atlassian.maven.plugins</groupId>
+        <artifactId>maven-jgitflow-plugin</artifactId>
+        <version>1.0-alpha21.1</version>
+        <configuration>
+          <flowInitContext>
+          <masterBranchName>master</masterBranchName>
+          <developBranchName>develop</developBranchName>
+          <featureBranchPrefix>feature-</featureBranchPrefix>
+          <releaseBranchPrefix>release-</releaseBranchPrefix>
+          <hotfixBranchPrefix>hotfix-</hotfixBranchPrefix>
+          <versionTagPrefix>v</versionTagPrefix>
+          </flowInitContext>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
   <profiles>
     <profile>
