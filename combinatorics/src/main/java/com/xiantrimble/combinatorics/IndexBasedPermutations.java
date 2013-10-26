@@ -32,7 +32,7 @@ extends AbstractCombinatoric<T> {
   }
   
   public T[] get( long index ) {
-  	return iterator(index).next();
+  	return iterator(index, index+1).next();
   }
 
   @Override
