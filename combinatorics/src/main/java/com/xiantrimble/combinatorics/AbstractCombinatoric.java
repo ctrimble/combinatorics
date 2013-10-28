@@ -108,7 +108,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   }
   
   public T[] get(long index) {
-  	return iterator(index, index+1).next();
+  	return iterator(index, index+1, 0).next();
   }
 
   /**
@@ -147,7 +147,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   public abstract CombinatoricIterator<T> iterator();
   
-  protected abstract CombinatoricIterator<T> iterator(long fromIndex, long toIndex);
+  protected abstract CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long startIndex);
   
   /**
    * Computes the size of the result for the given length (k) and domain.
@@ -162,18 +162,23 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       implements CombinatoricIterator<T>
   {
     protected long nextIndex = 0;
+    protected long startIndex = 0;
     protected long endIndex = 0;
     
     protected AbstractCombinatoricIterator(long startIndex)
     {
-      this(startIndex, size);
+      this(startIndex, size, 0);
     }
     
     protected AbstractCombinatoricIterator(long startIndex, long endIndex) {
-    	this.nextIndex = startIndex;
-    	this.endIndex = endIndex;
+    	this(startIndex, endIndex, 0);
     }
     
+    protected AbstractCombinatoricIterator(long startIndex, long endIndex, long nextIndex) {
+    	this.startIndex = startIndex;
+    	this.endIndex = endIndex;
+    	this.nextIndex = nextIndex;
+    }    
     /**
      * @throws UnsupportedOperationException
      */
@@ -226,7 +231,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     @Override
     public boolean hasNext()
     {
-      return nextIndex < endIndex;
+      return startIndex + nextIndex < endIndex;
     }
     
     /**
@@ -321,17 +326,18 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
 		@Override
     public int lastIndexOf(Object o) {
       long result = longIndexOf((T[])o);
-      return result < Integer.MAX_VALUE ? (int)result : Integer.MAX_VALUE;
+      if( result < fromIndex || result >= toIndex ) return -1;
+      return result-fromIndex < Integer.MAX_VALUE ? (int)(result-fromIndex) : Integer.MAX_VALUE;
     }
 
 		@Override
     public ListIterator<T[]> listIterator() {
-      return AbstractCombinatoric.this.iterator(fromIndex, toIndex);
+      return AbstractCombinatoric.this.iterator(fromIndex, toIndex, fromIndex);
     }
 
 		@Override
     public ListIterator<T[]> listIterator(int startIndex) {
-    	return AbstractCombinatoric.this.iterator(fromIndex+startIndex, toIndex);
+    	return AbstractCombinatoric.this.iterator(fromIndex, toIndex, startIndex);
     }
 
 		@Override
@@ -414,7 +420,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
 
 		@Override
     public CombinatoricIterator<T> iterator() {
-      return AbstractCombinatoric.this.iterator(fromIndex, toIndex);
+      return AbstractCombinatoric.this.iterator(fromIndex, toIndex, 0);
     }
 
 		@Override

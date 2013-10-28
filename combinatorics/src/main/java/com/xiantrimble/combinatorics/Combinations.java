@@ -39,18 +39,27 @@ public class Combinations<T>
     super(k, domain, mathUtil);
   } 
   
+  @Override
+  public T[] get( int index ) {
+    return get((long)index);
+  }
+  
+  public T[] get( long index ) {
+  	return iterator(index, index+1, 0).next();
+  }
+  
   /**
    * Returns an iterator over this collection.
    */
   @Override
   public CombinatoricIterator<T> iterator() {
-    return new CombinationIterator(0, size);
+    return new CombinationIterator(0, size, 0);
   }
   
 
 	@Override
-  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
-		return new CombinationIterator(fromIndex, toIndex);
+  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long nextIndex) {
+		return new CombinationIterator(fromIndex, toIndex, nextIndex);
   }
 
   /**
@@ -120,17 +129,33 @@ public class Combinations<T>
     protected int[] domainMultiplicity;
     protected DomainPointer[] indices;
     
-    protected CombinationIterator(long nextIndex, long endIndex) {
-      super(nextIndex, endIndex);
+    protected CombinationIterator(long startIndex, long endIndex, long nextIndex) {
+      super(startIndex, endIndex, nextIndex);
       next = newComponentArray(k);
       previous = newComponentArray(k);
       domainMultiplicity = domain.toMultiplicity();
       indices = new DomainPointer[domainMultiplicity.length];
       indices[indices.length-1] = new DomainPointer();
-      for( int i = domainMultiplicity.length-1; i > 0; i-- ) {
-        indices[i-1] = new DomainPointer();
-        indices[i-1].toRight = domainMultiplicity[i] + indices[i].toRight;
-      }      
+      int toRight = domain.totalSize();
+      int ni = 0;
+      long currentCombs = 0;
+      for( int i = 0; i < domainMultiplicity.length; i++) {
+        indices[i] = new DomainPointer();
+        indices[i].toRight = toRight -= domainMultiplicity[i];
+        indices[i].index = ni;
+        for( int count = Math.min(domainMultiplicity[i], k-ni); count >= 0; count-- ) {
+        	indices[i].count = count;
+        	long combsToRight = mathUtils.c(k-ni-count, domainMultiplicity, i+1, domainMultiplicity.length);
+        	if( currentCombs + combsToRight <= startIndex + nextIndex ) {
+        		currentCombs += combsToRight;
+        		continue;
+        	}
+        	for( int j = 0; j < indices[i].count; j++) {
+        	  next[ni++] = domainValues[i][j];
+          }
+        	break;
+        }
+      }
     }
 
     /**
@@ -140,10 +165,10 @@ public class Combinations<T>
      */
     @Override
     public T[] next() {
-      if( nextIndex >= endIndex ) throw new NoSuchElementException(); // we may just want to do this in the next method.
+      if( startIndex + nextIndex >= endIndex ) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // reset the next array if needed.
-      if( nextIndex == 0 ) {
+      if( startIndex + nextIndex == 0 ) {
         for(int i = 0, used = 0; i < indices.length && used < k; used += domainMultiplicity[i++]) {
           indices[i].index = used;
           indices[i].count = Math.min(k-used, domainMultiplicity[i]);
@@ -157,7 +182,7 @@ public class Combinations<T>
       for( int i = 0; i < next.length; i++ ) previous[i] = next[i];
       nextIndex++;
       
-      if( nextIndex != endIndex ) {
+      if( startIndex + nextIndex != endIndex ) {
       
       // DIAGRAM OF INDICIES ARRAY: DOMAIN MULTIPLICITY: (3,3,1,3,2), CURRENT COMBINATION MULTIPLICITY: (3,2,0,1,1)
       // Position  | 0 | 1 | 2 | 3 | 4
@@ -197,13 +222,13 @@ public class Combinations<T>
      */
     @Override
     public T[] previous() {
-      if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
+      if( startIndex + nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // set both values to the the previous value.
       for( int i = 0; i < previous.length; i++ ) next[i] = previous[i];
       nextIndex--;
       
-      if( nextIndex > 0 ) {
+      if( startIndex + nextIndex > 0 ) {
       
       // DIAGRAM OF INDICIES ARRAY: DOMAIN MULTIPLICITY: (3,3,1,3,2), CURRENT COMBINATION MULTIPLICITY: (3,2,0,1,1)
       // Position  | 0 | 1 | 2 | 3 | 4

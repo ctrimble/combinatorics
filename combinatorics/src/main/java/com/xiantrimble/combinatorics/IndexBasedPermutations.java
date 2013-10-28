@@ -32,7 +32,7 @@ extends AbstractCombinatoric<T> {
   }
   
   public T[] get( long index ) {
-  	return iterator(index, index+1).next();
+  	return iterator(index, index+1, 0).next();
   }
 
   @Override
@@ -133,15 +133,15 @@ extends AbstractCombinatoric<T> {
 
   @Override
   public CombinatoricIterator<T> iterator() {
-    return new IndexBasedPermutationIterator(0, size);
+    return new IndexBasedPermutationIterator(0, size, 0);
   }
   
   public CombinatoricIterator<T> iterator(long index) {
-    return new IndexBasedPermutationIterator(index, size);
+    return new IndexBasedPermutationIterator(index, size, 0);
   }
   
-  public CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
-    return new IndexBasedPermutationIterator(fromIndex, toIndex);
+  public CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long nextIndex ) {
+    return new IndexBasedPermutationIterator(fromIndex, toIndex, nextIndex );
   }
 
   @Override
@@ -157,8 +157,8 @@ extends AbstractCombinatoric<T> {
     T[] previous;
     long pastCombSize = 0;
     
-    protected IndexBasedPermutationIterator(long startIndex, long endIndex) {
-      super(0);
+    protected IndexBasedPermutationIterator(long startIndex, long endIndex, long nextIndex) {
+      super(startIndex, endIndex, nextIndex);
   
       // initialize our internal state.
       next = newComponentArray(k);
@@ -180,7 +180,7 @@ extends AbstractCombinatoric<T> {
           state[dri].permsToLeft = dri == 0 ? 1 : state[dri-1].permsToLeft * state[dri-1].perms;
         
           // if the next index is past this permutation, then add to the past perms.
-          if( pastCombSize + (currentPerms * state[dri].perms * state[dri].permsToRight) <= startIndex) {
+          if( pastCombSize + (currentPerms * state[dri].perms * state[dri].permsToRight) <= startIndex + nextIndex) {
             	pastCombSize += currentPerms * state[dri].perms * state[dri].permsToRight;
           }
           // consume this count.
@@ -285,19 +285,19 @@ extends AbstractCombinatoric<T> {
     public T[] next() {
       // mod the next index + 1 by the number of permutations for this state.  If it is
       // zero, move down a state.
-      if( nextIndex >= endIndex ) {
+      if( startIndex + nextIndex >= endIndex ) {
         throw new NoSuchElementException("Reached the end of iteration.");
       }
       nextIndex++;
       previous = next;
       
-      if( nextIndex == endIndex ) {
+      if( startIndex + nextIndex == endIndex ) {
         next = null;
         return previous;
       }
       next = next.clone();
       
-      long index = nextIndex-pastCombSize;
+      long index = (startIndex + nextIndex)-pastCombSize;
       int windowStart = 0;
       int windowEnd = next.length;
       TYPE: for( int i = 0; i < state.length-1; i++) {
@@ -345,7 +345,7 @@ extends AbstractCombinatoric<T> {
         }
       }
       
-      pastCombSize = nextIndex;
+      pastCombSize = startIndex + nextIndex;
       // end of permutations for this combination reached.  Advance to the next combination.
       int cur = state.length - 1;
       int remaining = 0;

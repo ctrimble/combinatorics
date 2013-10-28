@@ -169,7 +169,7 @@ public class CombinationsBenchmark<T>
   }
 
 	@Override
-  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex) {
+  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long nextIndex ) {
 	  throw new UnsupportedOperationException();
   }
 }

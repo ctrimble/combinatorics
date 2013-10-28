@@ -26,42 +26,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import static com.xiantrimble.combinatorics.PermutationsIndexOfTest.Element.*;
+import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.*;
 
 @RunWith(Parameterized.class)
-public class PermutationsIndexOfTest {
-  public static enum Element {
-    ONE,
-    TWO,
-    THREE,
-    FOUR,
-    FIVE
-  }
-  private static CombinatoricFactory factory = new CombinatoricFactoryImpl();
-
-  private Combinatoric<Element> combinatoric;
-
+public class PermutationsIndexOfTest
+  extends AbstractIndexOfTest
+{
   public PermutationsIndexOfTest( Combinatoric<Element> combinatoric ) {
-    this.combinatoric = combinatoric;
-  }
-  
-  @Test
-  public void iterationMatchesIndexOf() {
-    int index = 0;
-    for( Element[] element : combinatoric) {
-      long indexOf = combinatoric.longIndexOf(element);
-      assertEquals(index, indexOf);
-      index++;
-    }
-  }
-  
-  @Test
-  public void shouldBeInverseOfGet() {
-           for( Element[] element : combinatoric ) {
-                   long index = combinatoric.longIndexOf(element);
-                   Element[] roundTrip = combinatoric.get(index);
-                   assertThat(String.format("indexOf is the inverse of get at %d", index), roundTrip, is(element));
-           }
+    super(combinatoric);
   }
 
   @Parameters
@@ -73,14 +45,5 @@ public class PermutationsIndexOfTest {
         { permutaitons( 10, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) }
     });
   }
-  
-  public static <E> Combinatoric<E> combinations(int k, E... domain) {
-    return factory.createCombinations(k, domain);
-  }
-  
-  public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
-    //return factory.createPermutations(k, domain);
-    return new IndexBasedPermutations(k, domain, factory.getMathUtils());
-  }  
 }
 
