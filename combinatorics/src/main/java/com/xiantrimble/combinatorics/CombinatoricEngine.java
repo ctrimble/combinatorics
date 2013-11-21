@@ -51,4 +51,6 @@ public interface CombinatoricEngine<T> {
    * @return the size of the set of combinations or permutations, as a long.
    */
   long longSize();
+
+	CombinationsEngine<T> range(long fromIndex, long toIndex);
 }

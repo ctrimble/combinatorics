@@ -23,43 +23,55 @@ package com.xiantrimble.combinatorics;
  * @param <T> the type of the elements being combined or permuted.
  */
 public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
-  protected T[] last;
   protected int[] domainMiltiplicity;
-  protected DomainPointer[] indices;
+
+  protected long startIndex;
+  protected long endIndex;
   
   protected CombinationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
-    last = Utils.newArray(componentType, k);
     domainMiltiplicity = this.domain.toMultiplicity();
-    indices = new DomainPointer[domainMiltiplicity.length];
-    indices[indices.length-1] = new DomainPointer();
-    for( int i = domainMiltiplicity.length-1; i > 0; i-- ) {
-      indices[i-1] = new DomainPointer();
-      indices[i-1].toRight = domainMiltiplicity[i] + indices[i].toRight;
-    }
+    startIndex = 0;
+    endIndex = mathUtils.c(k, domainMultiplicity);
   }
 
   @Override
   public void execute() {
-    
+  	T[] last = Utils.newArray(componentType, k);
+    DomainPointer[] indices;    
     // signal that execution is starting.
     handler.start();
     
-    try {
-    
+    try {   
     // initialize the state and notify the handler.
-    for(int i = 0, used = 0; i < indices.length && used < k; used += domainMiltiplicity[i++]) {
-      indices[i].index = used;
-      indices[i].count = Math.min(k-used, domainMiltiplicity[i]);
-      for( int j = 0; j < indices[i].count; j++ ) {
-        last[indices[i].index+j] = domainValues[i][j];
+    indices = new DomainPointer[domainMultiplicity.length];
+    indices[indices.length-1] = new DomainPointer();
+    int toRight = domain.totalSize();
+    int ni = 0;
+    long currentCombs = 0;
+    for( int i = 0; i < domainMultiplicity.length; i++) {
+      indices[i] = new DomainPointer();
+      indices[i].toRight = toRight -= domainMultiplicity[i];
+      indices[i].index = ni;
+      for( int count = Math.min(domainMultiplicity[i], k-ni); count >= 0; count-- ) {
+      	indices[i].count = count;
+      	long combsToRight = mathUtils.c(k-ni-count, domainMultiplicity, i+1, domainMultiplicity.length);
+      	if( currentCombs + combsToRight <= startIndex ) {
+      		currentCombs += combsToRight;
+      		continue;
+      	}
+      	for( int j = 0; j < indices[i].count; j++) {
+      	  last[ni++] = domainValues[i][j];
+        }
+      	break;
       }
     }
+   
     handler.init(last);
     handler.evaluate();
     
     // we are now at index 1, start iterating over the combinations.
-    for (long index = 1; index < size; index++) {
+    for (long index = startIndex+1; index < endIndex; index++) {
 
       // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION:
       // (3,2,0,1,1)
@@ -99,6 +111,13 @@ public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
     finally {
       handler.end();
     }
+  }
+  
+  @Override
+  public CombinationsEngine<T> range( long fromIndex, long toIndex ) {
+  	startIndex = fromIndex;
+  	endIndex = toIndex;
+  	return this;
   }
 
   /**

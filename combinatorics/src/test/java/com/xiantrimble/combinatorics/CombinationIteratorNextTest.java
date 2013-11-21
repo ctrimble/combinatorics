@@ -31,4 +31,15 @@ public class CombinationIteratorNextTest extends AbstractCombinationIteratorTest
     }
     return result;
   }
+
+	@Override
+  public List<List<Integer>> createCombinations(List<Integer> elements, int k,
+      long fromIndex, long toIndex) {
+    CombinatoricFactory factory = new CombinatoricFactoryImpl();
+    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
+    List<List<Integer>> result = new ArrayList<List<Integer>>();
+    for( Integer[] element : combinations ) {
+      result.add(Arrays.asList(element));
+    }
+    return result;  }
 }

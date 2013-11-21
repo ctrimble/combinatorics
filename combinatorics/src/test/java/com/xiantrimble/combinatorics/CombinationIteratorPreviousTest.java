@@ -41,4 +41,23 @@ public class CombinationIteratorPreviousTest
     return result;
   }
 
+	@Override
+  public List<List<Integer>> createCombinations(List<Integer> elements, int k,
+      long fromIndex, long toIndex) {
+    CombinatoricFactory factory = new CombinatoricFactoryImpl();
+    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
+    FastList<List<Integer>> result = new FastList<List<Integer>>();
+    CombinatoricIterator<Integer> iterator = combinations.iterator();
+    
+    // move to the end
+    while( iterator.hasNext() ) { iterator.next(); }
+    
+    // iterate backwards to the beginning.
+    while( iterator.hasPrevious() ) {
+      Integer[] element = iterator.previous();
+      result.addFirst(Arrays.asList(element));
+    }
+    return result;
+  }
+
 }

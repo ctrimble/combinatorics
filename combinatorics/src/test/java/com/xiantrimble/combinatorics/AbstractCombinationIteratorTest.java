@@ -66,7 +66,24 @@ public abstract class AbstractCombinationIteratorTest {
         list(THREE, FOUR, FIVE));
     assertEquals(expected, actual);
   }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void sixChoseThreeOneDuplicateFrom3To9() {
+    List<List<Integer>> actual = createCombinations(
+        list(ONE, TWO, THREE, FOUR, ONE, FIVE), 3, 3, 9);
+    List<List<Integer>> expected = list(list(ONE, ONE, TWO),
+        list(ONE, ONE, THREE), list(ONE, ONE, FOUR), list(ONE, ONE, FIVE),
+        list(ONE, TWO, THREE), list(ONE, TWO, FOUR), list(ONE, TWO, FIVE),
+        list(ONE, THREE, FOUR), list(ONE, THREE, FIVE), list(ONE, FOUR, FIVE),
+        list(TWO, THREE, FOUR), list(TWO, THREE, FIVE), list(TWO, FOUR, FIVE),
+        list(THREE, FOUR, FIVE)).subList(3, 9);
+    assertEquals(expected, actual);
+  }
 
   public abstract List<List<Integer>> createCombinations(
       List<Integer> elements, int k);
+  
+  public abstract List<List<Integer>> createCombinations(
+  		List<Integer> elements, int k, long fromIndex, long toIndex );
 }

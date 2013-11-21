@@ -255,4 +255,9 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
   private static enum Direction {
     UP, DOWN
   }
+
+	@Override
+  public CombinationsEngine<T> range(long offset, long length) {
+	  throw new UnsupportedOperationException();
+  }
 }

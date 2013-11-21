@@ -184,4 +184,9 @@ public class IndexBasedPermutationsEngine<T> extends AbstractCombinatoricEngine<
   private static enum Direction {
     UP, DOWN
   }
+
+	@Override
+  public CombinationsEngine<T> range(long offset, long length) {
+	  throw new UnsupportedOperationException();
+  }
 }
