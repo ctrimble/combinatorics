@@ -2,7 +2,7 @@
 
   A combinatorics library for Java, with a focus on fast iteration.
   [![Build Status](https://secure.travis-ci.org/ctrimble/combinatorics.png?branch=master)](https://travis-ci.org/ctrimble/combinatorics)
-  [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/7c662a63fdd203d3ed95c0e01662fbf6 "githalytics.com")](http://githalytics.com/ctrimble/combinatorics)
+  [![Analytics](https://ga-beacon.appspot.com/UA-36594186-1/ctrimble/combinatorics)](https://github.com/igrigorik/ga-beacon)
 
 ## Status
 
