@@ -31,7 +31,7 @@
           <groupId>com.xiantrimble.combinatorics</groupId>
           <artifactId>combinatorics</artifactId>
           <version>0.2.0</version>
-        <dependency>
+        </dependency>
         
 ## Installing the CLI
 
