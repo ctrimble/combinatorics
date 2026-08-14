@@ -18,7 +18,7 @@ package com.xiantrimble.combinatorics;
 import java.util.Arrays;
 import java.util.List;
 
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public class CombinationIteratorPreviousTest
     extends AbstractCombinationIteratorTest {
@@ -27,7 +27,7 @@ public class CombinationIteratorPreviousTest
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
     Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
-    FastList<List<Integer>> result = new FastList<List<Integer>>();
+    ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
     CombinatoricIterator<Integer> iterator = combinations.iterator();
     
     // move to the end
@@ -36,7 +36,7 @@ public class CombinationIteratorPreviousTest
     // iterate backwards to the beginning.
     while( iterator.hasPrevious() ) {
       Integer[] element = iterator.previous();
-      result.addFirst(Arrays.asList(element));
+      result.add(0, Arrays.asList(element));
     }
     return result;
   }
@@ -46,7 +46,7 @@ public class CombinationIteratorPreviousTest
       long fromIndex, long toIndex) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
     Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
-    FastList<List<Integer>> result = new FastList<List<Integer>>();
+    ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
     CombinatoricIterator<Integer> iterator = combinations.iterator();
     
     // move to the end
@@ -55,7 +55,7 @@ public class CombinationIteratorPreviousTest
     // iterate backwards to the beginning.
     while( iterator.hasPrevious() ) {
       Integer[] element = iterator.previous();
-      result.addFirst(Arrays.asList(element));
+      result.add(0, Arrays.asList(element));
     }
     return result;
   }

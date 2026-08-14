@@ -16,12 +16,9 @@
 package com.xiantrimble.combinatorics;
 
 import java.util.Arrays;
-import org.apache.commons.math.util.MathUtils;
+import java.util.ArrayList;
 
-import javolution.context.ArrayFactory;
-import javolution.context.ObjectFactory;
-import javolution.lang.Reusable;
-import javolution.util.FastList;
+import org.apache.commons.math.util.MathUtils;
 
 /**
  * An implementation of the CombMathUtils.
@@ -30,10 +27,7 @@ import javolution.util.FastList;
  */
 public class CombMathUtilsImpl
   implements CombMathUtils
-{
-	private static ObjectFactory<PartialCombinationCount> pccFactory = ObjectFactory.getInstance(PartialCombinationCount.class);
-  private static ObjectFactory<FastList> stackFactory = ObjectFactory.getInstance(FastList.class);
-  
+{  
   @Override
   public long c(int k, int... m) {
     return c(k, createDistinctM(m));
@@ -51,14 +45,14 @@ public class CombMathUtilsImpl
     long result = 0;
     
     // create a stack for the calculation.
-    FastList<PartialCombinationCount> stack = stackFactory.object();
+    ArrayList<PartialCombinationCount> stack = new ArrayList<>();
     
     // add the initial partial combination.
-    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1));
+    stack.add(0, new PartialCombinationCount().init(k, dm, dm.m, 0, 1));
     
     while( !stack.isEmpty() ) {
       // get the next combination to expand.
-      PartialCombinationCount pc = stack.removeFirst();
+      PartialCombinationCount pc = stack.remove(0);
       
       //System.out.println(pc);
       
@@ -74,7 +68,6 @@ public class CombMathUtilsImpl
       
       // if there could never be an answer, then bail out.
       if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
-        pccFactory.recycle(pc);
         continue;
       }
       
@@ -96,19 +89,16 @@ public class CombMathUtilsImpl
         // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
         else if( pc.dm.next == null || pc.dm.next.m < nextDmk ) {
           int nextLdm = pc.ldm - e;
-          stack.addFirst(pccFactory.object().init(nextK, pc.dm, nextDmk, nextLdm, nextSize));
+          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm, nextDmk, nextLdm, nextSize));
         }
         
         // we need to advance to the next dmi.
         else {
           int nextLdm = pc.ldm - e + cdm.count;
-          stack.addFirst(pccFactory.object().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize));
+          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize));
         }
       }
-      pccFactory.recycle(pc);
     }
-    
-    stackFactory.recycle(stack);
     
     return result;
   }
@@ -129,14 +119,14 @@ public class CombMathUtilsImpl
 	    long result = 0;
 	    
 	    // create a stack for the calculation.
-	    FastList<PartialCombinationCount> stack = stackFactory.object();
+	    ArrayList<PartialCombinationCount> stack = new ArrayList<>();
 	    
 	    // add the initial partial combination.
-	    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1));
+	    stack.add(0, new PartialCombinationCount().init(k, dm, dm.m, 0, 1));
 	    
 	    while( !stack.isEmpty() ) {
 	      // get the next combination to expand.
-	      PartialCombinationCount pc = stack.removeFirst();
+	      PartialCombinationCount pc = stack.remove(0);
 	      
 	      //System.out.println(pc);
 	      
@@ -152,7 +142,6 @@ public class CombMathUtilsImpl
 	      
 	      // if there could never be an answer, then bail out.
 	      if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
-	        pccFactory.recycle(pc);
 	        continue;
 	      }
 	      
@@ -175,19 +164,16 @@ public class CombMathUtilsImpl
 	        // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
 	        else if( pc.dm.next == null || pc.dm.next.m < nextDmk ) {
 	          int nextLdm = pc.ldm - e;
-	          stack.addFirst(pccFactory.object().init(nextK, pc.dm, nextDmk, nextLdm, nextSize));
+	          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm, nextDmk, nextLdm, nextSize));
 	        }
 	        
 	        // we need to advance to the next dmi.
 	        else {
 	          int nextLdm = pc.ldm - e + cdm.count;
-	          stack.addFirst(pccFactory.object().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize));
+	          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize));
 	        }
 	      }
-	      pccFactory.recycle(pc);
 	    }
-	    
-	    stackFactory.recycle(stack);
 	    
 	    return result < value ? -1 : 0;
   }
@@ -196,18 +182,17 @@ public class CombMathUtilsImpl
    * Defines a partial solution to a counting of combinations.
    */
   public static class PartialCombinationCount
-    implements Reusable
   {
     /** the number of elements that still need to be added to the combination. */
-    public int k;
+    public int k = 0;
     /** the next distinct m to consider */
-    public DistinctM dm;
+    public DistinctM dm = null;
     /**  the size of the next combination of elements to add. */
-    public int dmk;
+    public int dmk = 0;
     /** the number of distinct unused elements to the left of mdi minus the number of distinct used elements at mdi. */
-    public int ldm;
+    public int ldm = 0;
     /** the number of combinations already in the solution */
-    public long size;
+    public long size = 0;
     /** the permutation denominator component when doing permutations. */
     public long pd = 1;
     
@@ -232,15 +217,6 @@ public class CombMathUtilsImpl
     
     public String toString() {
       return "{k:"+k+", dm:"+dm+", dmk:"+dmk+", ldm:"+ldm+", size:"+size+", pd:"+pd+"}";
-    }
-    @Override
-    public void reset() {
-      k = 0;
-      dm = null;
-      dmk = 0;
-      ldm = 0;
-      size = 0;
-      pd = 1;
     }
   }
   
@@ -317,15 +293,15 @@ public class CombMathUtilsImpl
     long result = 0;
     
     // create a stack for the calculation.
-    FastList<PartialCombinationCount> stack = stackFactory.object();
+    ArrayList<PartialCombinationCount> stack = new ArrayList<>();
     
     // add the initial partial combination.
     // 
-    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
+    stack.add(0, new PartialCombinationCount().init(k, dm, dm.m, 0, 1, 1));
     
     while( !stack.isEmpty() ) {
       // get the next combination to expand.
-      PartialCombinationCount pc = stack.removeFirst();
+      PartialCombinationCount pc = stack.remove(0);
       
       //System.out.println(pc);
       
@@ -344,7 +320,7 @@ public class CombMathUtilsImpl
       // if there could never be an answer, then bail out.
       if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
         //System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
-        pccFactory.recycle(pc);
+        
         continue;
       }
       
@@ -369,19 +345,19 @@ public class CombMathUtilsImpl
         // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
         else if( pc.dm.next == null || pc.dm.next.m < nextDmk ) {
           int nextLdm = pc.ldm - e;
-          stack.addFirst(pccFactory.object().init(nextK, pc.dm, nextDmk, nextLdm, nextSize, nextPd));
+          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm, nextDmk, nextLdm, nextSize, nextPd));
         }
         
         // we need to advance to the next dmi.
         else {
           int nextLdm = pc.ldm - e + cdm.count;
-          stack.addFirst(pccFactory.object().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize, nextPd));
+          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize, nextPd));
         }
       }
-      pccFactory.recycle(pc);
+      
     }
     
-    stackFactory.recycle(stack);
+    
     
     //System.out.println("Result: "+result);
     return result;
@@ -404,15 +380,15 @@ public class CombMathUtilsImpl
     long result = 0;
     
     // create a stack for the calculation.
-    FastList<PartialCombinationCount> stack = stackFactory.object();
+    ArrayList<PartialCombinationCount> stack = new ArrayList<>();
     
     // add the initial partial combination.
     // 
-    stack.addFirst(pccFactory.object().init(k, dm, dm.m, 0, 1, 1));
+    stack.add(0, new PartialCombinationCount().init(k, dm, dm.m, 0, 1, 1));
     
     while( !stack.isEmpty() ) {
       // get the next combination to expand.
-      PartialCombinationCount pc = stack.removeFirst();
+      PartialCombinationCount pc = stack.remove(0);
       
       //System.out.println(pc);
       
@@ -431,7 +407,7 @@ public class CombMathUtilsImpl
       // if there could never be an answer, then bail out.
       if( pc.k > (cdm.count + pc.ldm) * pc.dmk + cdm.rn ) {
         //System.out.println("OPTIMIZED DUE TO LACK OF ELEMENTS.");
-        pccFactory.recycle(pc);
+        
         continue;
       }
       
@@ -457,19 +433,19 @@ public class CombMathUtilsImpl
         // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
         else if( pc.dm.next == null || pc.dm.next.m < nextDmk ) {
           int nextLdm = pc.ldm - e;
-          stack.addFirst(pccFactory.object().init(nextK, pc.dm, nextDmk, nextLdm, nextSize, nextPd));
+          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm, nextDmk, nextLdm, nextSize, nextPd));
         }
         
         // we need to advance to the next dmi.
         else {
           int nextLdm = pc.ldm - e + cdm.count;
-          stack.addFirst(pccFactory.object().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize, nextPd));
+          stack.add(0, new PartialCombinationCount().init(nextK, pc.dm.next, nextDmk, nextLdm, nextSize, nextPd));
         }
       }
-      pccFactory.recycle(pc);
+      
     }
     
-    stackFactory.recycle(stack);
+    
     
     //System.out.println("Result: "+result);
     return result < value ? -1 : 0;

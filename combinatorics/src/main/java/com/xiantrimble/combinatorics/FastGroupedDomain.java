@@ -15,10 +15,9 @@
  */
 package com.xiantrimble.combinatorics;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javolution.util.FastList;
 
 /**
  * An implementation of GroupedDomain, based on Javolutions FastList.
@@ -29,7 +28,7 @@ import javolution.util.FastList;
  */
 @SuppressWarnings("serial")
 public class FastGroupedDomain<E>
-  extends FastList<List<E>>
+  extends ArrayList<List<E>>
   implements GroupedDomain<E>
 {
   /** The total of all the element ranks of this grouped domain. */
@@ -61,13 +60,13 @@ public class FastGroupedDomain<E>
     k = 0;
     for( int i = 0; i < newDomain.length;) {
       int cur = i;
-      FastList<E> elements = new FastList<E>();
+      ArrayList<E> elements = new ArrayList<E>();
       for( ; i < newDomain.length && newDomain[cur].equals(newDomain[i]); i++) {
         if( i - cur < maxTypeRank ) {
-          elements.addFirst(newDomain[i]);
+          elements.add(newDomain[i]);
         }
       }
-      add(elements.unmodifiable());
+      add(elements);
       k += elements.size();
     }
   }

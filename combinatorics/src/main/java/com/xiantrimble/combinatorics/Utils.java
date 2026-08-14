@@ -16,9 +16,8 @@
 package com.xiantrimble.combinatorics;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
-
-import javolution.util.FastList;
 
 /**
  * Static utilities to support this package.
@@ -63,15 +62,15 @@ public class Utils {
   public static final <T> Class<T> getComponentType(final T[] array) {
     return (Class<T>)array.getClass().getComponentType();
   }
- 
+  
   /**
-   * Returns a Javolution FastList for the specified elements.
+   * Returns a standard ArrayList for the specified elements.
    * 
    * @param elements the elements to place in the list.
    * @return a list of elements.
    */
   public static final <E> List<E> list(final E... elements) {
-    FastList<E> list = new FastList<E>();
+    ArrayList<E> list = new ArrayList<E>();
     for (E element : elements) {
       list.add(element);
     }

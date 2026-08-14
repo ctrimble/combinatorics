@@ -16,8 +16,7 @@
 package com.xiantrimble.combinatorics;
 
 import java.util.List;
-
-import javolution.util.FastList;
+import java.util.ArrayList;
 
 public abstract class AbstractCombinatoricIteratorTest {
   protected static Integer ONE = 1;
@@ -31,7 +30,7 @@ public abstract class AbstractCombinatoricIteratorTest {
   
 
   public static <E> List<E> list(E... elements) {
-    FastList<E> list = new FastList<E>();
+    ArrayList<E> list = new ArrayList<E>();
     for (E element : elements) {
       list.add(element);
     }

@@ -18,7 +18,7 @@ package com.xiantrimble.combinatorics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javolution.util.FastList;
+import java.util.List;
 
 import org.apache.commons.math.util.MathUtils;
 
@@ -106,15 +106,15 @@ class CombMathUtilsBenchmark
     long result = 0;
     
     // create a stack for the calculation.
-    FastList<PartialCombinationCount> stack = new FastList<PartialCombinationCount>();
+    ArrayList<PartialCombinationCount> stack = new ArrayList<PartialCombinationCount>();
     
     // add the initial partial combination.
     // 
-    stack.addFirst(new PartialCombinationCount(k, 0, dm[0].value, 0, 1));
+    stack.add(0,(new PartialCombinationCount(k, 0, dm[0].value, 0, 1)));
     
     while( !stack.isEmpty() ) {
       // get the next combination to expand.
-      PartialCombinationCount pc = stack.removeFirst();
+      PartialCombinationCount pc = stack.remove(0);
       
       //System.out.println(pc);
       
@@ -148,13 +148,13 @@ class CombMathUtilsBenchmark
         // if we are on the last distinct m, or the next distinct m is not big enough, stay at dmi.
         else if( nextDmi == dm.length || dm[nextDmi].value < nextDmk ) {
           int nextLdm = pc.ldm - e;
-          stack.addFirst(new PartialCombinationCount(nextK, pc.dmi, nextDmk, nextLdm, nextSize));
+          stack.add(0, new PartialCombinationCount(nextK, pc.dmi, nextDmk, nextLdm, nextSize));
         }
         
         // we need to advance to the next dmi.
         else {
           int nextLdm = pc.ldm - e + cdm.count;
-          stack.addFirst(new PartialCombinationCount(nextK, nextDmi, nextDmk, nextLdm, nextSize));
+          stack.add(0, new PartialCombinationCount(nextK, nextDmi, nextDmk, nextLdm, nextSize));
         }
         
       }

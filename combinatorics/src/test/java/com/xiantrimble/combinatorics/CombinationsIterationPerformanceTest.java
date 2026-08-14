@@ -17,7 +17,8 @@ package com.xiantrimble.combinatorics;
 
 import java.util.Arrays;
 
-import javolution.util.FastList;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -50,16 +51,16 @@ public class CombinationsIterationPerformanceTest {
   public void plan()
   {
     Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1,1,2,2,2,3,3,4,4,5}, mathUtils);
-    FastList<Integer[]> values = new FastList<Integer[]>();
+    ArrayList<Integer[]> values = new ArrayList<Integer[]>();
     values.addAll(combinations);
-    FastList<Integer[]> result = new FastList<Integer[]>();
-    result.add(values.getFirst());
-    values.removeFirst();
+    ArrayList<Integer[]> result = new ArrayList<Integer[]>();
+    result.add(values.get(0));
+    values.remove(0);
     int orderings = findOrdering(result, values);
     System.out.println("Found "+orderings+" orderings:");
   }
   
-  public int findOrdering(FastList<Integer[]> result, FastList<Integer[]> remainder) {
+  public int findOrdering(ArrayList<Integer[]> result, ArrayList<Integer[]> remainder) {
 
     if( remainder.size() == 0 ) {
       //if( distance(result.getFirst(), result.getLast()) > 1 ) {
@@ -72,17 +73,17 @@ public class CombinationsIterationPerformanceTest {
       return 1;
     }
     int orderings = 0;
-    for( int i = 0; i < remainder.size(); i++ ) {
-      int distance = distance(result.getLast(), remainder.get(i));
-      if( distance == 1) {
+    for(int i = 0; i < remainder.size(); i++) {
+      int distance = distance(result.get(result.size()-1), remainder.get(i));
+      if(distance == 1) {
         //boolean option = false;
         //for( int j = 0; j < remainder.size() && !option; j++ ) {
         //  if( j != i && distance(result.getFirst(), remainder.get(j)) <= 2 ) option = true;
         //}
         //if( !option ) return orderings;
-        result.addLast(remainder.remove(i));
+        result.add(remainder.remove(i));
         orderings += findOrdering(result, remainder);
-        remainder.add(i, result.removeLast());
+        remainder.add(i, result.remove(result.size()-1));
       }
       if( orderings > 0 ) return orderings;
     }
@@ -150,7 +151,7 @@ public class CombinationsIterationPerformanceTest {
   @SuppressWarnings("unused")
   private Integer[] values(int... args) {
     if( args.length % 2 != 0 ) throw new IllegalArgumentException();
-    FastList<Integer> values = new FastList<Integer>();
+    ArrayList<Integer> values = new ArrayList<Integer>();
     for( int i = 0; i < args.length; i+=2 ) {
       for( int j = 0; j < args[i+1]; j++ ) {
         values.add(args[i]);
