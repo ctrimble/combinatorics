@@ -19,18 +19,18 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 /**
- * A CombinatoricEngine implementation for Permutations.
+ * A CombinatoricGenerator implementation for Permutations.
  * 
  * @author Christian Trimble
  *
  * @param <T> The type of element being permuted.
  */
-public class IndexBasedPermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
+public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected TypePermutationState[] state;
   protected int[] domainRanks;
   protected T[] last;
 
-  protected IndexBasedPermutationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
+  protected IndexBasedPermutationsGenerator(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
   }
 
@@ -186,7 +186,7 @@ public class IndexBasedPermutationsEngine<T> extends AbstractCombinatoricEngine<
   }
 
 	@Override
-  public CombinationsEngine<T> range(long offset, long length) {
+  public CombinationsGenerator<T> range(long offset, long length) {
 	  throw new UnsupportedOperationException();
   }
 }

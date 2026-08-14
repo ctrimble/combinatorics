@@ -18,18 +18,18 @@ package com.xiantrimble.combinatorics;
 import java.util.Arrays;
 
 /**
- * A CombinatoricEngine implementation for Permutations.
+ * A CombinatoricGenerator implementation for Permutations.
  * 
  * @author Christian Trimble
  *
  * @param <T> The type of element being permuted.
  */
-public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
+public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected TypePermutationState[] state;
   protected int[] domainRanks;
   protected T[] last;
 
-  protected PermutationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
+  protected PermutationsGenerator(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
   }
 
@@ -257,7 +257,7 @@ public class PermutationsEngine<T> extends AbstractCombinatoricEngine<T> {
   }
 
 	@Override
-  public CombinationsEngine<T> range(long offset, long length) {
+  public CombinationsGenerator<T> range(long offset, long length) {
 	  throw new UnsupportedOperationException();
   }
 }

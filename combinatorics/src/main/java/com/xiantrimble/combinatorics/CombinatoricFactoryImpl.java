@@ -59,13 +59,13 @@ public class CombinatoricFactoryImpl
   }
 
   @Override
-  public <T> CombinationsEngine<T> createCombinationsEngine(int k, T... domain) {
-    return new CombinationsEngine<T>(k, domain, getMathUtils());
+  public <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain) {
+    return new CombinationsGenerator<T>(k, domain, getMathUtils());
   }
 
   @Override
-  public <T> IndexBasedPermutationsEngine<T> createPermutationsEngine(int k, T... domain) {
-    return new IndexBasedPermutationsEngine<T>(k, domain, getMathUtils());
+  public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain) {
+    return new PermutationsGenerator<T>(k, domain, getMathUtils());
   }
 
 }

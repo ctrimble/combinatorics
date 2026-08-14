@@ -16,7 +16,7 @@
 package com.xiantrimble.combinatorics;
 
 /**
- * Combinatoric engines provide access to the state changes that are happening while generating
+ * Combinatoric generators provide access to the state changes that are happening while generating
  * combinations and permutations.  Although this package does not provide minimal change ordering,
  * it does try to reduce state change to improve performance.  Implementations of this class give
  * you access to that information.
@@ -25,7 +25,7 @@ package com.xiantrimble.combinatorics;
  *
  * @param <T> the type of the elements being combined or permuted.
  */
-public interface CombinatoricEngine<T> {
+public interface CombinatoricGenerator<T> {
   /**
    * Starts iterating over the values of this combinations or permutation.
    */
@@ -52,5 +52,5 @@ public interface CombinatoricEngine<T> {
    */
   long longSize();
 
-	CombinationsEngine<T> range(long fromIndex, long toIndex);
+	CombinationsGenerator<T> range(long fromIndex, long toIndex);
 }

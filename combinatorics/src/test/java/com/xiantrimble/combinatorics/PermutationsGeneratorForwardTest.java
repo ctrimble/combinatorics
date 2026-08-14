@@ -19,15 +19,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PermutationsEngineForwardTest extends AbstractPermutationsIteratorTest {
+public class PermutationsGeneratorForwardTest extends AbstractPermutationsIteratorTest {
 
   @Override
   public List<List<Integer>> createPermutations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricEngine<Integer> permutationsEngine = factory.createPermutationsEngine(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    CombinatoricGenerator<Integer> permutationsGenerator = factory.createPermutationsGenerator(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
-    permutationsEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {
+    permutationsGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
       @Override
       public void evaluate() {
         result.add(Arrays.asList(Arrays.copyOf(state, state.length))); 
@@ -51,7 +51,7 @@ public class PermutationsEngineForwardTest extends AbstractPermutationsIteratorT
         state[i] = newValue;
       }
     });
-    permutationsEngine.execute();
+    permutationsGenerator.execute();
 
     return result;
   }

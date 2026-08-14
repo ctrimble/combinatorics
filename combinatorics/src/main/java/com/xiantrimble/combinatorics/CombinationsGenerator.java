@@ -16,19 +16,19 @@
 package com.xiantrimble.combinatorics;
 
 /**
- * A CombinatoricEngine implementation for combinations.
+ * A CombinatoricGenerator implementation for combinations.
  * 
  * @author Chritian Trimble
  *
  * @param <T> the type of the elements being combined or permuted.
  */
-public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
+public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected int[] domainMiltiplicity;
 
   protected long startIndex;
   protected long endIndex;
   
-  protected CombinationsEngine(int k, T[] domain, CombMathUtils mathUtils) {
+  protected CombinationsGenerator(int k, T[] domain, CombMathUtils mathUtils) {
     super(k, domain, mathUtils);
     domainMiltiplicity = this.domain.toMultiplicity();
     startIndex = 0;
@@ -114,7 +114,7 @@ public class CombinationsEngine<T> extends AbstractCombinatoricEngine<T> {
   }
   
   @Override
-  public CombinationsEngine<T> range( long fromIndex, long toIndex ) {
+  public CombinationsGenerator<T> range( long fromIndex, long toIndex ) {
   	startIndex = fromIndex;
   	endIndex = toIndex;
   	return this;

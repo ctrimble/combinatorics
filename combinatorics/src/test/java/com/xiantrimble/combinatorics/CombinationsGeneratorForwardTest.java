@@ -19,15 +19,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CombinationsEngineForwardTest extends AbstractCombinationIteratorTest {
+public class CombinationsGeneratorForwardTest extends AbstractCombinationIteratorTest {
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricEngine<Integer> combinationEngine = factory.createCombinationsEngine(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
-    combinationEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {
+    combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
       @Override
       public void evaluate() {
         result.add(Arrays.asList(Arrays.copyOf(state, state.length))); 
@@ -51,7 +51,7 @@ public class CombinationsEngineForwardTest extends AbstractCombinationIteratorTe
         state[i] = newValue;
       }
     });
-    combinationEngine.execute();
+    combinationGenerator.execute();
 
     return result;
   }
@@ -60,10 +60,10 @@ public class CombinationsEngineForwardTest extends AbstractCombinationIteratorTe
   public List<List<Integer>> createCombinations(List<Integer> elements, int k,
       long fromIndex, long toIndex) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricEngine<Integer> combinationEngine = factory.createCombinationsEngine(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
-    combinationEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {
+    combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
       @Override
       public void evaluate() {
         result.add(Arrays.asList(Arrays.copyOf(state, state.length))); 
@@ -87,7 +87,7 @@ public class CombinationsEngineForwardTest extends AbstractCombinationIteratorTe
         state[i] = newValue;
       }
     });
-    combinationEngine.range(fromIndex, toIndex).execute();
+    combinationGenerator.range(fromIndex, toIndex).execute();
 
     return result;
   }

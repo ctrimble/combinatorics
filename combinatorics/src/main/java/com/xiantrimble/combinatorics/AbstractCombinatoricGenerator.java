@@ -16,14 +16,14 @@
 package com.xiantrimble.combinatorics;
 
 /**
- * An abstract base class for CombinatoricEngine implementations.
+ * An abstract base class for CombinatoricGenerator implementations.
  * 
  * @author Christian Trimble
  *
  * @param <T> the type of the elements being combined or permuted.
  */
-public abstract class AbstractCombinatoricEngine<T>
-    implements CombinatoricEngine<T>
+public abstract class AbstractCombinatoricGenerator<T>
+    implements CombinatoricGenerator<T>
 {
   protected CombinatoricHandler<T> handler;
   protected int k;
@@ -34,7 +34,7 @@ public abstract class AbstractCombinatoricEngine<T>
   protected CombMathUtils mathUtils;
   protected Class<T> componentType;
 
-  protected AbstractCombinatoricEngine(int k, T[] domain, CombMathUtils mathUtils) {
+  protected AbstractCombinatoricGenerator(int k, T[] domain, CombMathUtils mathUtils) {
     this.k = k;
     this.domain = new FastGroupedDomain<T>(k, domain);
     this.mathUtils = mathUtils;
