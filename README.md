@@ -52,25 +52,24 @@
   for a given domain and length (k).  In the following example, we will count the number of
   permutations and combinations of length 6 for the set {1,1,1,1,2,2,2,3,3,4}:
   
-        import com.xiantrimble.combinatorics.CombinatoricFactory;
-        import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
-        import com.xiantrimble.combinatorics.CombMathUtils;
-        ...
-        int k = 6;
-        int[] domain = {1,1,1,1,2,2,2,3,3,4};
+         import com.xiantrimble.combinatorics.CombinatoricFactory;
+         import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+         import com.xiantrimble.combinatorics.CombMathUtils;
+          ...
+         int k = 6;
+         int[] domain = {1,1,1,1,2,2,2,3,3,4};
 
-        // create a factory and get the utilities.
-        CombinatoricFactory factory = new CombinatoricFactoryImpl();
-        CombMathUtils utils = factory.getMathUtils();
-        
-        // the math utils operate on the multiplicity of the domain, not the actual domain.
-        int[] domainMultiplicity = factory.createGroupedDomain(k, domain).toMultiplicity();
-        
-        // the number of combinations of length k
-        int combinationCount = utils.c(k, domainMultiplicity);
-        
-        // the number of permutations of length k
-        int permutationCount = utils.p(k, domainMultiplicity);
+          // create a factory to build the domain.
+         CombinatoricFactory factory = new CombinatoricFactoryImpl();
+         
+          // the math utils operate on the multiplicity of the domain, not the actual domain.
+         int[] domainMultiplicity = factory.createGroupedDomain(k, domain).toMultiplicity();
+         
+          // the number of combinations of length k
+         int combinationCount = CombMathUtils.c(k, domainMultiplicity);
+         
+          // the number of permutations of length k
+         int permutationCount = CombMathUtils.p(k, domainMultiplicity);
 
 ### Iterating Combinations and Permutations
 

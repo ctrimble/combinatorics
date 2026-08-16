@@ -29,9 +29,9 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected int[] domainRanks;
   protected T[] last;
 
-  protected PermutationsGenerator(int k, T[] domain, CombMathUtils mathUtils) {
-    super(k, domain, mathUtils);
-  }
+  protected PermutationsGenerator(int k, T[] domain) {
+    super(k, domain);
+    }
 
   /**
    * Computes the number of permutations for the specified length and domain.
@@ -41,7 +41,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.p(k, domain.toMultiplicity());
+    return CombMathUtils.p(k, domain.toMultiplicity());
   }
 
   @Override

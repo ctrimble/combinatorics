@@ -32,13 +32,12 @@ public class Permutations<T>
   /**
    * Creates a new Permutations object over the domain.
    * 
-   * @param k the length of the permutations.
-   * @param domain the elements that make up the permutations.
-   * @param mathUtils an instance of the math utilities.
-   */
-  protected Permutations(int k, T[] domain, CombMathUtils mathUtils) {
-    super(k, domain, mathUtils);
-  }
+     * @param k the length of the permutations.
+     * @param domain the elements that make up the permutations.
+     */
+  protected Permutations(int k, T[] domain) {
+    super(k, domain);
+     }
  
   @Override
   public CombinatoricIterator<T> iterator() {
@@ -53,7 +52,7 @@ public class Permutations<T>
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.p(k, domain.toMultiplicity());
+    return CombMathUtils.p(k, domain.toMultiplicity());
   }
 
   /**

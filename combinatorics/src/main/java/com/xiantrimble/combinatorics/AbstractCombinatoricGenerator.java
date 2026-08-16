@@ -30,19 +30,17 @@ public abstract class AbstractCombinatoricGenerator<T>
   protected GroupedDomain<T> domain;
   protected T[][] domainValues;
   protected int[] domainMultiplicity;
-  protected long size;
-  protected CombMathUtils mathUtils;
-  protected Class<T> componentType;
+   protected long size;
+   protected Class<T> componentType;
 
-  protected AbstractCombinatoricGenerator(int k, T[] domain, CombMathUtils mathUtils) {
+  protected AbstractCombinatoricGenerator(int k, T[] domain) {
     this.k = k;
     this.domain = new FastGroupedDomain<T>(k, domain);
-    this.mathUtils = mathUtils;
     this.size = computeSize(this.k, this.domain);
     this.componentType = Utils.getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
     this.domainMultiplicity = this.domain.toMultiplicity();
-  }
+   }
 
   @Override
   public void setHandler(CombinatoricHandler<T> handler) {

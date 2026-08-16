@@ -31,13 +31,12 @@ public class Combinations<T>
   /**
    * Creates a new Combinations object over the domain.
    * 
-   * @param k the length of the combinations.
-   * @param domain the elements that make up the combinations.
-   * @param mathUtil an instance of the math utilities.
-   */
-  public Combinations(int k, T[] domain, CombMathUtils mathUtil) {
-    super(k, domain, mathUtil);
-  } 
+     * @param k the length of the combinations.
+     * @param domain the elements that make up the combinations.
+     */
+  public Combinations(int k, T[] domain) {
+    super(k, domain);
+     } 
   
   @Override
   public T[] get( int index ) {
@@ -70,7 +69,7 @@ public class Combinations<T>
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.c(k, domain.toMultiplicity());
+    return CombMathUtils.c(k, domain.toMultiplicity());
   }
   
   @Override
@@ -99,7 +98,7 @@ public class Combinations<T>
       }
       if( emptyElementStart != i ) {
         for( int j = 1; j <= Math.min(remaining, passedElements); j++ ) {
-          index += mathUtils.c(j, Arrays.copyOfRange(domainMultiplicity, emptyElementStart, i)) * mathUtils.c(remaining-j, Arrays.copyOfRange(domainMultiplicity, i, domainMultiplicity.length));
+          index += CombMathUtils.c(j, Arrays.copyOfRange(domainMultiplicity, emptyElementStart, i)) * CombMathUtils.c(remaining-j, Arrays.copyOfRange(domainMultiplicity, i, domainMultiplicity.length));
         }
       }
       for( int w = emptyElementStart; w <= i; w++) {
@@ -107,7 +106,7 @@ public class Combinations<T>
       }
       // domainMultiplicity[i] = 0;
       for( int j = domainValues[i].length; j > 0 && elementMultiplicity[i] < j; j-- ) {
-        index += mathUtils.c(remaining-j, domainMultiplicity);
+        index += CombMathUtils.c(remaining-j, domainMultiplicity);
       }
       remaining -= elementMultiplicity[i];
     }
@@ -145,7 +144,7 @@ public class Combinations<T>
         indices[i].index = ni;
         for( int count = Math.min(domainMultiplicity[i], k-ni); count >= 0; count-- ) {
         	indices[i].count = count;
-        	long combsToRight = mathUtils.c(k-ni-count, domainMultiplicity, i+1, domainMultiplicity.length);
+        	long combsToRight = CombMathUtils.c(k-ni-count, domainMultiplicity, i+1, domainMultiplicity.length);
         	if( currentCombs + combsToRight <= startIndex + nextIndex ) {
         		currentCombs += combsToRight;
         		continue;

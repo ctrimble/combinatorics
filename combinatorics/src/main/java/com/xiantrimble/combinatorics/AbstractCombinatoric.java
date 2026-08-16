@@ -42,27 +42,23 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   protected T[][] domainValues;
   /** A view of the domain multiplicity. */
   protected int[] domainMultiplicity;
-  /** The length of this collection. */
-  protected long size;
-  /** The math utilities used to compute the length. */
-  protected CombMathUtils mathUtils;
-  /** The component type for the arrays that will be returned. */
-  protected Class<T> componentType;
+    /** The length of this collection. */
+   protected long size;
+    /** The component type for the arrays that will be returned. */
+   protected Class<T> componentType;
 
   /**
-   * @param k the length of the results.
-   * @param domain the domain being operated on.
-   * @param mathUtils the math utilities class used to compute the size of this collection.
-   */
-  protected AbstractCombinatoric(int k, T[] domain, CombMathUtils mathUtils) {
-    this.k = k;
-    this.domain = new FastGroupedDomain<T>(k, domain);
-    this.mathUtils = mathUtils;
-    this.size = computeSize(this.k, this.domain);
-    this.componentType = getComponentType(domain);
-    this.domainValues = this.domain.toValueArray();
-    this.domainMultiplicity = this.domain.toMultiplicity();
-  }
+     * @param k the length of the results.
+     * @param domain the domain being operated on.
+     */
+   protected AbstractCombinatoric(int k, T[] domain) {
+     this.k = k;
+     this.domain = new FastGroupedDomain<T>(k, domain);
+     this.size = computeSize(this.k, this.domain);
+     this.componentType = getComponentType(domain);
+     this.domainValues = this.domain.toValueArray();
+     this.domainMultiplicity = this.domain.toMultiplicity();
+     }
   
    /**
    * Returns a new array of type T with the length provided.

@@ -30,9 +30,9 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
   protected int[] domainRanks;
   protected T[] last;
 
-  protected IndexBasedPermutationsGenerator(int k, T[] domain, CombMathUtils mathUtils) {
-    super(k, domain, mathUtils);
-  }
+  protected IndexBasedPermutationsGenerator(int k, T[] domain) {
+    super(k, domain);
+      }
 
   /**
    * Computes the number of permutations for the specified length and domain.
@@ -42,7 +42,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.p(k, domain.toMultiplicity());
+    return CombMathUtils.p(k, domain.toMultiplicity());
   }
 
   @Override
@@ -64,7 +64,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
       for( int i = state.length - 2; i >= 0; i-- ) {
         state[i].toRight = domainMultiplicity[i+1] + state[i+1].toRight;
         state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
-        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+        state[i].perms = CombMathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
       }
 
       handler.init(last);
@@ -92,7 +92,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
         int bCount = state[i].activeToRight;
         int aIndex = 0;
         ELEMENT: for( int elementIndex = 0; elementIndex < windowEnd - windowStart; elementIndex++) {
-          long perms = elementDown ? mathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount}) : mathUtils.p(aCount+bCount-1, new int[]{ aCount, bCount-1});
+          long perms = elementDown ? CombMathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount}) : CombMathUtils.p(aCount+bCount-1, new int[]{ aCount, bCount-1});
           if( typeIndex == perms ) {
             boolean moveMultiple = ((elementIndex % 2) != (aIndex % 2)) ^ !elementDown;
             // this is the element, find the source and target.
@@ -146,7 +146,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
       
       for( int i = state.length - 2; i >= 0; i-- ) {
         state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
-        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+        state[i].perms = CombMathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
       }
       
       handler.init(last);

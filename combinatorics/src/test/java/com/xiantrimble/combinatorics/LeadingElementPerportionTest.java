@@ -127,7 +127,7 @@ public class LeadingElementPerportionTest {
      // compute the expected result.
      int[] m = Arrays.copyOf(kM, kM.length);
      m[i]--;
-     long expected = factory.getMathUtils().p(permutations.getK()-1, m);
+      long expected = CombMathUtils.p(permutations.getK()-1, m);
      
      // verify that the computed size is the same as the expected size.
      assertEquals(expected, s);

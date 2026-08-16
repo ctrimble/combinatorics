@@ -20,52 +20,38 @@ package com.xiantrimble.combinatorics;
  * 
  * @author Christian Trimble
  */
-public class CombinatoricFactoryImpl
-  implements CombinatoricFactory
-{
-  private CombMathUtils mathUtils = new CombMathUtilsImpl();
+ public class CombinatoricFactoryImpl
+   implements CombinatoricFactory
+  {
   
-  public CombinatoricFactoryImpl() {
-  	
-  }
-  
-  public CombinatoricFactoryImpl( CombMathUtils mathUtils ) {
-  	this.mathUtils = mathUtils;
-  }
+    @Override
+   public <T> Combinations<T> createCombinations(int k, T... domain) {
+    return new Combinations<T>(k, domain);
+      }
   
   @Override
-  public <T> Combinations<T> createCombinations(int k, T... domain) {
-    return new Combinations<T>(k, domain, getMathUtils());
-  }
-
+   public <T> IndexBasedPermutations<T> createPermutations(int k, T... domain) {
+    return new IndexBasedPermutations<T>(k, domain);
+      }
+  
   @Override
-  public <T> IndexBasedPermutations<T> createPermutations(int k, T... domain) {
-    return new IndexBasedPermutations<T>(k, domain, getMathUtils());
-  }
-
-  @Override
-  public <T> GroupedDomain<T> createGroupedDomain(T... domain) {
+   public <T> GroupedDomain<T> createGroupedDomain(T... domain) {
     return new FastGroupedDomain<T>(domain);
-  }
-
+      }
+  
   @Override
-  public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
+   public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
     return new FastGroupedDomain<T>(maxElementK, domain);
-  }
-
+      }
+  
   @Override
-  public CombMathUtils getMathUtils() {
-    return mathUtils;
-  }
-
+   public <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain) {
+    return new CombinationsGenerator<T>(k, domain);
+      }
+  
   @Override
-  public <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain) {
-    return new CombinationsGenerator<T>(k, domain, getMathUtils());
-  }
-
-  @Override
-  public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain) {
-    return new PermutationsGenerator<T>(k, domain, getMathUtils());
-  }
-
-}
+   public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain) {
+    return new PermutationsGenerator<T>(k, domain);
+      }
+  
+   }

@@ -30,10 +30,8 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 @SuppressWarnings("deprecation")
 public class CombinationsIterationPerformanceTest {
-  
-  public static CombMathUtils mathUtils = new CombMathUtilsImpl();
-  
-  @Rule
+   
+   @Rule
   public MethodRule benchmarkRun = new BenchmarkRule();
   
   @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
@@ -41,8 +39,8 @@ public class CombinationsIterationPerformanceTest {
   @Ignore
   public void iterateCombinationsSize()
   {
-    //System.out.println(new Combinations<Integer>(32, rangeValues(0, 64), mathUtils).size());
-    System.out.println(new Combinations<Integer>(16, rangeValues(0, 48), mathUtils).longSize());
+      //System.out.println(new Combinations<Integer>(32, rangeValues(0, 64)).size());
+     System.out.println(new Combinations<Integer>(16, rangeValues(0, 48)).longSize());
   }
   
   @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
@@ -50,7 +48,7 @@ public class CombinationsIterationPerformanceTest {
   @Ignore
   public void plan()
   {
-    Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1,1,2,2,2,3,3,4,4,5}, mathUtils);
+     Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1,1,2,2,2,3,3,4,4,5});
     ArrayList<Integer[]> values = new ArrayList<Integer[]>();
     values.addAll(combinations);
     ArrayList<Integer[]> result = new ArrayList<Integer[]>();
@@ -105,8 +103,8 @@ public class CombinationsIterationPerformanceTest {
   @Ignore
   public void iterateCombinations()
   {
-    //Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5), mathUtils);
-    Combinations<Integer> combinations = new Combinations<Integer>(8, rangeValues(0, 48), mathUtils);
+      //Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
+     Combinations<Integer> combinations = new Combinations<Integer>(8, rangeValues(0, 48));
     System.out.println("Size:"+combinations.longSize());
     long index = 0;
     for(Integer[] element: combinations) {
@@ -122,8 +120,8 @@ public class CombinationsIterationPerformanceTest {
   @Ignore
   public void iterateCombinationsBenchmark()
   {
-//    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5), mathUtils);
-    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(8, rangeValues(0, 48), mathUtils);
+//    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
+     CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(8, rangeValues(0, 48));
     System.out.println("Size:"+combinations.longSize());
     long index = 0;
     for(Integer[] element: combinations) {
@@ -141,8 +139,8 @@ public class CombinationsIterationPerformanceTest {
   @Ignore
   public void iterateCombinationsWithoutRecycle()
   {
-//    Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5), mathUtils);
-    Combinations<Integer> combinations = new Combinations<Integer>(32, rangeValues(0, 64), mathUtils);
+//    Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
+     Combinations<Integer> combinations = new Combinations<Integer>(32, rangeValues(0, 64));
     for(Integer[] element: combinations) {
       
     }

@@ -21,9 +21,9 @@ import java.util.NoSuchElementException;
 public class IndexBasedPermutations<T>
 extends AbstractCombinatoric<T> {
 
-  protected IndexBasedPermutations(int k, T[] domain, CombMathUtils mathUtils) {
-    super(k, domain, mathUtils);
-  }
+  protected IndexBasedPermutations(int k, T[] domain) {
+    super(k, domain);
+      }
 
   
   @Override
@@ -57,8 +57,8 @@ extends AbstractCombinatoric<T> {
       for( int m = startM; m > stopM; m-- ) {
           currentMultiplicity[i] = m;
           currentMultiplicity[i+1] = k-inCurrentMultiplicity-m;
-          long currentP = mathUtils.p(k, currentMultiplicity);
-          long remainingP = mathUtils.p(k-(inCurrentMultiplicity+m), workingMultiplicity);
+          long currentP = CombMathUtils.p(k, currentMultiplicity);
+          long remainingP = CombMathUtils.p(k-(inCurrentMultiplicity+m), workingMultiplicity);
           index += currentP * remainingP;
       }
       
@@ -82,7 +82,7 @@ extends AbstractCombinatoric<T> {
       int bCount = elementMultiplicity[i+1];
       T aElement = elementDomain.get(i).get(0);
       T bElement = elementDomain.get(i+1).get(0);
-      long typePerms = mathUtils.p(aCount+bCount, new int[]{ aCount, bCount});
+      long typePerms = CombMathUtils.p(aCount+bCount, new int[]{ aCount, bCount});
       boolean typeDown = localIndex % 2 == 0;
       localIndex *= typePerms;
       boolean elementDown = true;
@@ -98,11 +98,11 @@ extends AbstractCombinatoric<T> {
         
         // if the element is moving down, then add permutations for the b elements.
         if( elementDown && isB && aCount != 0 ) {
-          subLocalIndex += mathUtils.p(aCount-1+bCount, new int[] {aCount-1, bCount} );
+          subLocalIndex += CombMathUtils.p(aCount-1+bCount, new int[] {aCount-1, bCount} );
         }
         // if the element is moving up, then add permutations for the a elements.
         else if( !elementDown && isA && bCount != 0 ) {
-          subLocalIndex += mathUtils.p(aCount+bCount-1, new int[] {aCount, bCount-1} );
+          subLocalIndex += CombMathUtils.p(aCount+bCount-1, new int[] {aCount, bCount-1} );
         }
         
         if( isA ) {
@@ -146,7 +146,7 @@ extends AbstractCombinatoric<T> {
 
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.p(k, domain.toMultiplicity());
+    return CombMathUtils.p(k, domain.toMultiplicity());
   }
   
   public class IndexBasedPermutationIterator
@@ -175,8 +175,8 @@ extends AbstractCombinatoric<T> {
         for( int j = Math.min(domainMultiplicity[dri], k-ni); j >= 0; j-- ) { 
           state[dri].count = j;
           state[dri].activeToRight = k-ni-state[dri].count;
-          state[dri].perms = mathUtils.pAll(state[dri].count, state[dri].activeToRight);
-          state[dri].permsToRight = mathUtils.p(state[dri].activeToRight, domainMultiplicity, dri+1, domainMultiplicity.length);
+          state[dri].perms = CombMathUtils.pAll(state[dri].count, state[dri].activeToRight);
+          state[dri].permsToRight = CombMathUtils.p(state[dri].activeToRight, domainMultiplicity, dri+1, domainMultiplicity.length);
           state[dri].permsToLeft = dri == 0 ? 1 : state[dri-1].permsToLeft * state[dri-1].perms;
         
           // if the next index is past this permutation, then add to the past perms.
@@ -241,13 +241,13 @@ extends AbstractCombinatoric<T> {
       	
       	  // when we need to move forward.
         	if( windowIndex < windowTarget && atStart ) {
-        		if( windowIndex + mathUtils.pAll(remaining-1, toRight) > windowTarget ) {
+        		if( windowIndex + CombMathUtils.pAll(remaining-1, toRight) > windowTarget ) {
         			remaining--;
         			continue WINDOW;
         		}
         		else {
         			swap(next, windowCur, windowCur+remaining);
-        			windowIndex += mathUtils.pAll(remaining-1, toRight) + mathUtils.pAll(remaining-1, toRight-1) - 1;
+        			windowIndex += CombMathUtils.pAll(remaining-1, toRight) + CombMathUtils.pAll(remaining-1, toRight-1) - 1;
         			toRight--;
         			atStart = remaining == 1;
         		}
@@ -259,9 +259,9 @@ extends AbstractCombinatoric<T> {
         	  atStart = true;
         	}
         	else if( windowIndex > windowTarget && !atStart ) {
-        		if( windowIndex - mathUtils.pAll(remaining-1, toRight) >= windowTarget ) {
+        		if( windowIndex - CombMathUtils.pAll(remaining-1, toRight) >= windowTarget ) {
         			swap(next, windowCur, windowCur+remaining);
-        			windowIndex -= (mathUtils.pAll(remaining-1, toRight) + mathUtils.pAll(remaining-1, toRight-1) - 1);
+        			windowIndex -= (CombMathUtils.pAll(remaining-1, toRight) + CombMathUtils.pAll(remaining-1, toRight-1) - 1);
         			toRight--;
         			atStart = remaining != 1;
         		}
@@ -319,7 +319,7 @@ extends AbstractCombinatoric<T> {
         int bCount = state[i].activeToRight;
         int aIndex = 0;
         ELEMENT: for( int elementIndex = 0; elementIndex < windowEnd - windowStart; elementIndex++) {
-          long perms = elementDown ? mathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount}) : mathUtils.p(aCount+bCount-1, new int[]{ aCount, bCount-1});
+          long perms = elementDown ? CombMathUtils.p((aCount-1)+bCount, new int[]{ aCount-1, bCount}) : CombMathUtils.p(aCount+bCount-1, new int[]{ aCount, bCount-1});
           if( typeIndex == perms ) {
             boolean moveMultiple = ((elementIndex % 2) != (aIndex % 2)) ^ !elementDown;
             // this is the element, find the source and target.
@@ -371,7 +371,7 @@ extends AbstractCombinatoric<T> {
       
       for( int i = state.length - 2; i >= 0; i-- ) {
         state[i].activeToRight = state[i+1].activeToRight + state[i+1].count;
-        state[i].perms = mathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
+        state[i].perms = CombMathUtils.p(state[i].count+state[i].activeToRight, new int[]{ state[i].count, state[i].activeToRight});
       }
       
       return previous;

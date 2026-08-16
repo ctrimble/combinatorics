@@ -67,6 +67,6 @@ public abstract class AbstractIndexOfTest {
   
   public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
     //return factory.createPermutations(k, domain);
-    return new IndexBasedPermutations(k, domain, factory.getMathUtils());
+     return new IndexBasedPermutations(k, domain);
   }  
 }

@@ -21,9 +21,9 @@ import java.util.NoSuchElementException;
 public class CombinationsBenchmark<T>
   extends AbstractCombinatoric<T>
 {
-  public CombinationsBenchmark(int k, T[] domain, CombMathUtils mathUtil) {
-    super(k, domain, mathUtil);
-  } 
+   public CombinationsBenchmark(int k, T[] domain) {
+    super(k, domain);
+   } 
 
   @Override
   public CombinatoricIterator<T> iterator() {
@@ -32,7 +32,7 @@ public class CombinationsBenchmark<T>
 
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.c(k, domain.toMultiplicity());
+     return CombMathUtils.c(k, domain.toMultiplicity());
   }
   
   protected class CombinationIterator

@@ -28,12 +28,12 @@ public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected long startIndex;
   protected long endIndex;
   
-  protected CombinationsGenerator(int k, T[] domain, CombMathUtils mathUtils) {
-    super(k, domain, mathUtils);
-    domainMiltiplicity = this.domain.toMultiplicity();
-    startIndex = 0;
-    endIndex = mathUtils.c(k, domainMultiplicity);
-  }
+  protected CombinationsGenerator(int k, T[] domain) {
+    super(k, domain);
+     domainMiltiplicity = this.domain.toMultiplicity();
+     startIndex = 0;
+     endIndex = CombMathUtils.c(k, domainMultiplicity);
+      }
 
   @Override
   public void execute() {
@@ -55,7 +55,7 @@ public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
       indices[i].index = ni;
       for( int count = Math.min(domainMultiplicity[i], k-ni); count >= 0; count-- ) {
       	indices[i].count = count;
-      	long combsToRight = mathUtils.c(k-ni-count, domainMultiplicity, i+1, domainMultiplicity.length);
+      	long combsToRight = CombMathUtils.c(k-ni-count, domainMultiplicity, i+1, domainMultiplicity.length);
       	if( currentCombs + combsToRight <= startIndex ) {
       		currentCombs += combsToRight;
       		continue;
@@ -128,7 +128,7 @@ public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
    */
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-    return mathUtils.c(k, domain.toMultiplicity());
+    return CombMathUtils.c(k, domain.toMultiplicity());
   }
 
   /**
