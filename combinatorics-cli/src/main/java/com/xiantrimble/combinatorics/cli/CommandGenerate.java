@@ -28,31 +28,31 @@ import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 
 @Parameters(commandNames = "generate", commandDescription = "Generates combinations or permutations of length k")
 public class CommandGenerate
-  implements Runnable
+    implements Runnable
 {
-  @Parameter(names="-k", description="The length of the elements")
+  @Parameter(names = "-k", description = "The length of the elements")
   public int k;
-  
+
   @ParametersDelegate
   public TypeDelegate type = new TypeDelegate();
-  
-  @Parameter(names="-d", description="The domain", variableArity=true)
+
+  @Parameter(names = "-d", description = "The domain", variableArity = true)
   public List<String> domain;
-  
+
   @Override
   public void run() {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
     Combinatoric<String> combinatoric = null;
-    if( type.combination ) {
+    if(type.combination) {
       combinatoric = factory.createCombinations(k, domain.toArray(new String[domain.size()]));
     }
-    else if( type.permutation ) {
+    else if(type.permutation) {
       combinatoric = factory.createPermutations(k, domain.toArray(new String[domain.size()]));
     }
     else {
       throw new IllegalStateException("Type must be one of c or p.");
     }
-    for( String[] element : combinatoric ) {
+    for(String[] element : combinatoric) {
       System.out.println(StringUtils.join(element, '\t'));
     }
   }

@@ -66,7 +66,7 @@ public abstract class AbstractCombinationIteratorTest {
         list(THREE, FOUR, FIVE));
     assertEquals(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void sixChoseThreeOneDuplicateFrom3To9() {
@@ -83,7 +83,7 @@ public abstract class AbstractCombinationIteratorTest {
 
   public abstract List<List<Integer>> createCombinations(
       List<Integer> elements, int k);
-  
+
   public abstract List<List<Integer>> createCombinations(
-  		List<Integer> elements, int k, long fromIndex, long toIndex );
+      List<Integer> elements, int k, long fromIndex, long toIndex);
 }

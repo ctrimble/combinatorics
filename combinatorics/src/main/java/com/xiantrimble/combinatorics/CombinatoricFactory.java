@@ -22,9 +22,14 @@ package com.xiantrimble.combinatorics;
  */
 public interface CombinatoricFactory {
   public <T> Combinatoric<T> createCombinations(int k, T... domain);
+
   public <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain);
+
   public <T> Combinatoric<T> createPermutations(int k, T... domain);
-  public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T...domain );
+
+  public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain);
+
   public <T> GroupedDomain<T> createGroupedDomain(T... domain);
-   public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain);
-  }
+
+  public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain);
+}

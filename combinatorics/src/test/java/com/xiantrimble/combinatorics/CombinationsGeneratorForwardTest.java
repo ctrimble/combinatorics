@@ -24,18 +24,18 @@ public class CombinationsGeneratorForwardTest extends AbstractCombinationIterato
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k, (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
     combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
       @Override
       public void evaluate() {
-        result.add(Arrays.asList(Arrays.copyOf(state, state.length))); 
+        result.add(Arrays.asList(Arrays.copyOf(state, state.length)));
       }
 
       @Override
-      public void init(Integer[] newState ) {
-        for( int i = 0; i < newState.length; i++ ) {
+      public void init(Integer[] newState) {
+        for(int i = 0; i < newState.length; i++) {
           state[i] = newState[i];
         }
       }
@@ -56,22 +56,22 @@ public class CombinationsGeneratorForwardTest extends AbstractCombinationIterato
     return result;
   }
 
-	@Override
+  @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k,
       long fromIndex, long toIndex) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k, (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
     combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
       @Override
       public void evaluate() {
-        result.add(Arrays.asList(Arrays.copyOf(state, state.length))); 
+        result.add(Arrays.asList(Arrays.copyOf(state, state.length)));
       }
 
       @Override
-      public void init(Integer[] newState ) {
-        for( int i = 0; i < newState.length; i++ ) {
+      public void init(Integer[] newState) {
+        for(int i = 0; i < newState.length; i++) {
           state[i] = newState[i];
         }
       }

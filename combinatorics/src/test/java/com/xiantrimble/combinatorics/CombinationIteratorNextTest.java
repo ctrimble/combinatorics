@@ -24,22 +24,23 @@ public class CombinationIteratorNextTest extends AbstractCombinationIteratorTest
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    Combinatoric<Integer> combinations = factory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()]));
     List<List<Integer>> result = new ArrayList<List<Integer>>();
-    for( Integer[] element : combinations ) {
+    for(Integer[] element : combinations) {
       result.add(Arrays.asList(element));
     }
     return result;
   }
 
-	@Override
+  @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k,
       long fromIndex, long toIndex) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
+    Combinatoric<Integer> combinations = factory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
     List<List<Integer>> result = new ArrayList<List<Integer>>();
-    for( Integer[] element : combinations ) {
+    for(Integer[] element : combinations) {
       result.add(Arrays.asList(element));
     }
-    return result;  }
+    return result;
+  }
 }

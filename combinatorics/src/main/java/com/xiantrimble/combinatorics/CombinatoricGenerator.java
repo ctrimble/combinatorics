@@ -30,14 +30,14 @@ public interface CombinatoricGenerator<T> {
    * Starts iterating over the values of this combinations or permutation.
    */
   public void execute();
-  
+
   /**
    * Sets the hander to be used by this class.  This should be called before calling execute().
    * 
    * @param handler the target for the events.
    */
-  public void setHandler( CombinatoricHandler<T> handler );
-  
+  public void setHandler(CombinatoricHandler<T> handler);
+
   /**
    * Returns the size of the set of combinations or permutations.
    * 
@@ -52,5 +52,5 @@ public interface CombinatoricGenerator<T> {
    */
   long longSize();
 
-	CombinationsGenerator<T> range(long fromIndex, long toIndex);
+  CombinationsGenerator<T> range(long fromIndex, long toIndex);
 }

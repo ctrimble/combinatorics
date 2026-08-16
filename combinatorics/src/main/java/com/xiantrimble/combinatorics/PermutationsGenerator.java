@@ -31,7 +31,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
 
   protected PermutationsGenerator(int k, T[] domain) {
     super(k, domain);
-    }
+  }
 
   /**
    * Computes the number of permutations for the specified length and domain.
@@ -54,45 +54,45 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
       domainRanks = domain.toMultiplicity();
       state = new TypePermutationState[domainRanks.length];
       int ni = 0;
-      for (int ri = 0; ri < domainRanks.length; ri++) {
+      for(int ri = 0; ri < domainRanks.length; ri++) {
         state[ri] = new TypePermutationState();
         state[ri].count = Math.min(domainRanks[ri], k - ni);
         state[ri].entryState = new EntryPermutationState[domainRanks[ri]];
-        for (int j = 0; j < state[ri].entryState.length; j++) {
+        for(int j = 0; j < state[ri].entryState.length; j++) {
           state[ri].entryState[j] = new EntryPermutationState(j);
-          if (j < state[ri].count) {
+          if(j < state[ri].count) {
             last[ni++] = domain.get(ri).get(j);
           }
         }
       }
-      for (int i = state.length - 2; i >= 0; i--) {
+      for(int i = state.length - 2; i >= 0; i--) {
         state[i].toRight = state[i + 1].entryState.length + state[i + 1].toRight;
       }
 
       handler.init(last);
       handler.evaluate();
 
-      ITERATE : for (long index = 1; index < size; index++) {
+      ITERATE: for(long index = 1; index < size; index++) {
         int windowStart = 0;
         int windowEnd = last.length;
         int swapSource = 0;
         int swapTarget = 0;
-        TYPE : for (int i = 0; i < state.length; i++) {
+        TYPE: for(int i = 0; i < state.length; i++) {
           switch (state[i].direction) {
             case DOWN :
               // scan the entries from back to front, looking for the first item
               // to move.
-              ENTRY : for (int j = state[i].count - 1; j >= 0; j--) {
+              ENTRY: for(int j = state[i].count - 1; j >= 0; j--) {
                 switch (state[i].entryState[j].direction) {
                   case DOWN :
-                    if (state[i].entryState[j].index < (windowEnd - windowStart - 1) - ((state[i].count - 1) - j)) {
+                    if(state[i].entryState[j].index < (windowEnd - windowStart - 1) - ((state[i].count - 1) - j)) {
                       // track the source index for the swap.
                       swapSource = windowStart + state[i].entryState[j].index;
 
                       // increment the index and deal with moving over like
                       // elements
                       state[i].entryState[j].index++;
-                      for (; j < state[i].count - 1 && state[i].entryState[j].index == state[i].entryState[j + 1].index; j++) {
+                      for(; j < state[i].count - 1 && state[i].entryState[j].index == state[i].entryState[j + 1].index; j++) {
                         state[i].entryState[j + 1].index++;
                         state[i].entryState[j + 1].direction = Direction.DOWN;
                       }
@@ -105,10 +105,10 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
                     break;
                   case UP :
                     int startIndex = j;
-                    for (; state[i].entryState[j].index == state[i].entryState[j - 1].index + 1; j--) {
+                    for(; state[i].entryState[j].index == state[i].entryState[j - 1].index + 1; j--) {
                       // if this entry is moving down, then switch case
                       // statements.
-                      if (state[i].entryState[j - 1].direction == Direction.DOWN) {
+                      if(state[i].entryState[j - 1].direction == Direction.DOWN) {
                         continue ENTRY;
                       }
                     }
@@ -116,7 +116,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
                     state[i].entryState[j].direction = Direction.UP;
                     state[i].entryState[j].index--;
                     swapTarget = windowStart + state[i].entryState[j].index;
-                    for (j++; j <= startIndex; j++) {
+                    for(j++; j <= startIndex; j++) {
                       state[i].entryState[j].direction = Direction.DOWN;
                       state[i].entryState[j].index--;
                     }
@@ -126,23 +126,23 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
               // none of the entries can move down, switch directions.
               state[i].direction = Direction.UP;
               windowEnd -= state[i].count;
-              if (i < state.length - 1)
+              if(i < state.length - 1)
                 continue TYPE;
               break;
             case UP :
               // scan the entries from front to back, looking for the first item
               // to move.
-              ENTRY : for (int j = 0; j < state[i].count; j++) {
+              ENTRY: for(int j = 0; j < state[i].count; j++) {
                 switch (state[i].entryState[j].direction) {
                   case UP :
-                    if (state[i].entryState[j].index > j) {
+                    if(state[i].entryState[j].index > j) {
                       // track the source index of the swap.
                       swapSource = state[i].entryState[j].index + windowStart;
 
                       // decrement the index and deal with moving over like
                       // elements.
                       state[i].entryState[j].index--;
-                      for (; j > 0 && state[i].entryState[j].index == state[i].entryState[j - 1].index; j--) {
+                      for(; j > 0 && state[i].entryState[j].index == state[i].entryState[j - 1].index; j--) {
                         state[i].entryState[j - 1].index--;
                         state[i].entryState[j - 1].direction = Direction.UP;
                       }
@@ -155,10 +155,10 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
                     break;
                   case DOWN :
                     int startIndex = j;
-                    for (; state[i].entryState[j].index == state[i].entryState[j + 1].index - 1; j++) {
+                    for(; state[i].entryState[j].index == state[i].entryState[j + 1].index - 1; j++) {
                       // if this entry is moving down, then switch case
                       // statements.
-                      if (state[i].entryState[j + 1].direction == Direction.UP) {
+                      if(state[i].entryState[j + 1].direction == Direction.UP) {
                         continue ENTRY;
                       }
                     }
@@ -166,7 +166,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
                     state[i].entryState[j].direction = Direction.DOWN;
                     state[i].entryState[j].index++;
                     swapTarget = windowStart + state[i].entryState[j].index;
-                    for (j--; j >= startIndex; j--) {
+                    for(j--; j >= startIndex; j--) {
                       state[i].entryState[j].direction = Direction.UP;
                       state[i].entryState[j].index++;
                     }
@@ -175,7 +175,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
               }
               state[i].direction = Direction.DOWN;
               windowStart += state[i].count;
-              if (i < state.length - 1)
+              if(i < state.length - 1)
                 continue TYPE;
               break;
           }
@@ -187,14 +187,14 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
           int remaining = 0;
 
           // move cur backwards to find the next item to update.
-          for (; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining + 1); remaining += state[cur--].count);
+          for(; cur > 0 && (state[cur].count == 0 || state[cur].toRight < remaining + 1); remaining += state[cur--].count);
 
           // decrement the items at cur.
           state[cur].count--;
           remaining++;
 
           // move forward and update all of the counts.
-          for (cur++; cur < state.length; cur++) {
+          for(cur++; cur < state.length; cur++) {
             state[cur].count = Math.min(remaining, domainRanks[cur]);
             remaining -= state[cur].count;
           }
@@ -202,12 +202,12 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
           // for now, totally reset next. Making this an incremental update will
           // help when the length is much smaller than the number of entries.
           ni = 0;
-          for (int ri = 0; ri < domainRanks.length; ri++) {
+          for(int ri = 0; ri < domainRanks.length; ri++) {
             state[ri].direction = Direction.DOWN;
-            for (int k = 0; k < state[ri].entryState.length; k++) {
+            for(int k = 0; k < state[ri].entryState.length; k++) {
               state[ri].entryState[k].index = k;
               state[ri].entryState[k].direction = Direction.DOWN;
-              if (k < state[ri].count) {
+              if(k < state[ri].count) {
                 last[ni++] = domain.get(ri).get(k);
               }
             }
@@ -235,7 +235,8 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
     public EntryPermutationState[] entryState;
     public int count = 0; // the number of entries being used.
     public int toRight = 0; // the number of items that can occur to the right.
-                            // Would be better with the rank array.
+
+    // Would be better with the rank array.
     public String toString() {
       return "{direction:" + direction + ", entries:" + Arrays.toString(entryState) + "}";
     }
@@ -247,6 +248,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
     }
     public Direction direction = Direction.DOWN;
     public int index = 0;
+
     public String toString() {
       return "{direction:" + direction + ", index:" + index + "}";
     }
@@ -256,8 +258,8 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
     UP, DOWN
   }
 
-	@Override
+  @Override
   public CombinationsGenerator<T> range(long offset, long length) {
-	  throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException();
   }
 }

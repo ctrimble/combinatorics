@@ -42,25 +42,25 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   protected T[][] domainValues;
   /** A view of the domain multiplicity. */
   protected int[] domainMultiplicity;
-    /** The length of this collection. */
-   protected long size;
-    /** The component type for the arrays that will be returned. */
-   protected Class<T> componentType;
+  /** The length of this collection. */
+  protected long size;
+  /** The component type for the arrays that will be returned. */
+  protected Class<T> componentType;
 
   /**
-     * @param k the length of the results.
-     * @param domain the domain being operated on.
-     */
-   protected AbstractCombinatoric(int k, T[] domain) {
-     this.k = k;
-     this.domain = new FastGroupedDomain<T>(k, domain);
-     this.size = computeSize(this.k, this.domain);
-     this.componentType = getComponentType(domain);
-     this.domainValues = this.domain.toValueArray();
-     this.domainMultiplicity = this.domain.toMultiplicity();
-     }
-  
-   /**
+   * @param k the length of the results.
+   * @param domain the domain being operated on.
+   */
+  protected AbstractCombinatoric(int k, T[] domain) {
+    this.k = k;
+    this.domain = new FastGroupedDomain<T>(k, domain);
+    this.size = computeSize(this.k, this.domain);
+    this.componentType = getComponentType(domain);
+    this.domainValues = this.domain.toValueArray();
+    this.domainMultiplicity = this.domain.toMultiplicity();
+  }
+
+  /**
    * Returns a new array of type T with the length provided.
    * 
    * @return a new array of type T with the length provided.
@@ -100,11 +100,11 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   @Override
   public T[] get(int arg0) {
-  	return get((long)arg0);
+    return get((long)arg0);
   }
-  
+
   public T[] get(long index) {
-  	return iterator(index, index+1, 0).next();
+    return iterator(index, index + 1, 0).next();
   }
 
   /**
@@ -112,39 +112,39 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   @Override
   public int size() {
-    if (size >= Integer.MAX_VALUE) {
+    if(size >= Integer.MAX_VALUE) {
       return Integer.MAX_VALUE;
     }
-    return (int) size;
+    return (int)size;
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
   public int indexOf(T[] element) {
     long longIndex = longIndexOf(element);
-    if (longIndex >= Integer.MAX_VALUE) {
+    if(longIndex >= Integer.MAX_VALUE) {
       return Integer.MAX_VALUE;
     }
-    return (int) longIndex;
+    return (int)longIndex;
   }
-  
+
   public Combinatoric<T> subList(int fromIndex, int toIndex) {
-  	return subList((long)fromIndex, (long) toIndex);
+    return subList((long)fromIndex, (long)toIndex);
   }
-  
-  public Combinatoric<T> subList( final long fromIndex, final long toIndex ) {
-  	return new SubCombinatoric(fromIndex, toIndex);
+
+  public Combinatoric<T> subList(final long fromIndex, final long toIndex) {
+    return new SubCombinatoric(fromIndex, toIndex);
   }
 
   /**
    * {@inheritDoc}
    */
   public abstract CombinatoricIterator<T> iterator();
-  
+
   protected abstract CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long startIndex);
-  
+
   /**
    * Computes the size of the result for the given length (k) and domain.
    * 
@@ -160,21 +160,22 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     protected long nextIndex = 0;
     protected long startIndex = 0;
     protected long endIndex = 0;
-    
+
     protected AbstractCombinatoricIterator(long startIndex)
     {
       this(startIndex, size, 0);
     }
-    
+
     protected AbstractCombinatoricIterator(long startIndex, long endIndex) {
-    	this(startIndex, endIndex, 0);
+      this(startIndex, endIndex, 0);
     }
-    
+
     protected AbstractCombinatoricIterator(long startIndex, long endIndex, long nextIndex) {
-    	this.startIndex = startIndex;
-    	this.endIndex = endIndex;
-    	this.nextIndex = nextIndex;
-    }    
+      this.startIndex = startIndex;
+      this.endIndex = endIndex;
+      this.nextIndex = nextIndex;
+    }
+
     /**
      * @throws UnsupportedOperationException
      */
@@ -182,7 +183,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     public void add(T[] e) {
       throw new UnsupportedOperationException();
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -196,7 +197,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
      */
     @Override
     public long previousLongIndex() {
-      return nextIndex-1;
+      return nextIndex - 1;
     }
 
     /**
@@ -207,7 +208,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       long nextLongIndex = nextLongIndex();
       return nextLongIndex > Integer.MAX_VALUE
           ? Integer.MAX_VALUE
-          : (int) nextLongIndex;
+          : (int)nextLongIndex;
     }
 
     /**
@@ -218,9 +219,9 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       long previousLongIndex = previousLongIndex();
       return previousLongIndex > Integer.MAX_VALUE
           ? Integer.MAX_VALUE
-          : (int) previousLongIndex;
+          : (int)previousLongIndex;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -229,7 +230,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     {
       return startIndex + nextIndex < endIndex;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -255,179 +256,180 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
       throw new UnsupportedOperationException();
     }
   }
-  
-	protected class SubCombinatoric implements Combinatoric<T> {
-		private long fromIndex;
-		private long toIndex;
 
-		public SubCombinatoric( long fromIndex, long toIndex) {
-			this.fromIndex = fromIndex;
-			this.toIndex = toIndex;
-		}
-		@Override
+  protected class SubCombinatoric implements Combinatoric<T> {
+    private long fromIndex;
+    private long toIndex;
+
+    public SubCombinatoric(long fromIndex, long toIndex) {
+      this.fromIndex = fromIndex;
+      this.toIndex = toIndex;
+    }
+
+    @Override
     public boolean add(T[] element) {
       throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public void add(int arg0, T[] arg1) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public boolean addAll(Collection<? extends T[]> arg0) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public boolean addAll(int arg0, Collection<? extends T[]> arg1) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public void clear() {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public boolean contains(Object o) {
       long index = AbstractCombinatoric.this.longIndexOf((T[])o);
       return index >= fromIndex && index < toIndex;
     }
 
-		@Override
+    @Override
     public boolean containsAll(Collection<?> col) {
-			for( Object o : col ) {
-				if( !contains(o) ) return false;
-			}
-			return true;
+      for(Object o : col) {
+        if(!contains(o)) return false;
+      }
+      return true;
     }
 
-		@Override
+    @Override
     public T[] get(int index) {
-			return get((long)index);
+      return get((long)index);
     }
 
-		@Override
+    @Override
     public int indexOf(Object o) {
       long result = longIndexOf((T[])o);
       return result < Integer.MAX_VALUE ? (int)result : Integer.MAX_VALUE;
     }
 
-		@Override
+    @Override
     public boolean isEmpty() {
       return fromIndex == toIndex;
     }
 
-		@Override
+    @Override
     public int lastIndexOf(Object o) {
       long result = longIndexOf((T[])o);
-      if( result < fromIndex || result >= toIndex ) return -1;
-      return result-fromIndex < Integer.MAX_VALUE ? (int)(result-fromIndex) : Integer.MAX_VALUE;
+      if(result < fromIndex || result >= toIndex) return -1;
+      return result - fromIndex < Integer.MAX_VALUE ? (int)(result - fromIndex) : Integer.MAX_VALUE;
     }
 
-		@Override
+    @Override
     public ListIterator<T[]> listIterator() {
       return AbstractCombinatoric.this.iterator(fromIndex, toIndex, fromIndex);
     }
 
-		@Override
+    @Override
     public ListIterator<T[]> listIterator(int startIndex) {
-    	return AbstractCombinatoric.this.iterator(fromIndex, toIndex, startIndex);
+      return AbstractCombinatoric.this.iterator(fromIndex, toIndex, startIndex);
     }
 
-		@Override
+    @Override
     public boolean remove(Object arg0) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public T[] remove(int arg0) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public boolean removeAll(Collection<?> arg0) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public boolean retainAll(Collection<?> arg0) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public T[] set(int arg0, T[] arg1) {
-			throw new UnsupportedOperationException();
+      throw new UnsupportedOperationException();
     }
 
-		@Override
+    @Override
     public int size() {
       long result = longSize();
       return result < Integer.MAX_VALUE ? (int)result : Integer.MAX_VALUE;
     }
 
-		@Override
+    @Override
     public List<T[]> subList(int fromIndex, int toIndex) {
-    	return subList((long)fromIndex, (long)toIndex);
+      return subList((long)fromIndex, (long)toIndex);
     }
 
-		@Override
+    @Override
     public Object[] toArray() {
-			long length = toIndex-fromIndex;
+      long length = toIndex - fromIndex;
       Object[] result = new Object[length < Integer.MAX_VALUE ? (int)length : Integer.MAX_VALUE];
       Iterator<T[]> iterator = iterator();
-      for( int i = 0; i < result.length; i++ ) {
-      	result[i] = iterator.next();
+      for(int i = 0; i < result.length; i++) {
+        result[i] = iterator.next();
       }
       return result;
     }
 
-		@Override
+    @Override
     public <T> T[] toArray(T[] array) {
       throw new UnsupportedOperationException("Not yet implemented.");
     }
 
-		@Override
+    @Override
     public int getK() {
       return AbstractCombinatoric.this.getK();
     }
 
-		@Override
+    @Override
     public GroupedDomain<T> getDomain() {
       return AbstractCombinatoric.this.getDomain();
     }
 
-		@Override
+    @Override
     public long longSize() {
-      return toIndex-fromIndex;
+      return toIndex - fromIndex;
     }
 
-		@Override
+    @Override
     public int indexOf(T[] element) {
       long result = longIndexOf(element);
       return result < Integer.MAX_VALUE ? (int)result : Integer.MAX_VALUE;
     }
 
-		@Override
+    @Override
     public long longIndexOf(T[] element) {
       return AbstractCombinatoric.this.longIndexOf(element) - fromIndex;
     }
 
-		@Override
+    @Override
     public CombinatoricIterator<T> iterator() {
       return AbstractCombinatoric.this.iterator(fromIndex, toIndex, 0);
     }
 
-		@Override
+    @Override
     public T[] get(long index) {
-			return AbstractCombinatoric.this.get(index+fromIndex);
+      return AbstractCombinatoric.this.get(index + fromIndex);
     }
 
-		@Override
+    @Override
     public Combinatoric<T> subList(long fromIndex, long toIndex) {
-      return new SubCombinatoric(this.fromIndex+fromIndex, this.fromIndex+toIndex);
-		}
-	}
+      return new SubCombinatoric(this.fromIndex + fromIndex, this.fromIndex + toIndex);
+    }
+  }
 
 }

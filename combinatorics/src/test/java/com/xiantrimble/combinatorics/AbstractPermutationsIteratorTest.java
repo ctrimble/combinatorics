@@ -33,7 +33,7 @@ public abstract class AbstractPermutationsIteratorTest
   protected static Integer SIX = 6;
   protected static Integer SEVEN = 7;
   protected static Integer EIGHT = 8;
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void threePermThree() {
@@ -47,7 +47,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, THREE, TWO));
     assertSameContent(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void twoOnePermThree() {
@@ -56,9 +56,9 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, ONE, TWO),
         list(ONE, TWO, ONE),
         list(TWO, ONE, ONE));
-    assertSameContent(expected, actual);    
+    assertSameContent(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void threeOneOnePermFive() {
@@ -84,15 +84,15 @@ public abstract class AbstractPermutationsIteratorTest
         list(THREE, ONE, ONE, ONE, TWO),
         list(ONE, THREE, ONE, ONE, TWO),
         list(ONE, ONE, ONE, THREE, TWO));
-    
+
     assertSameContent(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void threeOneOneOnePermSix() {
     List<List<Integer>> actual = createPermutations(list(ONE, ONE, ONE, TWO, THREE, FOUR), 6);
-    
+
     List<List<Integer>> expected = list(
         list(ONE, ONE, ONE, TWO, THREE, FOUR),
         list(ONE, ONE, TWO, ONE, THREE, FOUR),
@@ -114,7 +114,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(TWO, THREE, ONE, ONE, FOUR, ONE),
         list(TWO, THREE, ONE, FOUR, ONE, ONE),
         list(TWO, THREE, FOUR, ONE, ONE, ONE),
-        
+
         list(THREE, TWO, FOUR, ONE, ONE, ONE),
         list(THREE, TWO, ONE, FOUR, ONE, ONE),
         list(THREE, ONE, TWO, FOUR, ONE, ONE),
@@ -135,7 +135,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, THREE, ONE, ONE, TWO, FOUR),
         list(ONE, ONE, THREE, ONE, TWO, FOUR),
         list(ONE, ONE, ONE, THREE, TWO, FOUR),
-        
+
         list(ONE, ONE, ONE, THREE, FOUR, TWO),
         list(ONE, ONE, THREE, ONE, FOUR, TWO),
         list(ONE, ONE, THREE, FOUR, ONE, TWO),
@@ -156,7 +156,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(THREE, FOUR, ONE, ONE, TWO, ONE),
         list(THREE, FOUR, ONE, TWO, ONE, ONE),
         list(THREE, FOUR, TWO, ONE, ONE, ONE),
-        
+
         list(FOUR, THREE, TWO, ONE, ONE, ONE),
         list(FOUR, THREE, ONE, TWO, ONE, ONE),
         list(FOUR, ONE, THREE, TWO, ONE, ONE),
@@ -177,7 +177,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, FOUR, ONE, ONE, THREE, TWO),
         list(ONE, ONE, FOUR, ONE, THREE, TWO),
         list(ONE, ONE, ONE, FOUR, THREE, TWO),
-        
+
         list(ONE, ONE, ONE, FOUR, TWO, THREE),
         list(ONE, ONE, FOUR, ONE, TWO, THREE),
         list(ONE, ONE, FOUR, TWO, ONE, THREE),
@@ -197,7 +197,7 @@ public abstract class AbstractPermutationsIteratorTest
         list(FOUR, TWO, ONE, ONE, ONE, THREE),
         list(FOUR, TWO, ONE, ONE, THREE, ONE),
         list(FOUR, TWO, ONE, THREE, ONE, ONE),
-        list(FOUR, TWO, THREE, ONE, ONE, ONE),        
+        list(FOUR, TWO, THREE, ONE, ONE, ONE),
 
         list(TWO, FOUR, THREE, ONE, ONE, ONE),
         list(TWO, FOUR, ONE, THREE, ONE, ONE),
@@ -219,10 +219,10 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, TWO, ONE, ONE, FOUR, THREE),
         list(ONE, ONE, TWO, ONE, FOUR, THREE),
         list(ONE, ONE, ONE, TWO, FOUR, THREE)
-);
+    );
     assertSameContent(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void threeOneOnePermFour() {
@@ -248,10 +248,10 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, THREE, ONE, TWO),
         list(THREE, ONE, ONE, TWO),
         list(ONE, ONE, THREE, TWO));
-    
+
     assertSameContent(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void oneTwoThreeFourFivePermThree() {
@@ -287,21 +287,21 @@ public abstract class AbstractPermutationsIteratorTest
         list(THREE, FIVE, ONE),
         list(FIVE, THREE, ONE),
         list(FIVE, ONE, THREE),
-        list(ONE, FIVE, THREE),  
+        list(ONE, FIVE, THREE),
         list(ONE, FOUR, FIVE),
         list(FOUR, ONE, FIVE),
         list(FOUR, FIVE, ONE),
         list(FIVE, FOUR, ONE),
         list(FIVE, ONE, FOUR),
         list(ONE, FIVE, FOUR),
-        
+
         // permutations with TWO as smallest value
         list(TWO, THREE, FOUR),
         list(THREE, TWO, FOUR),
         list(THREE, FOUR, TWO),
         list(FOUR, THREE, TWO),
         list(FOUR, TWO, THREE),
-        list(TWO, FOUR, THREE), 
+        list(TWO, FOUR, THREE),
         list(TWO, THREE, FIVE),
         list(THREE, TWO, FIVE),
         list(THREE, FIVE, TWO),
@@ -314,19 +314,19 @@ public abstract class AbstractPermutationsIteratorTest
         list(FIVE, FOUR, TWO),
         list(FIVE, TWO, FOUR),
         list(TWO, FIVE, FOUR),
-        
+
         // permutations with THREE as smallest value
         list(THREE, FOUR, FIVE),
         list(FOUR, THREE, FIVE),
         list(FOUR, FIVE, THREE),
         list(FIVE, FOUR, THREE),
         list(FIVE, THREE, FOUR),
-        list(THREE, FIVE, FOUR) 
-        );
-        
+        list(THREE, FIVE, FOUR)
+    );
+
     assertSameContent(expected, actual);
   }
-  
+
   @SuppressWarnings("unchecked")
   @Test
   public void oneTwoThreeFourFourPermThree() {
@@ -354,43 +354,43 @@ public abstract class AbstractPermutationsIteratorTest
         list(ONE, FOUR, FOUR),
         list(FOUR, ONE, FOUR),
         list(FOUR, FOUR, ONE),
-        
+
         // permutations with TWO as smallest value
         list(TWO, THREE, FOUR),
         list(THREE, TWO, FOUR),
         list(THREE, FOUR, TWO),
         list(FOUR, THREE, TWO),
         list(FOUR, TWO, THREE),
-        list(TWO, FOUR, THREE), 
+        list(TWO, FOUR, THREE),
         list(TWO, FOUR, FOUR),
         list(FOUR, TWO, FOUR),
         list(FOUR, FOUR, TWO),
-        
+
         // permutations with THREE as smallest value
         list(THREE, FOUR, FOUR),
         list(FOUR, THREE, FOUR),
         list(FOUR, FOUR, THREE)
-        );
-        
+    );
+
     assertSameContent(expected, actual);
   }
-  
-  private <T> void assertSameContent( List<T> expected, List<T> actual ) {
+
+  private <T> void assertSameContent(List<T> expected, List<T> actual) {
     assertEquals(expected.size(), actual.size());
     List<T> testList = new ArrayList<T>();
     testList.addAll(expected);
     testList.removeAll(actual);
-    
+
     assertEquals("Elements are missing.", new ArrayList<List<Integer>>(), testList);
-    
+
     testList.clear();
     testList.addAll(actual);
     testList.removeAll(expected);
-    
-    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);       
+
+    assertEquals("Extra elements found.", new ArrayList<List<Integer>>(), testList);
   }
-  
+
   public abstract List<List<Integer>> createPermutations(
       List<Integer> elements, int k);
-  
+
 }

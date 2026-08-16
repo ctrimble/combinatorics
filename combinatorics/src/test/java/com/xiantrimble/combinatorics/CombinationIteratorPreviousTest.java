@@ -26,34 +26,38 @@ public class CombinationIteratorPreviousTest
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()]));
+    Combinatoric<Integer> combinations = factory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()]));
     ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
     CombinatoricIterator<Integer> iterator = combinations.iterator();
-    
+
     // move to the end
-    while( iterator.hasNext() ) { iterator.next(); }
-    
+    while(iterator.hasNext()) {
+      iterator.next();
+    }
+
     // iterate backwards to the beginning.
-    while( iterator.hasPrevious() ) {
+    while(iterator.hasPrevious()) {
       Integer[] element = iterator.previous();
       result.add(0, Arrays.asList(element));
     }
     return result;
   }
 
-	@Override
+  @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k,
       long fromIndex, long toIndex) {
     CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> combinations = factory.createCombinations(k,  (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
+    Combinatoric<Integer> combinations = factory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
     ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
     CombinatoricIterator<Integer> iterator = combinations.iterator();
-    
+
     // move to the end
-    while( iterator.hasNext() ) { iterator.next(); }
-    
+    while(iterator.hasNext()) {
+      iterator.next();
+    }
+
     // iterate backwards to the beginning.
-    while( iterator.hasPrevious() ) {
+    while(iterator.hasPrevious()) {
       Integer[] element = iterator.previous();
       result.add(0, Arrays.asList(element));
     }

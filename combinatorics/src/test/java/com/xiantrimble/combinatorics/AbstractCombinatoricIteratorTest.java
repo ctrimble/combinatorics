@@ -27,11 +27,11 @@ public abstract class AbstractCombinatoricIteratorTest {
   protected static Integer SIX = 6;
   protected static Integer SEVEN = 7;
   protected static Integer EIGHT = 8;
-  
+
 
   public static <E> List<E> list(E... elements) {
     ArrayList<E> list = new ArrayList<E>();
-    for (E element : elements) {
+    for(E element : elements) {
       list.add(element);
     }
     return list;

@@ -37,36 +37,36 @@ public abstract class AbstractIndexOfTest {
   private static CombinatoricFactory factory = new CombinatoricFactoryImpl();
 
   protected Combinatoric<Element> combinatoric;
-  
-  protected AbstractIndexOfTest( Combinatoric<Element> combinatoric ) {
+
+  protected AbstractIndexOfTest(Combinatoric<Element> combinatoric) {
     this.combinatoric = combinatoric;
   }
 
   @Test
   public void iterationMatchesIndexOf() {
     int index = 0;
-    for( Element[] element : combinatoric) {
+    for(Element[] element : combinatoric) {
       long indexOf = combinatoric.longIndexOf(element);
       assertEquals(index, indexOf);
       index++;
     }
   }
-  
+
   @Test
   public void shouldBeInverseOfGet() {
-           for( Element[] element : combinatoric ) {
-                   long index = combinatoric.longIndexOf(element);
-                   Element[] roundTrip = combinatoric.get(index);
-                   assertThat(String.format("indexOf is the inverse of get at %d", index), roundTrip, is(element));
-           }
+    for(Element[] element : combinatoric) {
+      long index = combinatoric.longIndexOf(element);
+      Element[] roundTrip = combinatoric.get(index);
+      assertThat(String.format("indexOf is the inverse of get at %d", index), roundTrip, is(element));
+    }
   }
-  
+
   public static <E> Combinatoric<E> combinations(int k, E... domain) {
     return factory.createCombinations(k, domain);
   }
-  
+
   public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
     //return factory.createPermutations(k, domain);
-     return new IndexBasedPermutations(k, domain);
-  }  
+    return new IndexBasedPermutations(k, domain);
+  }
 }

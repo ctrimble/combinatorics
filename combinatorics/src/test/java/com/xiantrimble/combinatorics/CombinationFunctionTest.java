@@ -30,63 +30,65 @@ import org.junit.runners.Parameterized.Parameters;
 public class CombinationFunctionTest {
   @Parameters
   public static List<Object[]> parameters() {
-  	return Arrays.asList(new Object[][] {
-  			{ 2, new int[] { 0, 2 }, 0, 1, 0 },
-  			{ 2, new int[] { 0, 2 }, 1, 2, 1 },
-  			{ 2, new int[] { 0, 2 }, 0, 2, 1 },
-  			{ 2, new int[] { 2, 0 }, 0, 2, 1 },
-  			{ 2, new int[] { 1, 1 }, 0, 2, 1 },
-  			{ 1, new int[] { 1, 1 }, 0, 2, 2 },
-  			{ 1, new int[] { 1, 0 }, 0, 2, 1 },
-  			{ 0, new int[] { 1, 0 }, 0, 2, 1 },
-  			{ 0, new int[] { 0, 0 }, 0, 2, 1 }
-  	});
+    return Arrays.asList(new Object[][]{
+        {2, new int[]{0, 2}, 0, 1, 0},
+        {2, new int[]{0, 2}, 1, 2, 1},
+        {2, new int[]{0, 2}, 0, 2, 1},
+        {2, new int[]{2, 0}, 0, 2, 1},
+        {2, new int[]{1, 1}, 0, 2, 1},
+        {1, new int[]{1, 1}, 0, 2, 2},
+        {1, new int[]{1, 0}, 0, 2, 1},
+        {0, new int[]{1, 0}, 0, 2, 1},
+        {0, new int[]{0, 0}, 0, 2, 1}
+    });
   }
-	private int k;
-	private int[] m;
-	private int offset;
-	private int length;
- 	private long expected;
-   
-   public CombinationFunctionTest( int k, int[] m, int offset, int length, long expected) {
-   	this.k = k;
-   	this.m = m;
-   	this.offset = offset;
-   	this.length = length;
-   	this.expected = expected;
-   }
-  
-	@Test
-	public void checkResult() {
-		assertThat("the correct permutations were returned", CombMathUtils.c(k, m, offset, length), equalTo(expected));
-		
-		if( offset == 0 && length == m.length ) {
-			assertThat("the correct permutations were returned without offset and length", CombMathUtils.c(k, m), equalTo(expected));
-		}
-	}
-	
-	@Test
-	public void checkCompareGreaterThan() {
-		assertThat("greater than is bounded properly", CombMathUtils.compareC(k, m, offset, length, expected-1), equalTo(1));
-		
-		if( offset == 0 && length == m.length ) {
-			assertThat("greater than is bounded properly without offset and length", CombMathUtils.compareC(k, m, expected-1), equalTo(1));
-		}
-	}
-	@Test
-	public void checkCompareLessThan() {
-		assertThat("less than bound correct", CombMathUtils.compareC(k, m, offset, length, expected+1), equalTo(-1));
-		
-		if( offset == 0 && length == m.length ) {
-			assertThat("less than is bounded properly without offset and length", CombMathUtils.compareC(k, m, expected+1), equalTo(-1));
-		}
-	}
-	@Test
-	public void checkCompareEqualTo() {
-		assertThat("equal to is correct", CombMathUtils.compareC(k, m, offset, length, expected), equalTo(0));
-		
-		if( offset == 0 && length == m.length ) {
-			assertThat("equal to is correct without offset and length", CombMathUtils.compareC(k, m, expected), equalTo(0));
-		}
-	}
+  private int k;
+  private int[] m;
+  private int offset;
+  private int length;
+  private long expected;
+
+  public CombinationFunctionTest(int k, int[] m, int offset, int length, long expected) {
+    this.k = k;
+    this.m = m;
+    this.offset = offset;
+    this.length = length;
+    this.expected = expected;
+  }
+
+  @Test
+  public void checkResult() {
+    assertThat("the correct permutations were returned", CombMathUtils.c(k, m, offset, length), equalTo(expected));
+
+    if(offset == 0 && length == m.length) {
+      assertThat("the correct permutations were returned without offset and length", CombMathUtils.c(k, m), equalTo(expected));
+    }
+  }
+
+  @Test
+  public void checkCompareGreaterThan() {
+    assertThat("greater than is bounded properly", CombMathUtils.compareC(k, m, offset, length, expected - 1), equalTo(1));
+
+    if(offset == 0 && length == m.length) {
+      assertThat("greater than is bounded properly without offset and length", CombMathUtils.compareC(k, m, expected - 1), equalTo(1));
+    }
+  }
+
+  @Test
+  public void checkCompareLessThan() {
+    assertThat("less than bound correct", CombMathUtils.compareC(k, m, offset, length, expected + 1), equalTo(-1));
+
+    if(offset == 0 && length == m.length) {
+      assertThat("less than is bounded properly without offset and length", CombMathUtils.compareC(k, m, expected + 1), equalTo(-1));
+    }
+  }
+
+  @Test
+  public void checkCompareEqualTo() {
+    assertThat("equal to is correct", CombMathUtils.compareC(k, m, offset, length, expected), equalTo(0));
+
+    if(offset == 0 && length == m.length) {
+      assertThat("equal to is correct without offset and length", CombMathUtils.compareC(k, m, expected), equalTo(0));
+    }
+  }
 }

@@ -37,7 +37,7 @@ public class Utils {
   {
     return (T[])Array.newInstance(componentType, length);
   }
-  
+
   /**
    * Returns a two dimensional array for the type T.
    * 
@@ -51,7 +51,7 @@ public class Utils {
   {
     return (T[][])Array.newInstance(componentType, firstDim, secondDim);
   }
-  
+
   /**
    * Returns the component type of an array.
    * 
@@ -62,7 +62,7 @@ public class Utils {
   public static final <T> Class<T> getComponentType(final T[] array) {
     return (Class<T>)array.getClass().getComponentType();
   }
-  
+
   /**
    * Returns a standard ArrayList for the specified elements.
    * 
@@ -71,7 +71,7 @@ public class Utils {
    */
   public static final <E> List<E> list(final E... elements) {
     ArrayList<E> list = new ArrayList<E>();
-    for (E element : elements) {
+    for(E element : elements) {
       list.add(element);
     }
     return list;

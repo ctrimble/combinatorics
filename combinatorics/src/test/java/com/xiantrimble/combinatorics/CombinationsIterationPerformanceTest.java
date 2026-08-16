@@ -30,49 +30,49 @@ import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 
 @SuppressWarnings("deprecation")
 public class CombinationsIterationPerformanceTest {
-   
-   @Rule
+
+  @Rule
   public MethodRule benchmarkRun = new BenchmarkRule();
-  
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
+
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
   @Test
   @Ignore
   public void iterateCombinationsSize()
   {
-      //System.out.println(new Combinations<Integer>(32, rangeValues(0, 64)).size());
-     System.out.println(new Combinations<Integer>(16, rangeValues(0, 48)).longSize());
+    //System.out.println(new Combinations<Integer>(32, rangeValues(0, 64)).size());
+    System.out.println(new Combinations<Integer>(16, rangeValues(0, 48)).longSize());
   }
-  
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
+
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
   @Test
   @Ignore
   public void plan()
   {
-     Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1,1,2,2,2,3,3,4,4,5});
+    Combinations<Integer> combinations = new Combinations<Integer>(7, new Integer[]{1, 1, 2, 2, 2, 3, 3, 4, 4, 5});
     ArrayList<Integer[]> values = new ArrayList<Integer[]>();
     values.addAll(combinations);
     ArrayList<Integer[]> result = new ArrayList<Integer[]>();
     result.add(values.get(0));
     values.remove(0);
     int orderings = findOrdering(result, values);
-    System.out.println("Found "+orderings+" orderings:");
+    System.out.println("Found " + orderings + " orderings:");
   }
-  
+
   public int findOrdering(ArrayList<Integer[]> result, ArrayList<Integer[]> remainder) {
 
-    if( remainder.size() == 0 ) {
+    if(remainder.size() == 0) {
       //if( distance(result.getFirst(), result.getLast()) > 1 ) {
       //  return 0;
       //}
       System.out.println("Result:");
-      for( Integer[] element : result ) {
-        System.out.println("  "+Arrays.toString(element));
+      for(Integer[] element : result) {
+        System.out.println("  " + Arrays.toString(element));
       }
       return 1;
     }
     int orderings = 0;
     for(int i = 0; i < remainder.size(); i++) {
-      int distance = distance(result.get(result.size()-1), remainder.get(i));
+      int distance = distance(result.get(result.size() - 1), remainder.get(i));
       if(distance == 1) {
         //boolean option = false;
         //for( int j = 0; j < remainder.size() && !option; j++ ) {
@@ -81,87 +81,87 @@ public class CombinationsIterationPerformanceTest {
         //if( !option ) return orderings;
         result.add(remainder.remove(i));
         orderings += findOrdering(result, remainder);
-        remainder.add(i, result.remove(result.size()-1));
+        remainder.add(i, result.remove(result.size() - 1));
       }
-      if( orderings > 0 ) return orderings;
+      if(orderings > 0) return orderings;
     }
     return orderings;
   }
-  
+
   public int distance(Integer[] e1, Integer[] e2) {
     int distance = 0;
-    for( int i = 0; i < e1.length; i++) {
-      if( !e1[i].equals(e2[i])) {
+    for(int i = 0; i < e1.length; i++) {
+      if(!e1[i].equals(e2[i])) {
         distance++;
       }
     }
     return distance;
   }
- 
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
+
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
   @Test
   @Ignore
   public void iterateCombinations()
   {
-      //Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
-     Combinations<Integer> combinations = new Combinations<Integer>(8, rangeValues(0, 48));
-    System.out.println("Size:"+combinations.longSize());
+    //Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
+    Combinations<Integer> combinations = new Combinations<Integer>(8, rangeValues(0, 48));
+    System.out.println("Size:" + combinations.longSize());
     long index = 0;
-    for(Integer[] element: combinations) {
+    for(Integer[] element : combinations) {
       index++;
-      if( index % 10000000 == 0 ) {
-      System.out.println(index+":"+Arrays.toString(element));
+      if(index % 10000000 == 0) {
+        System.out.println(index + ":" + Arrays.toString(element));
       }
     }
   }
-  
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency=1)
+
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 0, concurrency = 1)
   @Test
   @Ignore
   public void iterateCombinationsBenchmark()
   {
 //    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
-     CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(8, rangeValues(0, 48));
-    System.out.println("Size:"+combinations.longSize());
+    CombinationsBenchmark<Integer> combinations = new CombinationsBenchmark<Integer>(8, rangeValues(0, 48));
+    System.out.println("Size:" + combinations.longSize());
     long index = 0;
-    for(Integer[] element: combinations) {
+    for(Integer[] element : combinations) {
       //Arrays.copyOf(element, element.length);
       index++;
-      if( index % 10000000 == 0 ) {
-      System.out.println(index+":"+Arrays.toString(element));
+      if(index % 10000000 == 0) {
+        System.out.println(index + ":" + Arrays.toString(element));
       }
     }
   }
-  
+
   @SuppressWarnings("unused")
-  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 1, concurrency=1)
+  @BenchmarkOptions(callgc = false, benchmarkRounds = 1, warmupRounds = 1, concurrency = 1)
   @Test
   @Ignore
   public void iterateCombinationsWithoutRecycle()
   {
 //    Combinations<Integer> combinations = new Combinations<Integer>(20, values(1, 5, 2, 5, 3, 5, 4, 5, 5, 5, 6, 5, 7, 5, 8, 5, 9, 5, 10, 5));
-     Combinations<Integer> combinations = new Combinations<Integer>(32, rangeValues(0, 64));
-    for(Integer[] element: combinations) {
-      
+    Combinations<Integer> combinations = new Combinations<Integer>(32, rangeValues(0, 64));
+    for(Integer[] element : combinations) {
+
     }
   }
-  
+
   @SuppressWarnings("unused")
   private Integer[] values(int... args) {
-    if( args.length % 2 != 0 ) throw new IllegalArgumentException();
+    if(args.length % 2 != 0) throw new IllegalArgumentException();
     ArrayList<Integer> values = new ArrayList<Integer>();
-    for( int i = 0; i < args.length; i+=2 ) {
-      for( int j = 0; j < args[i+1]; j++ ) {
+    for(int i = 0; i < args.length; i += 2) {
+      for(int j = 0; j < args[i + 1]; j++) {
         values.add(args[i]);
       }
     }
     return values.toArray(new Integer[values.size()]);
   }
-  
+
   private Integer[] rangeValues(int start, int end) {
-    Integer[] values = new Integer[end-start];
-    for( int i = 0; i < values.length; i++ ) {
-      values[i] = i+start;
+    Integer[] values = new Integer[end - start];
+    for(int i = 0; i < values.length; i++) {
+      values[i] = i + start;
     }
     return values;
   }

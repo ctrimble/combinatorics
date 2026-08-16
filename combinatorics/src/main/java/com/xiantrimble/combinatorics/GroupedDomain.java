@@ -32,14 +32,14 @@ public interface GroupedDomain<E> extends List<List<E>>
    * @return the total number of elements in this grouped domain.
    */
   public int totalSize();
-  
+
   /**
    * Returns a multiplicity array for this domain object.
    * 
    * @return a multiplicity array for this domain object.
    */
   public int[] toMultiplicity();
-  
+
   /**
    * Returns a two dimensional array representation of this grouped domain.
    * 

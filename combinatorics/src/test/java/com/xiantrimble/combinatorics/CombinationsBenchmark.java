@@ -19,11 +19,11 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class CombinationsBenchmark<T>
-  extends AbstractCombinatoric<T>
+    extends AbstractCombinatoric<T>
 {
-   public CombinationsBenchmark(int k, T[] domain) {
+  public CombinationsBenchmark(int k, T[] domain) {
     super(k, domain);
-   } 
+  }
 
   @Override
   public CombinatoricIterator<T> iterator() {
@@ -32,77 +32,77 @@ public class CombinationsBenchmark<T>
 
   @Override
   protected long computeSize(int k, GroupedDomain<T> domain) {
-     return CombMathUtils.c(k, domain.toMultiplicity());
+    return CombMathUtils.c(k, domain.toMultiplicity());
   }
-  
+
   protected class CombinationIterator
-    extends AbstractCombinatoric<T>.AbstractCombinatoricIterator
+      extends AbstractCombinatoric<T>.AbstractCombinatoricIterator
   {
     protected T[] next;
     protected T[] previous;
     protected int[] domainMultiplicity;
     protected DomainPointer[] indices;
-    
+
     protected CombinationIterator(long nextIndex) {
       super(nextIndex);
       next = newComponentArray(k);
       previous = newComponentArray(k);
       domainMultiplicity = domain.toMultiplicity();
       indices = new DomainPointer[domainMultiplicity.length];
-      indices[indices.length-1] = new DomainPointer();
-      for( int i = domainMultiplicity.length-1; i > 0; i-- ) {
-        indices[i-1] = new DomainPointer();
-        indices[i-1].toRight = domainMultiplicity[i] + indices[i].toRight;
-      }      
+      indices[indices.length - 1] = new DomainPointer();
+      for(int i = domainMultiplicity.length - 1; i > 0; i--) {
+        indices[i - 1] = new DomainPointer();
+        indices[i - 1].toRight = domainMultiplicity[i] + indices[i].toRight;
+      }
     }
 
     @Override
     public T[] next() {
-      if( nextIndex >= size ) throw new NoSuchElementException(); // we may just want to do this in the next method.
+      if(nextIndex >= size) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // reset the next array if needed.
-      if( nextIndex == 0 ) {
+      if(nextIndex == 0) {
         for(int i = 0, used = 0; i < indices.length && used < k; used += domainMultiplicity[i++]) {
           indices[i].index = used;
-          indices[i].count = Math.min(k-used, domainMultiplicity[i]);
-          for( int j = 0; j < indices[i].count; j++ ) {
-            next[indices[i].index+j] = domainValues[i][j];
+          indices[i].count = Math.min(k - used, domainMultiplicity[i]);
+          for(int j = 0; j < indices[i].count; j++) {
+            next[indices[i].index + j] = domainValues[i][j];
           }
         }
       }
-      
-      // set both values to the the next value.
-      for( int i = 0; i < next.length; i++ ) previous[i] = next[i];
-      nextIndex++;
-      
-      if( nextIndex != size ) {
-      
-      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
-      // Position  | 0 | 1 | 2 | 3 | 4
-      // Index     | 0 | 3 | 5 | 5 | 6
-      // Count     | 3 | 2 | 0 | 1 | 1
-      // ToRight   | 9 | 6 | 5 | 2 | 0
 
-      // advance the indices.
-      int cur = domainMultiplicity.length - 1;
-      int remaining = 0;
+      // set both values to the the next value.
+      for(int i = 0; i < next.length; i++) previous[i] = next[i];
+      nextIndex++;
+
+      if(nextIndex != size) {
+
+        // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
+        // Position  | 0 | 1 | 2 | 3 | 4
+        // Index     | 0 | 3 | 5 | 5 | 6
+        // Count     | 3 | 2 | 0 | 1 | 1
+        // ToRight   | 9 | 6 | 5 | 2 | 0
+
+        // advance the indices.
+        int cur = domainMultiplicity.length - 1;
+        int remaining = 0;
+
+        // move cur backwards to find the next item to update.
+        for(; cur > 0 && (indices[cur].count == 0 || indices[cur].toRight < remaining + 1); remaining += indices[cur--].count); // back cur up to a position to increment.
       
-      // move cur backwards to find the next item to update.
-      for( ; cur > 0 && (indices[cur].count == 0 || indices[cur].toRight < remaining+1); remaining += indices[cur--].count ); // back cur up to a position to increment.
-      
-      // decrement the items at cur.
-      indices[cur].count--;
-      remaining++;
-      
-      // move forward and update indices and next.
-      for(cur++; cur < indices.length; cur++) {
-        indices[cur].count = Math.min(remaining, domainMultiplicity[cur]);
-        indices[cur].index = indices[cur-1].index+indices[cur-1].count;
-        remaining -= indices[cur].count;
-        for( int i = 0; i < indices[cur].count; i++ ) {
-          next[indices[cur].index+i] = domainValues[cur][i];
+        // decrement the items at cur.
+        indices[cur].count--;
+        remaining++;
+
+        // move forward and update indices and next.
+        for(cur++; cur < indices.length; cur++) {
+          indices[cur].count = Math.min(remaining, domainMultiplicity[cur]);
+          indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;
+          remaining -= indices[cur].count;
+          for(int i = 0; i < indices[cur].count; i++) {
+            next[indices[cur].index + i] = domainValues[cur][i];
+          }
         }
-      }
       }
       // return previous, since we advanced past the next position.
       return Arrays.copyOf(previous, previous.length);
@@ -110,47 +110,47 @@ public class CombinationsBenchmark<T>
 
     @Override
     public T[] previous() {
-      if( nextIndex <= 0 ) throw new NoSuchElementException(); // we may just want to do this in the next method.
+      if(nextIndex <= 0) throw new NoSuchElementException(); // we may just want to do this in the next method.
       
       // set both values to the the previous value.
-      for( int i = 0; i < previous.length; i++ ) next[i] = previous[i];
+      for(int i = 0; i < previous.length; i++) next[i] = previous[i];
       nextIndex--;
-      
-      if( nextIndex > 0 ) {
-      
-      // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
-      // Position  | 0 | 1 | 2 | 3 | 4
-      // Index     | 0 | 3 | 5 | 5 | 6
-      // Count     | 3 | 2 | 0 | 1 | 1
-      // ToRight   | 9 | 6 | 5 | 2 | 0
 
-      // advance the indices.
-      int cur = domainMultiplicity.length - 1;
-      int remaining = 0;
+      if(nextIndex > 0) {
 
-      // move cur backwards to find an item to increment.
-      for( ; cur > 0 && (remaining == 0 || indices[cur].count == domainMultiplicity[cur]); remaining += indices[cur--].count );
+        // DIAGRAM OF INDICIES ARRAY: MULTISET: (3,3,1,3,2), CURRENT COMBINATION: (3,2,0,1,1)
+        // Position  | 0 | 1 | 2 | 3 | 4
+        // Index     | 0 | 3 | 5 | 5 | 6
+        // Count     | 3 | 2 | 0 | 1 | 1
+        // ToRight   | 9 | 6 | 5 | 2 | 0
 
-      // decrement the items at cur.
-      indices[cur].count++;
-      previous[indices[cur].index+indices[cur].count-1] = domainValues[cur][indices[cur].count-1];
-      remaining--;
-       
-      for(cur++; cur < indices.length; cur++) {
-        indices[cur].count = Math.max(remaining-indices[cur].toRight, 0);
-        indices[cur].index = indices[cur-1].index+indices[cur-1].count;
-        remaining -= indices[cur].count;
-        for( int i = 0; i < indices[cur].count; i++ ) {
-          previous[indices[cur].index+i] = domainValues[cur][i];
+        // advance the indices.
+        int cur = domainMultiplicity.length - 1;
+        int remaining = 0;
+
+        // move cur backwards to find an item to increment.
+        for(; cur > 0 && (remaining == 0 || indices[cur].count == domainMultiplicity[cur]); remaining += indices[cur--].count);
+
+        // decrement the items at cur.
+        indices[cur].count++;
+        previous[indices[cur].index + indices[cur].count - 1] = domainValues[cur][indices[cur].count - 1];
+        remaining--;
+
+        for(cur++; cur < indices.length; cur++) {
+          indices[cur].count = Math.max(remaining - indices[cur].toRight, 0);
+          indices[cur].index = indices[cur - 1].index + indices[cur - 1].count;
+          remaining -= indices[cur].count;
+          for(int i = 0; i < indices[cur].count; i++) {
+            previous[indices[cur].index + i] = domainValues[cur][i];
+          }
         }
       }
-      }
-      
+
       // return next, since we advanced past the previous position.
       return next;
     }
   }
-  
+
   private static class DomainPointer
   {
     public int index = 0;
@@ -159,7 +159,7 @@ public class CombinationsBenchmark<T>
     
     public String toString()
     {
-      return "{Index:"+index+",Count:"+count+",ToRight:"+toRight+"}";
+      return "{Index:" + index + ",Count:" + count + ",ToRight:" + toRight + "}";
     }
   }
 
@@ -168,8 +168,8 @@ public class CombinationsBenchmark<T>
     throw new UnsupportedOperationException("longIndexOf(T[]) not implemented yet.");
   }
 
-	@Override
-  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long nextIndex ) {
-	  throw new UnsupportedOperationException();
+  @Override
+  protected CombinatoricIterator<T> iterator(long fromIndex, long toIndex, long nextIndex) {
+    throw new UnsupportedOperationException();
   }
 }

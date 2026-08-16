@@ -26,7 +26,7 @@ import java.util.ListIterator;
  * @param <T> The type of element that is being combined or permuted.
  */
 public interface CombinatoricIterator<T>
-  extends ListIterator<T[]>
+    extends ListIterator<T[]>
 {
   /**
    * Returns the next index, as a long.
@@ -34,7 +34,7 @@ public interface CombinatoricIterator<T>
    * @return the next index, as a long.
    */
   public long nextLongIndex();
-  
+
   /**
    * Returns the previous index, as a long.
    * 

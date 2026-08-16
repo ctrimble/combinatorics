@@ -58,8 +58,8 @@ public class LeadingElementPerportionTest {
   }
   private static CombinatoricFactory factory = new CombinatoricFactoryImpl();
   private Combinatoric<Element> permutations;
-  
-  public LeadingElementPerportionTest( Combinatoric<Element> permutations ) {
+
+  public LeadingElementPerportionTest(Combinatoric<Element> permutations) {
     this.permutations = permutations;
   }
 
@@ -67,36 +67,36 @@ public class LeadingElementPerportionTest {
   public void twoElementsPerportional() {
     int[] leadingOnes = new int[permutations.getK()];
     int[] leadingTwos = new int[permutations.getK()];
-    for( Element[] element : permutations ) {
-      for( int i = 0; i < element.length; i++ ) {
-        leadingOnes[i] += element[i]==ONE?1:0;
-        leadingTwos[i] += element[i]==TWO?1:0;
+    for(Element[] element : permutations) {
+      for(int i = 0; i < element.length; i++) {
+        leadingOnes[i] += element[i] == ONE ? 1 : 0;
+        leadingTwos[i] += element[i] == TWO ? 1 : 0;
       }
     }
-    
+
     // Turn the leading arrays into proper fractions.
     int[] leadingGcd = new int[permutations.getK()];
-    for( int i = 0; i < permutations.getK(); i++ ) {
+    for(int i = 0; i < permutations.getK(); i++) {
       leadingGcd[i] = MathUtils.gcd(leadingOnes[i], leadingTwos[i]);
       leadingOnes[i] /= leadingGcd[i];
       leadingTwos[i] /= leadingGcd[i];
     }
-    
+
     int totalOnes = permutations.getDomain().get(0).size();
     int totalTwos = permutations.getDomain().get(1).size();
-    
+
     // Turn the total into a proper fraction.
     int totalGcd = MathUtils.gcd(totalOnes, totalTwos);
     totalOnes /= totalGcd;
     totalTwos /= totalGcd;
-    
-    for( int i = 0; i < permutations.getK(); i++ ) {
-      assertEquals("The wrong perportion of ones were found at index "+i, totalOnes, leadingOnes[i]);
-      assertEquals("The wrong perportion of twos were found at index "+i, totalTwos, leadingTwos[i]);
+
+    for(int i = 0; i < permutations.getK(); i++) {
+      assertEquals("The wrong perportion of ones were found at index " + i, totalOnes, leadingOnes[i]);
+      assertEquals("The wrong perportion of twos were found at index " + i, totalTwos, leadingTwos[i]);
     }
   }
-  
-  
+
+
   /**
    * if we make kM[i]/kS a proper fraction, can we always apply the denominator first to kS?
    * This test demonstrates that this is safe.  Applying this first will allow us to
@@ -106,7 +106,7 @@ public class LeadingElementPerportionTest {
   public void alwaysDivisible() {
     long size = permutations.size();
     int kTotalM = permutations.getDomain().totalSize();
-    for( int m : permutations.getDomain().toMultiplicity() ) {
+    for(int m : permutations.getDomain().toMultiplicity()) {
       long gcd = MathUtils.gcd(kTotalM, m);
       long den = kTotalM / gcd;
       assertEquals("Greatest common divisor is not denominator", den, MathUtils.gcd(size, den));
@@ -115,54 +115,54 @@ public class LeadingElementPerportionTest {
 
   @Test
   public void relativeComputation() {
-   long kS = permutations.size();
-   int kTotalM = permutations.getDomain().totalSize();
-   int[] kM = permutations.getDomain().toMultiplicity();
-   for( int i = 0; i < kM.length; i++ ) {
-     long gcd = MathUtils.gcd(kTotalM, kM[i]);
-     long num = kM[i] / gcd;
-     long den = kTotalM / gcd;
-     long s = (kS / den) * num;
-     
-     // compute the expected result.
-     int[] m = Arrays.copyOf(kM, kM.length);
-     m[i]--;
-      long expected = CombMathUtils.p(permutations.getK()-1, m);
-     
-     // verify that the computed size is the same as the expected size.
-     assertEquals(expected, s);
-   }
+    long kS = permutations.size();
+    int kTotalM = permutations.getDomain().totalSize();
+    int[] kM = permutations.getDomain().toMultiplicity();
+    for(int i = 0; i < kM.length; i++) {
+      long gcd = MathUtils.gcd(kTotalM, kM[i]);
+      long num = kM[i] / gcd;
+      long den = kTotalM / gcd;
+      long s = (kS / den) * num;
+
+      // compute the expected result.
+      int[] m = Arrays.copyOf(kM, kM.length);
+      m[i]--;
+      long expected = CombMathUtils.p(permutations.getK() - 1, m);
+
+      // verify that the computed size is the same as the expected size.
+      assertEquals(expected, s);
+    }
   }
-  
+
   @Parameters
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(new Object[][] {
-        { permutations( 3, ONE, TWO, TWO ) },
-        { permutations( 4, ONE, ONE, TWO, TWO ) },
-        { permutations( 4, ONE, TWO, TWO, TWO ) },
-        { permutations( 4, ONE, ONE, ONE, TWO ) },
-        { permutations( 5, ONE, ONE, TWO, TWO, TWO ) },
-        { permutations( 5, ONE, TWO, TWO, TWO, TWO ) },
-        { permutations( 5, ONE, ONE, ONE, TWO, TWO ) },
-        { permutations( 7, ONE, ONE, ONE, ONE, TWO, TWO, TWO ) },
-        { permutations( 7, ONE, ONE, ONE, TWO, TWO, TWO, TWO ) },
-        { permutations( 7, ONE, ONE, ONE, ONE, ONE, TWO, TWO ) },
-        { permutations( 7, ONE, ONE, ONE, TWO, TWO, THREE, THREE ) },
-        { permutations( 20, 
+    return Arrays.asList(new Object[][]{
+        {permutations(3, ONE, TWO, TWO)},
+        {permutations(4, ONE, ONE, TWO, TWO)},
+        {permutations(4, ONE, TWO, TWO, TWO)},
+        {permutations(4, ONE, ONE, ONE, TWO)},
+        {permutations(5, ONE, ONE, TWO, TWO, TWO)},
+        {permutations(5, ONE, TWO, TWO, TWO, TWO)},
+        {permutations(5, ONE, ONE, ONE, TWO, TWO)},
+        {permutations(7, ONE, ONE, ONE, ONE, TWO, TWO, TWO)},
+        {permutations(7, ONE, ONE, ONE, TWO, TWO, TWO, TWO)},
+        {permutations(7, ONE, ONE, ONE, ONE, ONE, TWO, TWO)},
+        {permutations(7, ONE, ONE, ONE, TWO, TWO, THREE, THREE)},
+        {permutations(20,
             ONE, ONE, ONE, ONE, ONE,
             ONE, ONE, ONE, ONE, ONE,
             ONE, ONE, ONE, ONE, ONE,
-            ONE, ONE, TWO, TWO, TWO ) },
-        { permutations( 20, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, TWO, TWO, TWO, TWO, TWO, TWO, TWO ) },
-        { permutations( 20, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, TWO, TWO, TWO, TWO, TWO, TWO, TWO, TWO, TWO ) }
-        // TODO: This does not work.
-        //   Investigation turned up nothing.
-        //   Is this an overflow type condition?
-        //{ permutations( 20, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, TWO, TWO, TWO, TWO, TWO, TWO, TWO, THREE, THREE ) }
+            ONE, ONE, TWO, TWO, TWO)},
+        {permutations(20, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, TWO, TWO, TWO, TWO, TWO, TWO, TWO)},
+        {permutations(20, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, TWO, TWO, TWO, TWO, TWO, TWO, TWO, TWO, TWO)}
+    // TODO: This does not work.
+    //   Investigation turned up nothing.
+    //   Is this an overflow type condition?
+    //{ permutations( 20, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, ONE, TWO, TWO, TWO, TWO, TWO, TWO, TWO, THREE, THREE ) }
     });
   }
 
   public static <E> Combinatoric<E> permutations(int k, E... domain) {
     return factory.createPermutations(k, domain);
-  }  
+  }
 }

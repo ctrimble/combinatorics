@@ -33,20 +33,20 @@ import com.xiantrimble.combinatorics.AbstractIndexOfTest.Element;
 
 @RunWith(Parameterized.class)
 public class CombinationIndexOfTest
-extends AbstractIndexOfTest
+    extends AbstractIndexOfTest
 {
-public CombinationIndexOfTest( Combinatoric<Element> combinatoric ) {
-  super(combinatoric);
-}
+  public CombinationIndexOfTest(Combinatoric<Element> combinatoric) {
+    super(combinatoric);
+  }
 
-@Parameters
-public static Collection<Object[]> parameters() {
-  return Arrays.asList(new Object[][] {
-      { combinations( 1, ONE ) },
-      { combinations( 2, ONE, TWO ) },
-      { combinations( 3, ONE, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) },
-      { combinations( 10, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) },
-      { combinations( 4, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) }
-  });
-}
+  @Parameters
+  public static Collection<Object[]> parameters() {
+    return Arrays.asList(new Object[][]{
+        {combinations(1, ONE)},
+        {combinations(2, ONE, TWO)},
+        {combinations(3, ONE, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR)},
+        {combinations(10, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR)},
+        {combinations(4, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR)}
+    });
+  }
 }

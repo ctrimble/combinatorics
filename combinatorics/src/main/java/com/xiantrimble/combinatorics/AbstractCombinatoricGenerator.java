@@ -30,8 +30,8 @@ public abstract class AbstractCombinatoricGenerator<T>
   protected GroupedDomain<T> domain;
   protected T[][] domainValues;
   protected int[] domainMultiplicity;
-   protected long size;
-   protected Class<T> componentType;
+  protected long size;
+  protected Class<T> componentType;
 
   protected AbstractCombinatoricGenerator(int k, T[] domain) {
     this.k = k;
@@ -40,7 +40,7 @@ public abstract class AbstractCombinatoricGenerator<T>
     this.componentType = Utils.getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
     this.domainMultiplicity = this.domain.toMultiplicity();
-   }
+  }
 
   @Override
   public void setHandler(CombinatoricHandler<T> handler) {
@@ -50,12 +50,12 @@ public abstract class AbstractCombinatoricGenerator<T>
 
   @Override
   public int size() {
-    if (size >= Integer.MAX_VALUE) {
+    if(size >= Integer.MAX_VALUE) {
       return Integer.MAX_VALUE;
     }
-    return (int) size;
+    return (int)size;
   }
-  
+
   @Override
   public long longSize() {
     return size;

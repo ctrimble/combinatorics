@@ -28,8 +28,8 @@ import java.util.List;
  */
 @SuppressWarnings("serial")
 public class FastGroupedDomain<E>
-  extends ArrayList<List<E>>
-  implements GroupedDomain<E>
+    extends ArrayList<List<E>>
+    implements GroupedDomain<E>
 {
   /** The total of all the element ranks of this grouped domain. */
   protected int k = 0;
@@ -44,7 +44,7 @@ public class FastGroupedDomain<E>
   public FastGroupedDomain(E[] domain) {
     this(Integer.MAX_VALUE, domain);
   }
-  
+
   /**
    * Creates a new FastMultiSet for the specified domain.  If any type has more than maxTypeRank elements,
    * then those elements will be excluded from the grouped domain.
@@ -58,11 +58,11 @@ public class FastGroupedDomain<E>
     E[] newDomain = Arrays.copyOf(domain, domain.length);
     Arrays.sort(newDomain);
     k = 0;
-    for( int i = 0; i < newDomain.length;) {
+    for(int i = 0; i < newDomain.length; ) {
       int cur = i;
       ArrayList<E> elements = new ArrayList<E>();
-      for( ; i < newDomain.length && newDomain[cur].equals(newDomain[i]); i++) {
-        if( i - cur < maxTypeRank ) {
+      for(; i < newDomain.length && newDomain[cur].equals(newDomain[i]); i++) {
+        if(i - cur < maxTypeRank) {
           elements.add(newDomain[i]);
         }
       }
@@ -80,8 +80,8 @@ public class FastGroupedDomain<E>
   public int[] toMultiplicity() {
     int[] rankArray = new int[size()];
     int i = 0;
-    for(List<E> element: this) {
-      rankArray[i++] = element.size(); 
+    for(List<E> element : this) {
+      rankArray[i++] = element.size();
     }
     return rankArray;
   }
@@ -89,7 +89,7 @@ public class FastGroupedDomain<E>
   @Override
   public E[][] toValueArray() {
     E[][] valueArray = Utils.newArray(componentType, size(), 0);
-    for( int i = 0; i < size(); i++ ) {
+    for(int i = 0; i < size(); i++) {
       valueArray[i] = get(i).toArray(Utils.newArray(componentType, get(i).size()));
     }
     return valueArray;

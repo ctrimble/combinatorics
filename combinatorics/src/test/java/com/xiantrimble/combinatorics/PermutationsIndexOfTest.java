@@ -30,19 +30,19 @@ import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.*;
 
 @RunWith(Parameterized.class)
 public class PermutationsIndexOfTest
-  extends AbstractIndexOfTest
+    extends AbstractIndexOfTest
 {
-  public PermutationsIndexOfTest( Combinatoric<Element> combinatoric ) {
+  public PermutationsIndexOfTest(Combinatoric<Element> combinatoric) {
     super(combinatoric);
   }
 
   @Parameters
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(new Object[][] {
-        { permutaitons( 1, ONE ) },
-        { permutaitons( 2, ONE, TWO ) },
-        { permutaitons( 3, ONE, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) },
-        { permutaitons( 10, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR ) }
+    return Arrays.asList(new Object[][]{
+        {permutaitons(1, ONE)},
+        {permutaitons(2, ONE, TWO)},
+        {permutaitons(3, ONE, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR)},
+        {permutaitons(10, ONE, ONE, ONE, TWO, TWO, TWO, THREE, THREE, THREE, FOUR, FOUR, FOUR)}
     });
   }
 }
