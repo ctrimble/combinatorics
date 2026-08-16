@@ -162,6 +162,7 @@ public class LeadingElementPerportionTest {
     });
   }
 
+  @SafeVarargs
   public static <E> Combinatoric<E> permutations(int k, E... domain) {
     return factory.createPermutations(k, domain);
   }

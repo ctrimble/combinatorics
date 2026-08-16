@@ -61,12 +61,14 @@ public abstract class AbstractIndexOfTest {
     }
   }
 
+  @SafeVarargs
   public static <E> Combinatoric<E> combinations(int k, E... domain) {
     return factory.createCombinations(k, domain);
   }
 
+  @SafeVarargs
   public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
     //return factory.createPermutations(k, domain);
-    return new IndexBasedPermutations(k, domain);
+    return new IndexBasedPermutations<E>(k, domain);
   }
 }

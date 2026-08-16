@@ -25,9 +25,14 @@
   <name>Java Combinatorics Library :: Parent</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
   <inceptionYear>2012</inceptionYear>
-  <url>https://github.com/ctrimble/combinatorics</url>
+    <url>https://github.com/ctrimble/combinatorics</url>
 
-  <developers>
+    <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.release>17</maven.compiler.release>
+    </properties>
+
+    <developers>
     <developer>
       <id>ctrimble</id>
       <name>Christian Trimble</name>
@@ -160,9 +165,9 @@
               <artifactId>maven-surefire-plugin</artifactId>
               <version>3.6.0-M1</version>
             <configuration>
-              <redirectTestOutputToFile>true</redirectTestOutputToFile>
-              <printSummary>false</printSummary>
-              <forkCount>0</forkCount>
+                <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                <printSummary>false</printSummary>
+                <forkCount>1</forkCount>
             </configuration>
           </plugin>
           <plugin>

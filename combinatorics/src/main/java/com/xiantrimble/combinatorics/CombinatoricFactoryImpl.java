@@ -25,31 +25,37 @@ public class CombinatoricFactoryImpl
 {
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> Combinations<T> createCombinations(int k, T... domain) {
     return new Combinations<T>(k, domain);
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> IndexBasedPermutations<T> createPermutations(int k, T... domain) {
     return new IndexBasedPermutations<T>(k, domain);
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> GroupedDomain<T> createGroupedDomain(T... domain) {
     return new FastGroupedDomain<T>(domain);
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
     return new FastGroupedDomain<T>(maxElementK, domain);
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain) {
     return new CombinationsGenerator<T>(k, domain);
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain) {
     return new PermutationsGenerator<T>(k, domain);
   }

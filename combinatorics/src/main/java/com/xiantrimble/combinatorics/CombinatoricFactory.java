@@ -21,15 +21,21 @@ package com.xiantrimble.combinatorics;
  * @author Christian Trimble
  */
 public interface CombinatoricFactory {
+  @SuppressWarnings("unchecked")
   public <T> Combinatoric<T> createCombinations(int k, T... domain);
 
+  @SuppressWarnings("unchecked")
   public <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain);
 
+  @SuppressWarnings("unchecked")
   public <T> Combinatoric<T> createPermutations(int k, T... domain);
 
+  @SuppressWarnings("unchecked")
   public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain);
 
+  @SuppressWarnings("unchecked")
   public <T> GroupedDomain<T> createGroupedDomain(T... domain);
 
+  @SuppressWarnings("unchecked")
   public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain);
 }

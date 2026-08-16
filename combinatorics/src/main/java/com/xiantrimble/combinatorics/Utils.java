@@ -69,6 +69,7 @@ public class Utils {
    * @param elements the elements to place in the list.
    * @return a list of elements.
    */
+  @SafeVarargs
   public static final <E> List<E> list(final E... elements) {
     ArrayList<E> list = new ArrayList<E>();
     for(E element : elements) {

@@ -29,6 +29,7 @@ public abstract class AbstractCombinatoricIteratorTest {
   protected static Integer EIGHT = 8;
 
 
+  @SafeVarargs
   public static <E> List<E> list(E... elements) {
     ArrayList<E> list = new ArrayList<E>();
     for(E element : elements) {

@@ -70,6 +70,7 @@ public class CombinationsIndexOfTest {
     });
   }
 
+  @SafeVarargs
   public static <E> Combinatoric<E> combinations(int k, E... domain) {
     return factory.createCombinations(k, domain);
   }

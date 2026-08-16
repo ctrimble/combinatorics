@@ -292,6 +292,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean contains(Object o) {
       long index = AbstractCombinatoric.this.longIndexOf((T[])o);
       return index >= fromIndex && index < toIndex;
@@ -311,6 +312,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public int indexOf(Object o) {
       long result = longIndexOf((T[])o);
       return result < Integer.MAX_VALUE ? (int)result : Integer.MAX_VALUE;
@@ -322,6 +324,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public int lastIndexOf(Object o) {
       long result = longIndexOf((T[])o);
       if(result < fromIndex || result >= toIndex) return -1;
