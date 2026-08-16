@@ -89,8 +89,8 @@
         <plugins>
           <plugin>
             <groupId>com.github.github</groupId>
-            <artifactId>site-maven-plugin</artifactId>
-            <version>0.6</version>
+              <artifactId>site-maven-plugin</artifactId>
+              <version>0.12</version>
             <configuration>
               <repositoryName>combinatorics</repositoryName>
               <repositoryOwner>ctrimble</repositoryOwner>

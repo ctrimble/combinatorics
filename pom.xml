@@ -76,7 +76,7 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.10</version>
+        <version>4.12</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -115,62 +115,83 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-eclipse-plugin</artifactId>
-          <version>2.8</version>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <version>2.10</version>
         </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>2.0.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.felix</groupId>
-          <artifactId>maven-bundle-plugin</artifactId>
-          <version>2.3.7</version>
-          <extensions>true</extensions>
-          <!--
-          <executions>
-            <execution>
-              <id>bundle-manifest</id>
-              <phase>process-classes</phase>
-              <goals>
-                <goal>manifest</goal>
-              </goals>
-            </execution>
-          </executions>
-          -->
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <configuration>
-            <docfilessubdirs>true</docfilessubdirs>
-            <links>
-              <link>http://commons.apache.org/math/apidocs</link>
-              <link>http://javolution.org/target/site/apidocs</link>
-              <link>http://docs.oracle.com/javase/6/docs/api</link>
-            </links>
-            <linksource>true</linksource>
-            <quiet>true</quiet>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.12.4</version>
-          <configuration>
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-            <printSummary>false</printSummary>
-            <forkCount>0</forkCount>
-          </configuration>
-        </plugin>
-      </plugins>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+              <artifactId>maven-bundle-plugin</artifactId>
+              <version>6.1.0</version>
+            <extensions>true</extensions>
+            <!--
+            <executions>
+              <execution>
+                <id>bundle-manifest</id>
+                <phase>process-classes</phase>
+                <goals>
+                  <goal>manifest</goal>
+                </goals>
+              </execution>
+            </executions>
+            -->
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.12.0</version>
+            <configuration>
+              <docfilessubdirs>true</docfilessubdirs>
+              <links>
+                <link>http://commons.apache.org/math/apidocs</link>
+                <link>http://javolution.org/target/site/apidocs</link>
+                <link>http://docs.oracle.com/javase/6/docs/api</link>
+              </links>
+              <linksource>true</linksource>
+              <quiet>true</quiet>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.6.2</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>3.6.0-M1</version>
+            <configuration>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
+              <printSummary>false</printSummary>
+              <forkCount>0</forkCount>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.5.0</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.15.0</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-install-plugin</artifactId>
+            <version>3.1.4</version>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>3.1.4</version>
+          </plugin>
+        </plugins>
     </pluginManagement>
     <plugins>
         <plugin>
           <groupId>com.atlassian.maven.plugins</groupId>
-          <artifactId>maven-jgitflow-plugin</artifactId>
-          <version>1.0-alpha21.1</version>
+            <artifactId>maven-jgitflow-plugin</artifactId>
+            <version>1.0-alpha27</version>
           <configuration>
             <flowInitContext>
             <masterBranchName>master</masterBranchName>
@@ -182,17 +203,37 @@
             </flowInitContext>
           </configuration>
         </plugin>
-        <plugin>
-            <groupId>org.openrewrite.maven</groupId>
-            <artifactId>rewrite-maven-plugin</artifactId>
-            <version>6.46.1</version>
-          <configuration>
-            <activeRecipes>
-              <recipe>org.openrewrite.java.format.AutoFormat</recipe>
-            </activeRecipes>
-          </configuration>
-        </plugin>
-      </plugins>
+          <plugin>
+              <groupId>org.openrewrite.maven</groupId>
+              <artifactId>rewrite-maven-plugin</artifactId>
+              <version>6.46.1</version>
+            <configuration>
+              <activeRecipes>
+                <recipe>org.openrewrite.java.format.AutoFormat</recipe>
+              </activeRecipes>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.6.3</version>
+            <executions>
+              <execution>
+                <id>enforce-maven-version</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireMavenVersion>
+                      <version>3.9.12</version>
+                    </requireMavenVersion>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
   </build>
   <profiles>
     <profile>
@@ -204,8 +245,8 @@
         <plugins>
           <plugin>
             <groupId>com.github.github</groupId>
-            <artifactId>site-maven-plugin</artifactId>
-            <version>0.6</version>
+              <artifactId>site-maven-plugin</artifactId>
+              <version>0.12</version>
             <configuration>
               <repositoryName>combinatorics</repositoryName>
               <repositoryOwner>ctrimble</repositoryOwner>

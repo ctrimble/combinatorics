@@ -110,8 +110,8 @@
       </plugin>
       <plugin>
         <groupId>org.skife.maven</groupId>
-        <artifactId>really-executable-jar-maven-plugin</artifactId>
-        <version>1.0.5</version>
+          <artifactId>really-executable-jar-maven-plugin</artifactId>
+          <version>2.1.1</version>
         <configuration>
           <programFile>comb</programFile>
         </configuration>
@@ -137,8 +137,8 @@
         <plugins>
           <plugin>
             <groupId>com.github.github</groupId>
-            <artifactId>site-maven-plugin</artifactId>
-            <version>0.6</version>
+              <artifactId>site-maven-plugin</artifactId>
+              <version>0.12</version>
             <configuration>
               <repositoryName>combinatorics</repositoryName>
               <repositoryOwner>ctrimble</repositoryOwner>
