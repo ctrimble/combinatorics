@@ -15,6 +15,7 @@
   */
 package com.xiantrimble.combinatorics;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,24 +38,61 @@ public final class Domain<E> implements List<List<E>> {
   /** The class for the elements in this domain. */
   private final Class<E> componentType;
 
-  private Domain(final int maxTypeRank, final E[] domain) {
+  private Domain(final E[] domain) {
     this.componentType = Utils.getComponentType(domain);
-    E[] newDomain = domain.clone();
-    Arrays.sort(newDomain);
-    this.elements = new ArrayList<List<E>>(newDomain.length);
+    this.elements = group(domain.clone());
+    this.totalSize = totalSize(this.elements);
+  }
+
+  private Domain(final Domain<E> restricted, final int maxRank) {
+    this.componentType = restricted.componentType;
+    this.elements = new ArrayList<List<E>>(restricted.elements.size());
     int size = 0;
-    for(int i = 0; i < newDomain.length; ) {
-      int cur = i;
-      List<E> group = new ArrayList<E>();
-      for(; i < newDomain.length && newDomain[cur].equals(newDomain[i]); i++) {
-        if(i - cur < maxTypeRank) {
-          group.add(newDomain[i]);
-        }
+    for(List<E> group : restricted.elements) {
+      List<E> clamped = new ArrayList<E>(Math.min(group.size(), maxRank));
+      for(int i = 0; i < maxRank && i < group.size(); i++) {
+        clamped.add(group.get(i));
       }
-      elements.add(group);
-      size += group.size();
+      this.elements.add(clamped);
+      size += clamped.size();
     }
     this.totalSize = size;
+  }
+
+  private Domain(final Class<E> componentType, final List<E> domain) {
+    Class<?> type = componentType == null ? Object.class : componentType;
+    @SuppressWarnings("unchecked")
+    E[] array = (E[])Array.newInstance(type, domain.size());
+    for(int i = 0; i < domain.size(); i++) {
+      array[i] = domain.get(i);
+    }
+    this.elements = group(array.clone());
+    this.totalSize = totalSize(this.elements);
+    @SuppressWarnings("unchecked")
+    Class<E> resolved = (Class<E>)type;
+    this.componentType = resolved;
+  }
+
+  private static <E> List<List<E>> group(final E[] domain) {
+    Arrays.sort(domain);
+    List<List<E>> groups = new ArrayList<List<E>>(domain.length);
+    for(int i = 0; i < domain.length; ) {
+      int cur = i;
+      List<E> group = new ArrayList<E>();
+      for(; i < domain.length && domain[cur].equals(domain[i]); i++) {
+        group.add(domain[i]);
+      }
+      groups.add(group);
+    }
+    return groups;
+  }
+
+  private static <E> int totalSize(final List<List<E>> elements) {
+    int size = 0;
+    for(List<E> element : elements) {
+      size += element.size();
+    }
+    return size;
   }
 
   /**
@@ -75,6 +113,17 @@ public final class Domain<E> implements List<List<E>> {
   @Override
   public int size() {
     return totalSize;
+  }
+
+  /**
+   * Returns a new domain where the rank of each unique element is clamped to
+   * the specified maximum.
+   *
+   * @param maxRank the maximum rank for any unique element.
+   * @return a new domain with ranks clamped to the specified maximum.
+   */
+  public Domain<E> restrictRank(final int maxRank) {
+    return new Domain<E>(this, maxRank);
   }
 
   /**
@@ -241,28 +290,50 @@ public final class Domain<E> implements List<List<E>> {
    * @param <E> the element type of the domain.
    */
   public static final class Builder<E> {
-    /** The maximum number of elements for any unique value in the domain. */
-    private int maxTypeRank = Integer.MAX_VALUE;
+    /** The accumulated elements of this domain. */
+    private final List<E> accumulated = new ArrayList<E>();
+    /** The component type of the domain, captured from the first element. */
+    private Class<E> componentType;
 
     /**
-     * Sets the maximum number of elements for any unique value in the domain.
+     * Adds the specified element to the domain the specified number of times.
      *
-     * @param maxTypeRank the maximum number of elements for any unique value.
+     * @param value the element to add.
+     * @param count the number of times to add the element.
      * @return this builder.
      */
-    public Builder<E> maxTypeRank(int maxTypeRank) {
-      this.maxTypeRank = maxTypeRank;
+    @SuppressWarnings("unchecked")
+    public Builder<E> element(final E value, final int count) {
+      if(componentType == null) {
+        componentType = (Class<E>)value.getClass();
+      }
+      for(int i = 0; i < count; i++) {
+        accumulated.add(value);
+      }
       return this;
     }
 
     /**
-     * Builds a Domain for the specified domain.
+     * Builds a Domain from the accumulated elements.
+     *
+     * @return a new Domain.
+     */
+    public Domain<E> build() {
+      return new Domain<E>(componentType, accumulated);
+    }
+
+    /**
+     * Builds a Domain from the given domain, treating each element as having
+     * a rank of one.
      *
      * @param domain the elements that make up this domain.
      * @return a new Domain.
      */
-    public Domain<E> build(E... domain) {
-      return new Domain<E>(maxTypeRank, domain);
+    public Domain<E> build(final E... domain) {
+      for(E value : domain) {
+        this.element(value, 1);
+      }
+      return this.build();
     }
   }
 }

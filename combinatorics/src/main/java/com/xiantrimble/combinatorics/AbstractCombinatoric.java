@@ -53,7 +53,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   protected AbstractCombinatoric(int k, T[] domain) {
     this.k = k;
-    this.domain = Domain.<T>builder().maxTypeRank(k).build(domain);
+    this.domain = Domain.<T>builder().build(domain).restrictRank(k);
     this.size = computeSize(this.k, this.domain);
     this.componentType = getComponentType(domain);
     this.domainValues = this.domain.toValueArray();

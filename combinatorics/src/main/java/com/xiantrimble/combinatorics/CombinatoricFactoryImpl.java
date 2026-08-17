@@ -45,7 +45,7 @@ public class CombinatoricFactoryImpl
   @Override
   @SuppressWarnings("unchecked")
   public <T> Domain<T> createDomain(int maxElementK, T... domain) {
-    return Domain.<T>builder().maxTypeRank(maxElementK).build(domain);
+    return Domain.<T>builder().build(domain).restrictRank(maxElementK);
   }
 
   @Override
