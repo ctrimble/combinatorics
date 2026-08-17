@@ -24,7 +24,6 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 import com.xiantrimble.combinatorics.Combinatoric;
 import com.xiantrimble.combinatorics.CombinatoricFactory;
-import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 
 @Parameters(commandNames = "generate", commandDescription = "Generates combinations or permutations of length k")
 public class CommandGenerate
@@ -41,14 +40,13 @@ public class CommandGenerate
 
   @Override
   public void run() {
-    CombinatoricFactory factory = new CombinatoricFactoryImpl();
     Combinatoric<String> combinatoric = null;
-    if(type.combination) {
-      combinatoric = factory.createCombinations(k, domain.toArray(new String[domain.size()]));
-    }
-    else if(type.permutation) {
-      combinatoric = factory.createPermutations(k, domain.toArray(new String[domain.size()]));
-    }
+     if(type.combination) {
+       combinatoric = CombinatoricFactory.createCombinations(k, domain.toArray(new String[domain.size()]));
+      }
+     else if(type.permutation) {
+       combinatoric = CombinatoricFactory.createPermutations(k, domain.toArray(new String[domain.size()]));
+      }
     else {
       throw new IllegalStateException("Type must be one of c or p.");
     }

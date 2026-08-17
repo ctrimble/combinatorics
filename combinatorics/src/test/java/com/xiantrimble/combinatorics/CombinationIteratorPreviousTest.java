@@ -25,10 +25,10 @@ public class CombinationIteratorPreviousTest
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
-    CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> combinations = factory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()]));
-    ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
-    CombinatoricIterator<Integer> iterator = combinations.iterator();
+     Combinatoric<Integer> combinations = CombinatoricFactory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()]));
+     ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
+     CombinatoricIterator<Integer> iterator = combinations.iterator();
+
 
     // move to the end
     while(iterator.hasNext()) {
@@ -46,8 +46,7 @@ public class CombinationIteratorPreviousTest
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k,
       long fromIndex, long toIndex) {
-    CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    Combinatoric<Integer> combinations = factory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
+     Combinatoric<Integer> combinations = CombinatoricFactory.createCombinations(k, (Integer[])elements.toArray(new Integer[elements.size()])).subList(fromIndex, toIndex);
     ArrayList<List<Integer>> result = new ArrayList<List<Integer>>();
     CombinatoricIterator<Integer> iterator = combinations.iterator();
 

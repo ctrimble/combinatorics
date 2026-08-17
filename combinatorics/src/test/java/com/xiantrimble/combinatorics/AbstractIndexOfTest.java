@@ -34,9 +34,7 @@ public abstract class AbstractIndexOfTest {
     FOUR,
     FIVE
   }
-  private static CombinatoricFactory factory = new CombinatoricFactoryImpl();
-
-  protected Combinatoric<Element> combinatoric;
+   protected Combinatoric<Element> combinatoric;
 
   protected AbstractIndexOfTest(Combinatoric<Element> combinatoric) {
     this.combinatoric = combinatoric;
@@ -62,13 +60,13 @@ public abstract class AbstractIndexOfTest {
   }
 
   @SafeVarargs
-  public static <E> Combinatoric<E> combinations(int k, E... domain) {
-    return factory.createCombinations(k, domain);
-  }
+   public static <E> Combinatoric<E> combinations(int k, E... domain) {
+     return CombinatoricFactory.createCombinations(k, domain);
+    }
 
   @SafeVarargs
   public static <E> Combinatoric<E> permutaitons(int k, E... domain) {
-    //return factory.createPermutations(k, domain);
+      //return CombinatoricFactory.createPermutations(k, domain);
     return new IndexBasedPermutations<E>(k, domain);
   }
 }

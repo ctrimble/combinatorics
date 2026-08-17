@@ -23,44 +23,42 @@ public class CombinationsGeneratorForwardTest extends AbstractCombinationIterato
 
   @Override
   public List<List<Integer>> createCombinations(List<Integer> elements, int k) {
-    CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k, (Integer[])elements.toArray(new Integer[elements.size()]));
-    final List<List<Integer>> result = new ArrayList<List<Integer>>();
-    final Integer[] state = new Integer[k];
-    combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
-      @Override
-      public void evaluate() {
-        result.add(Arrays.asList(Arrays.copyOf(state, state.length)));
-      }
+     CombinatoricGenerator<Integer> combinationGenerator = CombinatoricFactory.createCombinationsGenerator(k, (Integer[])elements.toArray(new Integer[elements.size()]));
+     final List<List<Integer>> result = new ArrayList<List<Integer>>();
+     final Integer[] state = new Integer[k];
+     combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {
+        @Override
+       public void evaluate() {
+         result.add(Arrays.asList(Arrays.copyOf(state, state.length)));
+         }
 
-      @Override
-      public void init(Integer[] newState) {
-        for(int i = 0; i < newState.length; i++) {
-          state[i] = newState[i];
-        }
-      }
+        @Override
+       public void init(Integer[] newState) {
+         for(int i = 0; i < newState.length; i++) {
+           state[i] = newState[i];
+          }
+         }
 
-      @Override
-      public void swap(Integer newA, int ai, Integer newB, int bi) {
-        state[ai] = newA;
-        state[bi] = newB;
-      }
+        @Override
+       public void swap(Integer newA, int ai, Integer newB, int bi) {
+         state[ai] = newA;
+         state[bi] = newB;
+         }
 
-      @Override
-      public void replace(Integer newValue, Integer oldValue, int i) {
-        state[i] = newValue;
-      }
-    });
-    combinationGenerator.execute();
+        @Override
+       public void replace(Integer newValue, Integer oldValue, int i) {
+         state[i] = newValue;
+         }
+       });
+     combinationGenerator.execute();
 
-    return result;
-  }
+     return result;
+     }
 
-  @Override
-  public List<List<Integer>> createCombinations(List<Integer> elements, int k,
-      long fromIndex, long toIndex) {
-    CombinatoricFactory factory = new CombinatoricFactoryImpl();
-    CombinatoricGenerator<Integer> combinationGenerator = factory.createCombinationsGenerator(k, (Integer[])elements.toArray(new Integer[elements.size()]));
+    @Override
+   public List<List<Integer>> createCombinations(List<Integer> elements, int k,
+       long fromIndex, long toIndex) {
+     CombinatoricGenerator<Integer> combinationGenerator = CombinatoricFactory.createCombinationsGenerator(k, (Integer[])elements.toArray(new Integer[elements.size()]));
     final List<List<Integer>> result = new ArrayList<List<Integer>>();
     final Integer[] state = new Integer[k];
     combinationGenerator.setHandler(new AbstractCombinatoricHandler<Integer>() {

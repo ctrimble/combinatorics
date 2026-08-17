@@ -36,9 +36,7 @@ public class CombinationsIndexOfTest {
     FOUR,
     FIVE
   }
-  private static CombinatoricFactory factory = new CombinatoricFactoryImpl();
-
-  private Combinatoric<Element> combinatoric;
+   private Combinatoric<Element> combinatoric;
 
   public CombinationsIndexOfTest(Combinatoric<Element> combinatoric) {
     this.combinatoric = combinatoric;
@@ -71,7 +69,7 @@ public class CombinationsIndexOfTest {
   }
 
   @SafeVarargs
-  public static <E> Combinatoric<E> combinations(int k, E... domain) {
-    return factory.createCombinations(k, domain);
-  }
+   public static <E> Combinatoric<E> combinations(int k, E... domain) {
+     return CombinatoricFactory.createCombinations(k, domain);
+    }
 }

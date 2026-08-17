@@ -55,8 +55,7 @@ public class LeadingElementPerportionTest {
     TWO,
     THREE
   }
-  private static CombinatoricFactory factory = new CombinatoricFactoryImpl();
-  private Combinatoric<Element> permutations;
+   private Combinatoric<Element> permutations;
 
   public LeadingElementPerportionTest(Combinatoric<Element> permutations) {
     this.permutations = permutations;
@@ -162,7 +161,7 @@ public class LeadingElementPerportionTest {
   }
 
   @SafeVarargs
-  public static <E> Combinatoric<E> permutations(int k, E... domain) {
-    return factory.createPermutations(k, domain);
-  }
+   public static <E> Combinatoric<E> permutations(int k, E... domain) {
+     return CombinatoricFactory.createPermutations(k, domain);
+    }
 }

@@ -24,7 +24,6 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 import com.xiantrimble.combinatorics.Combinatoric;
 import com.xiantrimble.combinatorics.CombinatoricFactory;
-import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 
 @Parameters(commandNames = "count", commandDescription = "Counts the elements of the combination or permutation of length k")
 public class CommandCount
@@ -41,14 +40,13 @@ public class CommandCount
 
   @Override
   public void run() {
-    CombinatoricFactory factory = new CombinatoricFactoryImpl();
     long size = 0;
-    if(type.combination) {
-      size = factory.createCombinations(k, domain.toArray(new String[domain.size()])).longSize();
-    }
-    else if(type.permutation) {
-      size = factory.createPermutations(k, domain.toArray(new String[domain.size()])).longSize();
-    }
+     if(type.combination) {
+       size = CombinatoricFactory.createCombinations(k, domain.toArray(new String[domain.size()])).longSize();
+      }
+     else if(type.permutation) {
+       size = CombinatoricFactory.createPermutations(k, domain.toArray(new String[domain.size()])).longSize();
+      }
     else {
       throw new IllegalStateException("Type must be one of c or p.");
     }
