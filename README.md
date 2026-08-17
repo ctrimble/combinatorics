@@ -1,155 +1,146 @@
 # Java Combinatorics
 
-  A combinatorics library for Java, with a focus on fast iteration.
-  [![Build Status](https://secure.travis-ci.org/ctrimble/combinatorics.png?branch=master)](https://travis-ci.org/ctrimble/combinatorics)
-  [![Analytics](https://ga-beacon.appspot.com/UA-36594186-1/ctrimble/combinatorics)](https://github.com/igrigorik/ga-beacon)
+A Java library for generating and iterating over combinations and permutations
+of a domain, with a focus on fast iteration.
 
-## Status
+- **Combinations** and **permutations** are exposed as `Combinatoric`
+  collections that extend `java.util.List`, so they can be iterated, indexed,
+  and sub-listed (including sub-ranges that exceed `int` range via `long`
+  APIs).
+- Handles **repeated elements** in a domain correctly (e.g. `{1,1,2,2,3}`).
+- Supports **counting** the number of combinations/permutations without
+  materializing them.
 
-  This project is now working for forward iteration.  Upcoming improvements:
-  - backward iteration for permutations (working for combinations.)
-  - inlining of combinatoric engine handlers with ASM.
+## Requirements
 
-## Mailing List
-
-  If you are using this project, it would be great to hear from you.  I have set up a user mailing list on [Librelist](http://librelist.com/browser/combinatorics/)
-  for any questions or comments.  Simply email combinatorics@librelist.com to sign up.
+- Java 17+
+- Maven 3.9.12+
 
 ## Building from Source
 
-  To build this project, you will need [Maven 3.0](http://maven.apache.org/) and Java 1.6 or higher installed.
-
-        git checkout git://github.com/ctrimble/combinatorics.git combinatorics
-        cd combinatorics
-        mvn clean install
+```sh
+git clone https://github.com/ctrimble/combinatorics.git
+cd combinatorics
+mvn clean install
+```
 
 ## Maven Dependency
 
-  To use this project, add the following dependency to your project.
+Add the following dependency to your `pom.xml`:
 
-        <dependency>
-          <groupId>com.xiantrimble.combinatorics</groupId>
-          <artifactId>combinatorics</artifactId>
-          <version>0.2.0</version>
-        </dependency>
-        
-## Installing the CLI
+```xml
+<dependency>
+  <groupId>com.xiantrimble.combinatorics</groupId>
+  <artifactId>combinatorics</artifactId>
+  <version>0.3.0-SNAPSHOT</version>
+</dependency>
+```
 
-  I have included a homebrew formula for installing the CLI for this project.  You can install the cli by
-  first installing my tap:
-  
-    brew tap ctrimble/homebrew-tap
-    
-  and then install the comb command:
-  
-    brew install --HEAD comb
-        
-## Some Basic Examples
+## Usage
+
+All entry points are created through the `CombinatoricFactory`, obtained via the
+`CombinatoricFactoryImpl` implementation.
+
+### Iterating Combinations
+
+`Combinatoric<T>` extends `List<T[]>`, so each combination is a `T[]` of length
+`k` which can be iterated directly (including with `for`-each loops):
+
+```java
+import com.xiantrimble.combinatorics.CombinatoricFactory;
+import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+import com.xiantrimble.combinatorics.Combinatoric;
+import java.util.Arrays;
+
+int k = 6;
+int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
+
+CombinatoricFactory factory = new CombinatoricFactoryImpl();
+Combinatoric<Integer> combinations = factory.createCombinations(k, domain);
+
+System.out.println(combinations.longSize());
+
+for (Integer[] combination : combinations) {
+  System.out.println(Arrays.toString(combination));
+}
+```
+
+### Iterating Permutations
+
+Permutations work the same way as combinations. Each permutation is a `T[]` of
+length `k`:
+
+```java
+import com.xiantrimble.combinatorics.CombinatoricFactory;
+import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+import com.xiantrimble.combinatorics.Combinatoric;
+import java.util.Arrays;
+
+int k = 6;
+int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
+
+CombinatoricFactory factory = new CombinatoricFactoryImpl();
+Combinatoric<Integer> permutations = factory.createPermutations(k, domain);
+
+for (Integer[] permutation : permutations) {
+  System.out.println(Arrays.toString(permutation));
+}
+```
+
+### Indexing and Sub-ranges
+
+Because `Combinatoric` extends `List`, collections can be indexed and sliced by
+position. Large collections use the `long`-based APIs (`longSize`, `get(long)`,
+`subList(long, long)`):
+
+```java
+Combinatoric<Integer> combinations = factory.createCombinations(k, domain);
+
+// the 1,000,000th combination
+System.out.println(Arrays.toString(combinations.get(1_000_000L)));
+
+// the sub-collection covering positions 100..500
+for (Integer[] combination : combinations.subList(100L, 500L)) {
+  System.out.println(Arrays.toString(combination));
+}
+```
 
 ### Counting Combinations and Permutations
 
-  This package provides a math utility class for computing the number of permutations or combinations
-  for a given domain and length (k).  In the following example, we will count the number of
-  permutations and combinations of length 6 for the set {1,1,1,1,2,2,2,3,3,4}:
-  
-         import com.xiantrimble.combinatorics.CombinatoricFactory;
-         import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
-         import com.xiantrimble.combinatorics.CombMathUtils;
-          ...
-         int k = 6;
-         int[] domain = {1,1,1,1,2,2,2,3,3,4};
+The `CombMathUtils` class computes the number of combinations (`c`) and
+permutations (`p`) of a given length `k` for a domain, without iterating:
 
-          // create a factory to build the domain.
-         CombinatoricFactory factory = new CombinatoricFactoryImpl();
-         
-          // the math utils operate on the multiplicity of the domain, not the actual domain.
-          int[] domainMultiplicity = factory.createDomain(k, domain).toMultiplicity();
-         
-          // the number of combinations of length k
-         int combinationCount = CombMathUtils.c(k, domainMultiplicity);
-         
-          // the number of permutations of length k
-         int permutationCount = CombMathUtils.p(k, domainMultiplicity);
+```java
+import com.xiantrimble.combinatorics.CombMathUtils;
 
-### Iterating Combinations and Permutations
+long k = 6;
+int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
-  Combinations and Permutations in this package are represented by the Combinatoric interface.  This
-  interface extends from java.util.List and adds methods to get the length and domain for the collection.
-  It also adds access to a long size, since combinations and permutations are often larger than an int
-  can represent.  Here is an example of iterating all combinations and permutations of length 6 for the
-  set {1,1,1,2,2,2,3,3,4}:
+// c(k, n) — number of combinations
+System.out.println(CombMathUtils.c(6, 10));
 
-        import com.xiantrimble.combinatorics.CombinatoricFactory;
-        import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
-        import com.xiantrimble.combinatorics.Combinatoric;
-        ...
-        int k = 6;
-        int[] domain = {1,1,1,1,2,2,2,3,3,4};
+// p(k, n) — number of permutations
+System.out.println(CombMathUtils.p(6, 10));
+```
 
-        // create a factory and get the utilities.
-        CombinatoricFactory factory = new CombinatoricFactoryImpl();
-        Combinatoric<Integer> combinations = factory.createCombinations(k,  domain);
+The `c`/`p` overloads that accept a multiplicity array are the most useful when
+a domain contains repeated elements. Obtain the multiplicity via
+`CombinatoricFactory.createDomain`:
 
-        for( Integer[] combination : combinations ) {
-          System.out.println(Arrays.toString(combination));
-        }
-        
-        Combinatoric<Integer> permutations = factory.createPermutations(k,  domain);
+```java
+import com.xiantrimble.combinatorics.CombMathUtils;
+import com.xiantrimble.combinatorics.CombinatoricFactory;
+import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
+import com.xiantrimble.combinatorics.Domain;
 
-        for( Integer[] permutation : permutations ) {
-          System.out.println(Arrays.toString(permutation));
-        }
-        
-### Inverting Control with Combination and Permutation Engines
+int k = 6;
+int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
-  This package provides combination and permutation engines, which invert the iteration process.  Instead
-  of requesting the next combination/permutation from an iterator, an engine is created to drive the iteration
-  process.  As it iterates, the engine calls back to a handler with change events (swap, replace, init) and then
-  calls evaluate() when the next valid state has been reached.
-        
-        import java.util.ArrayList;
-        import java.util.List;
-        import com.xiantrimble.combinatorics.CombinatoricFactory;
-        import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
-        import com.xiantrimble.combinatorics.CombinatoricEngine;
-        ...
-        int k = 6;
-        int[] domain = {1,1,1,1,2,2,2,3,3,4};
-        
-	    CombinatoricFactory factory = new CombinatoricFactoryImpl();
-	    CombinatoricEngine<Integer> permutationsEngine = factory.createPermutationsEngine(k,  domain);
-	    
-	    final List<List<Integer>> result = new ArrayList<List<Integer>>();
-	    final Integer[] state = new Integer[k];
-	    permutationsEngine.setHandler(new AbstractCombinatoricHandler<Integer>() {
-	      @Override
-	      public void evaluate() {
-	        result.add(Arrays.asList(Arrays.copyOf(state, state.length))); 
-	      }
-	
-	      @Override
-	      public void init(Integer[] newState ) {
-	        for( int i = 0; i < newState.length; i++ ) {
-	          state[i] = newState[i];
-	        }
-	      }
-	
-	      @Override
-	      public void swap(Integer newA, int ai, Integer newB, int bi) {
-	        state[ai] = newA;
-	        state[bi] = newB;
-	      }
-	
-	      @Override
-	      public void replace(Integer newValue, Integer oldValue, int i) {
-	        state[i] = newValue;
-	      }
-	    });
-	    permutationsEngine.execute();
-	
-	    return result;
- 
+CombinatoricFactory factory = new CombinatoricFactoryImpl();
+Domain<Integer> domainObj = factory.createDomain(k, domain);
 
+int[] multiplicity = domainObj.toMultiplicity();
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ctrimble/combinatorics/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
+long combinationCount = CombMathUtils.c(k, multiplicity);
+long permutationCount = CombMathUtils.p(k, multiplicity);
+```
