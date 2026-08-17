@@ -2,15 +2,18 @@
   "$schema": "https://opencode.ai/config.json",
   "permission": {
     "edit": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
     "external_directory": "deny"
   },
-  "model": "qwen3-coder-opencode",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama Local",
       "options": {
-        "baseURL": "http://127.0.0.1:11434/v1"
+        "baseURL": "http://127.0.0.1:11434/v1",
+        "timeout": 1200000,
+        "headerTimeout": 1200000
       },
       "models": {
         "qwen2.5-coder-opencode": {
@@ -19,6 +22,18 @@
         },
         "qwen3-coder-opencode": {
           "name": "qwen3-coder-opencode",
+          "tools": true
+        },
+        "qwen3.8-basic-opencode": {
+          "name": "qwen3.8-basic-opencode",
+          "tools": true
+        },
+        "qwen3.8-mlx-opencode": {
+          "name": "qwen3.8-mlx-opencode",
+          "tools": true
+        },
+        "qwen3.8-opencode": {
+          "name": "qwen3.8-opencode",
           "tools": true
         }
       }

@@ -1,0 +1,13 @@
+# 1. Base Model Definition
+FROM qwen3-coder:30b
+
+# 2. Performance and Resource Allocation Parameters (Keep these!)
+# Crucial: Gives OpenCode room for file context
+# Crucial: Gives OpenCode room for file context
+PARAMETER num_ctx 32768
+# Crucial: Forces strict adherence to OpenCode's JSON schemas
+PARAMETER temperature 0.0
+PARAMETER top_p 0.9          
+PARAMETER num_predict 4096   
+PARAMETER stop "<|im_end|>"  
+PARAMETER stop "<|im_start|>"

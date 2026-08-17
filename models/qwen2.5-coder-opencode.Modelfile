@@ -1,0 +1,11 @@
+FROM qwen2.5-coder:32b
+
+# Expand context window to maximum safe buffer for large codebases
+PARAMETER num_ctx 32768
+
+# Force Ollama to keep the entire model pinned in the Metal GPU
+PARAMETER num_gpu 99
+
+# Strict parameters for precise structured tool outputs
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
