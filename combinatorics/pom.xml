@@ -54,6 +54,10 @@
       <artifactId>commons-lang3</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>net.karneim</groupId>
+      <artifactId>pojobuilder</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
