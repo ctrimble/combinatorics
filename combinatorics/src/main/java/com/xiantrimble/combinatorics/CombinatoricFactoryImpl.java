@@ -38,14 +38,14 @@ public class CombinatoricFactoryImpl
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T> GroupedDomain<T> createGroupedDomain(T... domain) {
-    return new FastGroupedDomain<T>(domain);
+  public <T> Domain<T> createDomain(T... domain) {
+    return Domain.<T>builder().build(domain);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain) {
-    return new FastGroupedDomain<T>(maxElementK, domain);
+  public <T> Domain<T> createDomain(int maxElementK, T... domain) {
+    return Domain.<T>builder().maxTypeRank(maxElementK).build(domain);
   }
 
   @Override

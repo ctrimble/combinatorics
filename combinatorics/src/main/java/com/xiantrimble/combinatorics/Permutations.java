@@ -51,7 +51,7 @@ public class Permutations<T>
    * @param domain the elements that make up the permutations.
    */
   @Override
-  protected long computeSize(int k, GroupedDomain<T> domain) {
+  protected long computeSize(int k, Domain<T> domain) {
     return CombMathUtils.p(k, domain.toMultiplicity());
   }
 

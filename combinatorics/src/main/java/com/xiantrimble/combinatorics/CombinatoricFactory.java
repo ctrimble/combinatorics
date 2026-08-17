@@ -34,8 +34,8 @@ public interface CombinatoricFactory {
   public <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain);
 
   @SuppressWarnings("unchecked")
-  public <T> GroupedDomain<T> createGroupedDomain(T... domain);
+  public <T> Domain<T> createDomain(T... domain);
 
   @SuppressWarnings("unchecked")
-  public <T> FastGroupedDomain<T> createGroupedDomain(int maxElementK, T... domain);
+  public <T> Domain<T> createDomain(int maxElementK, T... domain);
 }

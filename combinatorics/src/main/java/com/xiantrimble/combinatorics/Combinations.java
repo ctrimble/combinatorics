@@ -68,7 +68,7 @@ public class Combinations<T>
    * @param domain the elements to be combined.
    */
   @Override
-  protected long computeSize(int k, GroupedDomain<T> domain) {
+  protected long computeSize(int k, Domain<T> domain) {
     return CombMathUtils.c(k, domain.toMultiplicity());
   }
 
@@ -135,7 +135,7 @@ public class Combinations<T>
       domainMultiplicity = domain.toMultiplicity();
       indices = new DomainPointer[domainMultiplicity.length];
       indices[indices.length - 1] = new DomainPointer();
-      int toRight = domain.totalSize();
+      int toRight = domain.size();
       int ni = 0;
       long currentCombs = 0;
       for(int i = 0; i < domainMultiplicity.length; i++) {

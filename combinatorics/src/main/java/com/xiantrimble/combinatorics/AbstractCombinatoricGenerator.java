@@ -27,7 +27,7 @@ public abstract class AbstractCombinatoricGenerator<T>
 {
   protected CombinatoricHandler<T> handler;
   protected int k;
-  protected GroupedDomain<T> domain;
+  protected Domain<T> domain;
   protected T[][] domainValues;
   protected int[] domainMultiplicity;
   protected long size;
@@ -35,7 +35,7 @@ public abstract class AbstractCombinatoricGenerator<T>
 
   protected AbstractCombinatoricGenerator(int k, T[] domain) {
     this.k = k;
-    this.domain = new FastGroupedDomain<T>(k, domain);
+    this.domain = Domain.<T>builder().maxTypeRank(k).build(domain);
     this.size = computeSize(this.k, this.domain);
     this.componentType = Utils.getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
@@ -61,5 +61,5 @@ public abstract class AbstractCombinatoricGenerator<T>
     return size;
   }
 
-  protected abstract long computeSize(int rank, GroupedDomain<T> domain);
+  protected abstract long computeSize(int rank, Domain<T> domain);
 }

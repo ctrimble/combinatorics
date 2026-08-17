@@ -40,14 +40,14 @@ public class IndexBasedPermutations<T>
     long index = 0;
 
     // compute what combination the element is in and advance the index to that combination.
-    GroupedDomain<T> elementDomain = new FastGroupedDomain<T>(element);
+    Domain<T> elementDomain = Domain.<T>builder().build(element);
     int[] elementMultiplicity = elementDomain.toMultiplicity();
     int[] workingMultiplicity = domainMultiplicity.clone();
     int[] currentMultiplicity = new int[domainMultiplicity.length];
     int inCurrentMultiplicity = 0;
 
     int workingK = k;
-    PAST_COMBINATIONS: for(int i = 0, j = 0; i < domainValues.length - 1 && j < elementDomain.size() && workingK > 0; i++) {
+    PAST_COMBINATIONS: for(int i = 0, j = 0; i < domainValues.length - 1 && j < elementDomain.distinctSize() && workingK > 0; i++) {
       boolean onElement = elementDomain.get(j).get(0).equals(domainValues[i][0]);
       int startM = Math.min(domainMultiplicity[i], k - inCurrentMultiplicity);
       int stopM = !onElement ? 0 : elementMultiplicity[j];
@@ -77,7 +77,7 @@ public class IndexBasedPermutations<T>
     T[] workingElement = element.clone();
     long localIndex = 0;
     // we are now on the proper state for this index.  On even cycles we are moving down.
-    for(int i = elementDomain.size() - 2; i >= 0; i--) {
+    for(int i = elementDomain.distinctSize() - 2; i >= 0; i--) {
       int aCount = elementMultiplicity[i];
       int bCount = elementMultiplicity[i + 1];
       T aElement = elementDomain.get(i).get(0);
@@ -145,7 +145,7 @@ public class IndexBasedPermutations<T>
   }
 
   @Override
-  protected long computeSize(int k, GroupedDomain<T> domain) {
+  protected long computeSize(int k, Domain<T> domain) {
     return CombMathUtils.p(k, domain.toMultiplicity());
   }
 
@@ -165,7 +165,7 @@ public class IndexBasedPermutations<T>
       state = new TypePermutationState[domainMultiplicity.length];
 
       int ni = 0; // index into the next solution array.
-      int toRight = domain.totalSize();
+      int toRight = domain.size();
       long currentPerms = 1;
       pastCombSize = 0;
 

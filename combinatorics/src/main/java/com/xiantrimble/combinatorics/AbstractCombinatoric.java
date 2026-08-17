@@ -37,7 +37,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
   /** The length of each result. */
   protected int k;
   /** The domain being operated on. */
-  protected GroupedDomain<T> domain;
+  protected Domain<T> domain;
   /** A view of the domain as a 2-dimensional array for fast lookups. */
   protected T[][] domainValues;
   /** A view of the domain multiplicity. */
@@ -53,7 +53,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    */
   protected AbstractCombinatoric(int k, T[] domain) {
     this.k = k;
-    this.domain = new FastGroupedDomain<T>(k, domain);
+    this.domain = Domain.<T>builder().maxTypeRank(k).build(domain);
     this.size = computeSize(this.k, this.domain);
     this.componentType = getComponentType(domain);
     this.domainValues = this.domain.toValueArray();
@@ -83,7 +83,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    * {@inheritDoc}
    */
   @Override
-  public GroupedDomain<T> getDomain() {
+  public Domain<T> getDomain() {
     return domain;
   }
 
@@ -152,7 +152,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    * @param domain the domain to operate on.
    * @return
    */
-  protected abstract long computeSize(int k, GroupedDomain<T> domain);
+  protected abstract long computeSize(int k, Domain<T> domain);
 
   protected abstract class AbstractCombinatoricIterator
       implements CombinatoricIterator<T>
@@ -399,7 +399,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
     }
 
     @Override
-    public GroupedDomain<T> getDomain() {
+    public Domain<T> getDomain() {
       return AbstractCombinatoric.this.getDomain();
     }
 

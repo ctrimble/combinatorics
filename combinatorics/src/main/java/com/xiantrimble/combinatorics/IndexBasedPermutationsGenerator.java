@@ -41,7 +41,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
    * @param domain the elements to be permuted.
    */
   @Override
-  protected long computeSize(int k, GroupedDomain<T> domain) {
+  protected long computeSize(int k, Domain<T> domain) {
     return CombMathUtils.p(k, domain.toMultiplicity());
   }
 

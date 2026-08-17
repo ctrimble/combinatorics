@@ -31,7 +31,7 @@ public class CombinationsBenchmark<T>
   }
 
   @Override
-  protected long computeSize(int k, GroupedDomain<T> domain) {
+  protected long computeSize(int k, Domain<T> domain) {
     return CombMathUtils.c(k, domain.toMultiplicity());
   }
 

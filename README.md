@@ -63,7 +63,7 @@
          CombinatoricFactory factory = new CombinatoricFactoryImpl();
          
           // the math utils operate on the multiplicity of the domain, not the actual domain.
-         int[] domainMultiplicity = factory.createGroupedDomain(k, domain).toMultiplicity();
+          int[] domainMultiplicity = factory.createDomain(k, domain).toMultiplicity();
          
           // the number of combinations of length k
          int combinationCount = CombMathUtils.c(k, domainMultiplicity);
