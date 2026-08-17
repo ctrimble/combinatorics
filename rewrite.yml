@@ -1,0 +1,14 @@
+---
+type: specs.openrewrite.org/v1beta/style
+name: org.openrewrite.java.JavadocStyle
+style:
+  org.openrewrite.java.format.JavadocStyle:
+    alignLeadingAsterisks: true
+---
+type: specs.openrewrite.org/v1beta/recipe
+name: com.xiantrimble.combinatorics.AlignJavadocComments
+displayName: Uniform Javadoc Star Alignment
+description: Enforces perfect vertical alignment for leading stars in Javadoc blocks.
+recipeList:
+  - org.openrewrite.java.format.TabsAndIndents
+  - org.openrewrite.java.format.AutoFormat

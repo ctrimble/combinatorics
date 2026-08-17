@@ -219,8 +219,13 @@
               <artifactId>rewrite-maven-plugin</artifactId>
               <version>6.46.1</version>
             <configuration>
+              <activeStyles>
+                <!-- Matches the 'name' defined in your style yaml block -->
+                <style>org.openrewrite.java.JavadocStyle</style>
+              </activeStyles>
               <activeRecipes>
-                <recipe>org.openrewrite.java.format.AutoFormat</recipe>
+                <!-- Matches the 'name' defined in your recipe yaml block -->
+                <recipe>com.xiantrimble.combinatorics.AlignJavadocComments</recipe>
               </activeRecipes>
             </configuration>
           </plugin>
