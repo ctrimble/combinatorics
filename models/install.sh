@@ -88,8 +88,7 @@ if [[ -f "$OPENCODE_CONFIG" ]]; then
         # Multiple models: build the models block dynamically from directory files
         # Use jq to create a new models object with all discovered models
         jq '
-            .provider.ollama.models = {} | 
-            del(.model)
+            .provider.ollama.models = {}
         ' "$OPENCODE_CONFIG" > "$TEMP_CONFIG"
         
         # Add each model to the models object
