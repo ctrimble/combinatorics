@@ -18,8 +18,6 @@ package com.xiantrimble.combinatorics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.apache.commons.math.util.MathUtils;
-
 /**
  * Math methods for counting combinations and permutations of a domain that may
  * contain duplicate elements (i.e. multiplicities).

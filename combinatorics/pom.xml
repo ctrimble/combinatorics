@@ -29,16 +29,12 @@
   <name>Java Combinatorics Library</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-math</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
+    <dependencies>
+     <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+      </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-all</artifactId>
@@ -72,11 +68,10 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <docfilessubdirs>true</docfilessubdirs>
-          <links>
-            <link>http://commons.apache.org/math/apidocs</link>
-            <link>http://javolution.org/target/site/apidocs</link>
-            <link>http://docs.oracle.com/javase/6/docs/api</link>
-          </links>
+            <links>
+              <link>http://javolution.org/target/site/apidocs</link>
+              <link>http://docs.oracle.com/javase/6/docs/api</link>
+            </links>
           <linksource>true</linksource>
           <quiet>true</quiet>
         </configuration>
