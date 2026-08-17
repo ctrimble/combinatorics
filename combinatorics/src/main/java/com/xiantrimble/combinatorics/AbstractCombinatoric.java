@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.xiantrimble.combinatorics.Utils.getComponentType;
-
 /**
  * An abstract base class for combinatoric implementations.
  * 
@@ -52,10 +50,14 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    * @param domain the domain being operated on.
    */
   protected AbstractCombinatoric(int k, T[] domain) {
+    this(k, Domain.<T>builder().build(domain));
+  }
+
+  protected AbstractCombinatoric(int k, Domain<T> domain) {
     this.k = k;
-    this.domain = Domain.<T>builder().build(domain).restrictRank(k);
+    this.domain = domain.restrictRank(k);
     this.size = computeSize(this.k, this.domain);
-    this.componentType = getComponentType(domain);
+    this.componentType = this.domain.getComponentType();
     this.domainValues = this.domain.toValueArray();
     this.domainMultiplicity = this.domain.toMultiplicity();
   }

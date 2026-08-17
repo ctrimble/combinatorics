@@ -127,6 +127,15 @@ public final class Domain<E> implements List<List<E>> {
   }
 
   /**
+   * Returns the component type of the elements in this domain.
+   *
+   * @return the component type of the elements in this domain.
+   */
+  public Class<E> getComponentType() {
+    return componentType;
+  }
+
+  /**
    * Returns a multiplicity array for this domain object.
    *
    * @return a multiplicity array for this domain object.

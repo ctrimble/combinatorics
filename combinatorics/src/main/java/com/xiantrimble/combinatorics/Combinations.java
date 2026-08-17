@@ -38,6 +38,16 @@ public class Combinations<T>
     super(k, domain);
   }
 
+  /**
+   * Creates a new Combinations object over the domain.
+   *
+   * @param k the length of the combinations.
+   * @param domain the elements that make up the combinations.
+   */
+  public Combinations(int k, Domain<T> domain) {
+    super(k, domain);
+  }
+
   @Override
   public T[] get(int index) {
     return get((long)index);

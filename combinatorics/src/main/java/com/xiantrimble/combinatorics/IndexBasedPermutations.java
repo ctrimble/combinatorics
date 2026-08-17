@@ -25,6 +25,10 @@ public class IndexBasedPermutations<T>
     super(k, domain);
   }
 
+  protected IndexBasedPermutations(int k, Domain<T> domain) {
+    super(k, domain);
+  }
+
 
   @Override
   public T[] get(int index) {

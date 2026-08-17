@@ -41,12 +41,12 @@ public class CommandGenerate
   @Override
   public void run() {
     Combinatoric<String> combinatoric = null;
-     if(type.combination) {
-       combinatoric = CombinatoricFactory.createCombinations(k, domain.toArray(new String[domain.size()]));
-      }
-     else if(type.permutation) {
-       combinatoric = CombinatoricFactory.createPermutations(k, domain.toArray(new String[domain.size()]));
-      }
+    if(type.combination) {
+      combinatoric = CombinatoricFactory.createCombinations(k, domain.toArray(new String[domain.size()]));
+    }
+    else if(type.permutation) {
+      combinatoric = CombinatoricFactory.createPermutations(k, domain.toArray(new String[domain.size()]));
+    }
     else {
       throw new IllegalStateException("Type must be one of c or p.");
     }

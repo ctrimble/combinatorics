@@ -41,12 +41,12 @@ public class CommandCount
   @Override
   public void run() {
     long size = 0;
-     if(type.combination) {
-       size = CombinatoricFactory.createCombinations(k, domain.toArray(new String[domain.size()])).longSize();
-      }
-     else if(type.permutation) {
-       size = CombinatoricFactory.createPermutations(k, domain.toArray(new String[domain.size()])).longSize();
-      }
+    if(type.combination) {
+      size = CombinatoricFactory.createCombinations(k, domain.toArray(new String[domain.size()])).longSize();
+    }
+    else if(type.permutation) {
+      size = CombinatoricFactory.createPermutations(k, domain.toArray(new String[domain.size()])).longSize();
+    }
     else {
       throw new IllegalStateException("Type must be one of c or p.");
     }

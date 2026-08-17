@@ -30,6 +30,10 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected T[] last;
 
   protected PermutationsGenerator(int k, T[] domain) {
+    this(k, Domain.<T>builder().build(domain));
+  }
+
+  protected PermutationsGenerator(int k, Domain<T> domain) {
     super(k, domain);
   }
 

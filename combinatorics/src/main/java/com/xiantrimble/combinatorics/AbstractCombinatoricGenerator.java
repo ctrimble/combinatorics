@@ -34,10 +34,14 @@ public abstract class AbstractCombinatoricGenerator<T>
   protected Class<T> componentType;
 
   protected AbstractCombinatoricGenerator(int k, T[] domain) {
+    this(k, Domain.<T>builder().build(domain));
+  }
+
+  protected AbstractCombinatoricGenerator(int k, Domain<T> domain) {
     this.k = k;
-    this.domain = Domain.<T>builder().build(domain).restrictRank(k);
+    this.domain = domain.restrictRank(k);
     this.size = computeSize(this.k, this.domain);
-    this.componentType = Utils.getComponentType(domain);
+    this.componentType = this.domain.getComponentType();
     this.domainValues = this.domain.toValueArray();
     this.domainMultiplicity = this.domain.toMultiplicity();
   }

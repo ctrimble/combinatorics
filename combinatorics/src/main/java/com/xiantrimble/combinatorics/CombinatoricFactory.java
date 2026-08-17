@@ -16,42 +16,62 @@
 package com.xiantrimble.combinatorics;
 
 /**
-  * A factory for combination and permutation collections.
-  *
-  * @author Christian Trimble
-  */
+ * A factory for combination and permutation collections.
+ *
+ * @author Christian Trimble
+ */
 public final class CombinatoricFactory {
 
-   private CombinatoricFactory() {
-   }
+  private CombinatoricFactory() {
+  }
 
-    @SuppressWarnings("unchecked")
-   public static <T> Combinations<T> createCombinations(int k, T... domain) {
-     return new Combinations<T>(k, domain);
-    }
+  @SuppressWarnings("unchecked")
+  public static <T> Combinations<T> createCombinations(int k, T... domain) {
+    return new Combinations<T>(k, domain);
+  }
 
-    @SuppressWarnings("unchecked")
-   public static <T> IndexBasedPermutations<T> createPermutations(int k, T... domain) {
-     return new IndexBasedPermutations<T>(k, domain);
-    }
+  public static <T> Combinations<T> createCombinations(int k, Domain<T> domain) {
+    return new Combinations<T>(k, domain);
+  }
 
-    @SuppressWarnings("unchecked")
-   public static <T> Domain<T> createDomain(T... domain) {
-     return Domain.<T>builder().build(domain);
-    }
+  @SuppressWarnings("unchecked")
+  public static <T> IndexBasedPermutations<T> createPermutations(int k, T... domain) {
+    return new IndexBasedPermutations<T>(k, domain);
+  }
 
-    @SuppressWarnings("unchecked")
-   public static <T> Domain<T> createDomain(int maxElementK, T... domain) {
-     return Domain.<T>builder().build(domain).restrictRank(maxElementK);
-    }
+  public static <T> IndexBasedPermutations<T> createPermutations(int k, Domain<T> domain) {
+    return new IndexBasedPermutations<T>(k, domain);
+  }
 
-    @SuppressWarnings("unchecked")
-   public static <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain) {
-     return new CombinationsGenerator<T>(k, domain);
-    }
+  public static <T> Domain.Builder<T> domainBuilder() {
+    return Domain.<T>builder();
+  }
 
-    @SuppressWarnings("unchecked")
-   public static <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain) {
-     return new PermutationsGenerator<T>(k, domain);
-    }
+  @SuppressWarnings("unchecked")
+  public static <T> Domain<T> createDomain(T... domain) {
+    return Domain.<T>builder().build(domain);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> Domain<T> createDomain(int maxElementK, T... domain) {
+    return Domain.<T>builder().build(domain).restrictRank(maxElementK);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, T... domain) {
+    return new CombinationsGenerator<T>(k, domain);
+  }
+
+  public static <T> CombinatoricGenerator<T> createCombinationsGenerator(int k, Domain<T> domain) {
+    return new CombinationsGenerator<T>(k, domain);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, T... domain) {
+    return new PermutationsGenerator<T>(k, domain);
+  }
+
+  public static <T> CombinatoricGenerator<T> createPermutationsGenerator(int k, Domain<T> domain) {
+    return new PermutationsGenerator<T>(k, domain);
+  }
 }

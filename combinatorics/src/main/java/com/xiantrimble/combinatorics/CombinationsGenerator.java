@@ -29,6 +29,10 @@ public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected long endIndex;
 
   protected CombinationsGenerator(int k, T[] domain) {
+    this(k, Domain.<T>builder().build(domain));
+  }
+
+  protected CombinationsGenerator(int k, Domain<T> domain) {
     super(k, domain);
     domainMiltiplicity = this.domain.toMultiplicity();
     startIndex = 0;
