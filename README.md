@@ -38,8 +38,7 @@ Add the following dependency to your `pom.xml`:
 
 ## Usage
 
-All entry points are created through the `CombinatoricFactory`, obtained via the
-`CombinatoricFactoryImpl` implementation.
+All entry points are static factory methods on the `CombinatoricFactory` class.
 
 ### Iterating Combinations
 
@@ -48,15 +47,13 @@ All entry points are created through the `CombinatoricFactory`, obtained via the
 
 ```java
 import com.xiantrimble.combinatorics.CombinatoricFactory;
-import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 import com.xiantrimble.combinatorics.Combinatoric;
 import java.util.Arrays;
 
 int k = 6;
-int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
+Integer[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
-CombinatoricFactory factory = new CombinatoricFactoryImpl();
-Combinatoric<Integer> combinations = factory.createCombinations(k, domain);
+Combinatoric<Integer> combinations = CombinatoricFactory.createCombinations(k, domain);
 
 System.out.println(combinations.longSize());
 
@@ -72,15 +69,13 @@ length `k`:
 
 ```java
 import com.xiantrimble.combinatorics.CombinatoricFactory;
-import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 import com.xiantrimble.combinatorics.Combinatoric;
 import java.util.Arrays;
 
 int k = 6;
-int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
+Integer[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
-CombinatoricFactory factory = new CombinatoricFactoryImpl();
-Combinatoric<Integer> permutations = factory.createPermutations(k, domain);
+Combinatoric<Integer> permutations = CombinatoricFactory.createPermutations(k, domain);
 
 for (Integer[] permutation : permutations) {
   System.out.println(Arrays.toString(permutation));
@@ -94,7 +89,17 @@ position. Large collections use the `long`-based APIs (`longSize`, `get(long)`,
 `subList(long, long)`):
 
 ```java
-Combinatoric<Integer> combinations = factory.createCombinations(k, domain);
+import com.xiantrimble.combinatorics.CombinatoricFactory;
+import com.xiantrimble.combinatorics.Combinatoric;
+import java.util.Arrays;
+
+int k = 6;
+Integer[] domain = new Integer[40];
+for (int i = 0; i < domain.length; i++) {
+  domain[i] = i + 1;
+}
+
+Combinatoric<Integer> combinations = CombinatoricFactory.createCombinations(k, domain);
 
 // the 1,000,000th combination
 System.out.println(Arrays.toString(combinations.get(1_000_000L)));
@@ -108,39 +113,25 @@ for (Integer[] combination : combinations.subList(100L, 500L)) {
 ### Counting Combinations and Permutations
 
 The `CombMathUtils` class computes the number of combinations (`c`) and
-permutations (`p`) of a given length `k` for a domain, without iterating:
-
-```java
-import com.xiantrimble.combinatorics.CombMathUtils;
-
-long k = 6;
-int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
-
-// c(k, n) — number of combinations
-System.out.println(CombMathUtils.c(6, 10));
-
-// p(k, n) — number of permutations
-System.out.println(CombMathUtils.p(6, 10));
-```
-
-The `c`/`p` overloads that accept a multiplicity array are the most useful when
-a domain contains repeated elements. Obtain the multiplicity via
-`CombinatoricFactory.createDomain`:
+permutations (`p`) of a given length `k` for a domain, without iterating. The
+counts are derived from the domain's multiplicity (the rank of each distinct
+element), which is obtained from a `Domain` via
+`CombinatoricFactory.createDomain` and `Domain.toMultiplicity`:
 
 ```java
 import com.xiantrimble.combinatorics.CombMathUtils;
 import com.xiantrimble.combinatorics.CombinatoricFactory;
-import com.xiantrimble.combinatorics.CombinatoricFactoryImpl;
 import com.xiantrimble.combinatorics.Domain;
 
 int k = 6;
-int[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
+Integer[] domain = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 
-CombinatoricFactory factory = new CombinatoricFactoryImpl();
-Domain<Integer> domainObj = factory.createDomain(k, domain);
-
+// c(k, m) — number of combinations
+Domain<Integer> domainObj = CombinatoricFactory.createDomain(domain);
 int[] multiplicity = domainObj.toMultiplicity();
 
 long combinationCount = CombMathUtils.c(k, multiplicity);
+
+// p(k, m) — number of permutations
 long permutationCount = CombMathUtils.p(k, multiplicity);
 ```
