@@ -1,5 +1,5 @@
 # 1. Base Model Definition
 FROM qwen3.8:27b-mlx
 
-PARAMETER num_ctx 32768
+PARAMETER num_ctx 65536
 PARAMETER think high

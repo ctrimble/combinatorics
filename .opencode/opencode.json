@@ -12,8 +12,9 @@
       "name": "Ollama Local",
       "options": {
         "baseURL": "http://127.0.0.1:11434/v1",
-        "timeout": 1200000,
-        "headerTimeout": 1200000
+        "timeout": 2400000,
+        "headerTimeout": 2400000,
+        "chunkTimeout": 1200000
       },
       "models": {
         "qwen2.5-coder-opencode": {
@@ -26,6 +27,10 @@
         },
         "qwen3.8-basic-opencode": {
           "name": "qwen3.8-basic-opencode",
+          "tools": true
+        },
+        "qwen3.8-mlx-64k-opencode": {
+          "name": "qwen3.8-mlx-64k-opencode",
           "tools": true
         },
         "qwen3.8-mlx-opencode": {
