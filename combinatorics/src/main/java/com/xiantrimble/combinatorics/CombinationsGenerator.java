@@ -29,7 +29,7 @@ public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected long endIndex;
 
   protected CombinationsGenerator(int k, T[] domain) {
-    this(k, Domain.<T>builder().build(domain));
+    this(k, Domain.<T>of(domain));
   }
 
   protected CombinationsGenerator(int k, Domain<T> domain) {
@@ -50,7 +50,7 @@ public class CombinationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
       // initialize the state and notify the handler.
       indices = new DomainPointer[domainMultiplicity.length];
       indices[indices.length - 1] = new DomainPointer();
-      int toRight = domain.size();
+      int toRight = domain.totalSize();
       int ni = 0;
       long currentCombs = 0;
       for(int i = 0; i < domainMultiplicity.length; i++) {

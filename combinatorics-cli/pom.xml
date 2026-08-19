@@ -16,13 +16,15 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>com.xiantrimble.combinatorics</groupId>
     <artifactId>combinatorics-parent</artifactId>
     <version>0.3.0-SNAPSHOT</version>
   </parent>
+
   <groupId>com.xiantrimble.combinatorics</groupId>
   <artifactId>combinatorics-cli</artifactId>
   <packaging>jar</packaging>
@@ -60,7 +62,12 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
     </dependency>
+    <dependency>
+      <groupId>net.karneim</groupId>
+      <artifactId>pojobuilder</artifactId>
+    </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -135,10 +142,10 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.skife.maven</groupId>
-          <artifactId>really-executable-jar-maven-plugin</artifactId>
-          <version>2.1.1</version>
-        <configuration>
+         <groupId>org.skife.maven</groupId>
+         <artifactId>really-executable-jar-maven-plugin</artifactId>
+         <version>2.1.1</version>
+         <configuration>
           <programFile>comb</programFile>
         </configuration>
 
@@ -153,6 +160,20 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <docfilessubdirs>true</docfilessubdirs>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <profiles>
     <profile>
       <id>github</id>
@@ -162,10 +183,10 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>com.github.github</groupId>
-              <artifactId>site-maven-plugin</artifactId>
-              <version>0.12</version>
-            <configuration>
+             <groupId>com.github.github</groupId>
+             <artifactId>site-maven-plugin</artifactId>
+             <version>0.12</version>
+             <configuration>
               <repositoryName>combinatorics</repositoryName>
               <repositoryOwner>ctrimble</repositoryOwner>
               <message>Creating site for ${project.version}</message>
@@ -183,16 +204,4 @@
       </build>
     </profile>
   </profiles>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <docfilessubdirs>true</docfilessubdirs>
-          <quiet>true</quiet>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>

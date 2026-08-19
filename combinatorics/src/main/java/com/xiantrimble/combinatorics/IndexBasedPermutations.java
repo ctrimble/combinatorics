@@ -44,7 +44,7 @@ public class IndexBasedPermutations<T>
     long index = 0;
 
     // compute what combination the element is in and advance the index to that combination.
-    Domain<T> elementDomain = Domain.<T>builder().build(element);
+    Domain<T> elementDomain = Domain.<T>of(element);
     int[] elementMultiplicity = elementDomain.toMultiplicity();
     int[] workingMultiplicity = domainMultiplicity.clone();
     int[] currentMultiplicity = new int[domainMultiplicity.length];
@@ -52,7 +52,7 @@ public class IndexBasedPermutations<T>
 
     int workingK = k;
     PAST_COMBINATIONS: for(int i = 0, j = 0; i < domainValues.length - 1 && j < elementDomain.distinctSize() && workingK > 0; i++) {
-      boolean onElement = elementDomain.get(j).get(0).equals(domainValues[i][0]);
+      boolean onElement = elementDomain.rankView().get(j).getValue().equals(domainValues[i][0]);
       int startM = Math.min(domainMultiplicity[i], k - inCurrentMultiplicity);
       int stopM = !onElement ? 0 : elementMultiplicity[j];
       workingMultiplicity[i] = 0;
@@ -84,8 +84,8 @@ public class IndexBasedPermutations<T>
     for(int i = elementDomain.distinctSize() - 2; i >= 0; i--) {
       int aCount = elementMultiplicity[i];
       int bCount = elementMultiplicity[i + 1];
-      T aElement = elementDomain.get(i).get(0);
-      T bElement = elementDomain.get(i + 1).get(0);
+      T aElement = elementDomain.rankView().get(i).getValue();
+      T bElement = elementDomain.rankView().get(i + 1).getValue();
       long typePerms = CombMathUtils.p(aCount + bCount, new int[]{aCount, bCount});
       boolean typeDown = localIndex % 2 == 0;
       localIndex *= typePerms;
@@ -169,7 +169,7 @@ public class IndexBasedPermutations<T>
       state = new TypePermutationState[domainMultiplicity.length];
 
       int ni = 0; // index into the next solution array.
-      int toRight = domain.size();
+      int toRight = domain.totalSize();
       long currentPerms = 1;
       pastCombSize = 0;
 
@@ -368,7 +368,7 @@ public class IndexBasedPermutations<T>
 
       for(int ri = 0, ni = 0; ri < domainMultiplicity.length; ri++) {
         for(int j = 0; j < state[ri].count; j++) {
-          next[ni++] = domain.get(ri).get(j);
+          next[ni++] = domain.rankView().get(ri).getValue();
         }
       }
 

@@ -22,6 +22,29 @@ Add the `provided`-scoped dependency to the module that needs generated builders
 </dependency>
 ```
 
+In modern versions of the maven-compiler-plugin (3.x or later), you need to put the definition in the compiler's `<annotationProcessorPaths/>` block:
+
+```
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.13.0</version> <!-- Use a recent version -->
+            <configuration>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>net.karneim</groupId>
+                        <artifactId>pojobuilder</artifactId>
+                        <version>4.3.1</version>
+                    </path>
+                 </annotationProcessorPaths>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
 The compile phase auto-detects and activates PojoBuilder, and generated sources appear under `${project.build.directory}/generated-sources/annotations`.
 
 ### Triggering Generation

@@ -91,7 +91,7 @@ public class Permutations<T>
         for(int j = 0; j < state[dri].entryState.length; j++) {
           state[dri].entryState[j] = new EntryPermutationState(j);
           if(j < state[dri].count) {
-            next[ni++] = domain.get(dri).get(j);
+            next[ni++] = domain.rankView().get(dri).getValue();
           }
         }
       }
@@ -242,7 +242,7 @@ public class Permutations<T>
             state[ri].entryState[k].index = k;
             state[ri].entryState[k].direction = Direction.DOWN;
             if(k < state[ri].count) {
-              next[ni++] = domain.get(ri).get(k);
+              next[ni++] = domain.rankView().get(ri).getValue();
             }
           }
         }

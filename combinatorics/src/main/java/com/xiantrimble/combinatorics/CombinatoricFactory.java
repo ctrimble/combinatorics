@@ -43,18 +43,16 @@ public final class CombinatoricFactory {
     return new IndexBasedPermutations<T>(k, domain);
   }
 
-  public static <T> Domain.Builder<T> domainBuilder() {
+  public static <T> DomainBuilder<T> domainBuilder() {
     return Domain.<T>builder();
   }
 
-  @SuppressWarnings("unchecked")
   public static <T> Domain<T> createDomain(T... domain) {
-    return Domain.<T>builder().build(domain);
+    return Domain.<T>of(domain);
   }
 
-  @SuppressWarnings("unchecked")
   public static <T> Domain<T> createDomain(int maxElementK, T... domain) {
-    return Domain.<T>builder().build(domain).restrictRank(maxElementK);
+    return Domain.of(domain).restrictRank(maxElementK);
   }
 
   @SuppressWarnings("unchecked")

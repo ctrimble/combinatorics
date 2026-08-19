@@ -16,20 +16,22 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <parent>
     <groupId>com.xiantrimble.combinatorics</groupId>
     <artifactId>combinatorics-parent</artifactId>
     <version>0.3.0-SNAPSHOT</version>
   </parent>
+
   <artifactId>combinatorics</artifactId>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
 
   <name>Java Combinatorics Library</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
 
-    <dependencies>
+  <dependencies>
      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -59,11 +61,6 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
@@ -78,6 +75,20 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <docfilessubdirs>true</docfilessubdirs>
+          <quiet>true</quiet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
   <profiles>
     <profile>
       <id>github</id>
@@ -87,10 +98,10 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>com.github.github</groupId>
-              <artifactId>site-maven-plugin</artifactId>
-              <version>0.12</version>
-            <configuration>
+             <groupId>com.github.github</groupId>
+             <artifactId>site-maven-plugin</artifactId>
+             <version>0.12</version>
+             <configuration>
               <repositoryName>combinatorics</repositoryName>
               <repositoryOwner>ctrimble</repositoryOwner>
               <message>Creating site for ${project.version}</message>
@@ -108,16 +119,4 @@
       </build>
     </profile>
   </profiles>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <docfilessubdirs>true</docfilessubdirs>
-          <quiet>true</quiet>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>

@@ -80,8 +80,8 @@ public class LeadingElementPerportionTest {
       leadingTwos[i] /= leadingGcd[i];
     }
 
-    int totalOnes = permutations.getDomain().get(0).size();
-    int totalTwos = permutations.getDomain().get(1).size();
+    int totalOnes = permutations.getDomain().rankView().get(0).getMultiplicity();
+    int totalTwos = permutations.getDomain().rankView().get(1).getMultiplicity();
 
     // Turn the total into a proper fraction.
     int totalGcd = MathUtils.gcd(totalOnes, totalTwos);
@@ -103,7 +103,7 @@ public class LeadingElementPerportionTest {
   @Test
   public void alwaysDivisible() {
     long size = permutations.size();
-    int kTotalM = permutations.getDomain().size();
+    int kTotalM = permutations.getDomain().totalSize();
     for(int m : permutations.getDomain().toMultiplicity()) {
       long gcd = MathUtils.gcd(kTotalM, m);
       long den = kTotalM / gcd;
@@ -114,7 +114,7 @@ public class LeadingElementPerportionTest {
   @Test
   public void relativeComputation() {
     long kS = permutations.size();
-    int kTotalM = permutations.getDomain().size();
+    int kTotalM = permutations.getDomain().totalSize();
     int[] kM = permutations.getDomain().toMultiplicity();
     for(int i = 0; i < kM.length; i++) {
       long gcd = MathUtils.gcd(kTotalM, kM[i]);

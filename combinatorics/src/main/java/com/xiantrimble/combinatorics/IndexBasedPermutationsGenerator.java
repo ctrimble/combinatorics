@@ -58,7 +58,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
         state[dri] = new TypePermutationState();
         state[dri].count = Math.min(domainMultiplicity[dri], k - ni);
         for(int j = 0; j < state[dri].count; j++) {
-          last[ni++] = domain.get(dri).get(j);
+          last[ni++] = domain.rankView().get(dri).getValue();
         }
       }
       for(int i = state.length - 2; i >= 0; i--) {
@@ -140,7 +140,7 @@ public class IndexBasedPermutationsGenerator<T> extends AbstractCombinatoricGene
 
         for(int ri = 0, ni2 = 0; ri < domainMultiplicity.length; ri++) {
           for(int j = 0; j < state[ri].count; j++) {
-            last[ni2++] = domain.get(ri).get(j);
+            last[ni2++] = domain.rankView().get(ri).getValue();
           }
         }
 

@@ -30,7 +30,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
   protected T[] last;
 
   protected PermutationsGenerator(int k, T[] domain) {
-    this(k, Domain.<T>builder().build(domain));
+    this(k, Domain.<T>of(domain));
   }
 
   protected PermutationsGenerator(int k, Domain<T> domain) {
@@ -65,7 +65,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
         for(int j = 0; j < state[ri].entryState.length; j++) {
           state[ri].entryState[j] = new EntryPermutationState(j);
           if(j < state[ri].count) {
-            last[ni++] = domain.get(ri).get(j);
+            last[ni++] = domain.rankView().get(ri).getValue();
           }
         }
       }
@@ -212,7 +212,7 @@ public class PermutationsGenerator<T> extends AbstractCombinatoricGenerator<T> {
               state[ri].entryState[k].index = k;
               state[ri].entryState[k].direction = Direction.DOWN;
               if(k < state[ri].count) {
-                last[ni++] = domain.get(ri).get(k);
+                last[ni++] = domain.rankView().get(ri).getValue();
               }
             }
           }

@@ -8,91 +8,100 @@
   *         http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-   * distributed under the License is distributed on an "AS IS" BASIS,
-   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   * See the License for the specific language governing permissions and
-   * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
   */
 package com.xiantrimble.combinatorics;
 
-import java.lang.reflect.Array;
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+import java.util.Objects;
+
+import net.karneim.pojobuilder.GeneratePojoBuilder;
 
 /**
  * A representation of a set of elements where the like elements have been grouped.
+ *
+ * <p>
+ * This domain is itself an immutable {@link List} of its grouped {@link Element}s, so it
+ * implements the {@link List} contract against the grouping: {@link #size()} reports the
+ * number of unique elements and {@link #get(int)} reports the unique element at the given
+ * grouping index.  The flat, fully expanded view of the domain is available through
+ * {@link #flatView()} and is constructed eagerly when this domain is built.
  *
  * @author Christian Trimble
  *
  * @param <E> the element type of the collection or array that this domain represents.
  */
-public final class Domain<E> implements List<List<E>> {
-  /** The grouped elements, one group per unique value. */
-  private final List<List<E>> elements;
-  /** The total of all the element ranks of this domain. */
-  private final int totalSize;
+public final class Domain<E> extends AbstractList<Domain.Element<E>> {
+  /** The grouping of like elements, backed by a random access and unmodifiable list. */
+  private final List<Domain.Element<E>> elements;
   /** The class for the elements in this domain. */
   private final Class<E> componentType;
+  /** An expanded view of the domain, one entry per element described by the grouping. */
+  private final Domain.FlatView<E> view;
+
+  /**
+   * Canonical constructor that backs this domain with a random access list of groups and
+   * eagerly builds the flat view.  This constructor is the basis for the generated builder.
+   *
+   * @param elements the grouping of like elements, one entry per unique value.
+   * @param componentType the class of the elements in this domain.
+   */
+  @GeneratePojoBuilder
+  protected Domain(final List<Domain.Element<E>> elements, final Class<E> componentType) {
+    this.elements = List.copyOf(elements);
+    this.componentType = componentType;
+    this.view = new Domain.FlatView<E>(expand(this.elements));
+  }
 
   private Domain(final E[] domain) {
-    this.componentType = Utils.getComponentType(domain);
-    this.elements = group(domain.clone());
-    this.totalSize = totalSize(this.elements);
+    this(group(domain.clone()), Utils.getComponentType(domain));
   }
 
   private Domain(final Domain<E> restricted, final int maxRank) {
-    this.componentType = restricted.componentType;
-    this.elements = new ArrayList<List<E>>(restricted.elements.size());
-    int size = 0;
-    for(List<E> group : restricted.elements) {
-      List<E> clamped = new ArrayList<E>(Math.min(group.size(), maxRank));
-      for(int i = 0; i < maxRank && i < group.size(); i++) {
-        clamped.add(group.get(i));
-      }
-      this.elements.add(clamped);
-      size += clamped.size();
-    }
-    this.totalSize = size;
+    this(clamp(restricted.elements, maxRank), restricted.componentType);
   }
 
-  private Domain(final Class<E> componentType, final List<E> domain) {
-    Class<?> type = componentType == null ? Object.class : componentType;
-    @SuppressWarnings("unchecked")
-    E[] array = (E[])Array.newInstance(type, domain.size());
-    for(int i = 0; i < domain.size(); i++) {
-      array[i] = domain.get(i);
+  private static <E> List<Domain.Element<E>> clamp(
+      final List<Domain.Element<E>> elements, final int maxRank) {
+    final List<Domain.Element<E>> clamped = new ArrayList<Domain.Element<E>>(elements.size());
+    for(Domain.Element<E> group : elements) {
+      clamped.add(Domain.Element.of(group.getValue(), Math.min(group.getMultiplicity(), maxRank)));
     }
-    this.elements = group(array.clone());
-    this.totalSize = totalSize(this.elements);
-    @SuppressWarnings("unchecked")
-    Class<E> resolved = (Class<E>)type;
-    this.componentType = resolved;
+    return clamped;
   }
 
-  private static <E> List<List<E>> group(final E[] domain) {
+  private static <E> List<Domain.Element<E>> group(final E[] domain) {
     Arrays.sort(domain);
-    List<List<E>> groups = new ArrayList<List<E>>(domain.length);
+    final List<Domain.Element<E>> groups = new ArrayList<Domain.Element<E>>(domain.length);
     for(int i = 0; i < domain.length; ) {
       int cur = i;
-      List<E> group = new ArrayList<E>();
+      int count = 0;
       for(; i < domain.length && domain[cur].equals(domain[i]); i++) {
-        group.add(domain[i]);
+        count++;
       }
-      groups.add(group);
+      groups.add(Domain.Element.of(domain[cur], count));
     }
     return groups;
   }
 
-  private static <E> int totalSize(final List<List<E>> elements) {
-    int size = 0;
-    for(List<E> element : elements) {
-      size += element.size();
+  private static <E> List<E> expand(final List<Domain.Element<E>> elements) {
+    int total = 0;
+    for(Domain.Element<E> element : elements) {
+      total += element.getMultiplicity();
     }
-    return size;
+    final List<E> view = new ArrayList<E>(total);
+    for(Domain.Element<E> element : elements) {
+      for(int i = 0; i < element.getMultiplicity(); i++) {
+        view.add(element.getValue());
+      }
+    }
+    return List.copyOf(view);
   }
 
   /**
@@ -101,26 +110,55 @@ public final class Domain<E> implements List<List<E>> {
    * @param <E> the element type.
    * @return a builder for a Domain.
    */
-  public static <E> Builder<E> builder() {
-    return new Builder<E>();
+  public static <E> DomainBuilder<E> builder() {
+    return new DomainBuilder<E>();
   }
 
   /**
-   * Returns the total number of elements in this domain.
+   * Creates a domain from the specified elements, treating each as a single occurrence.
    *
-   * @return the total number of elements in this domain.
+   * @param domain the elements that make up this domain.
+   * @return a new Domain.
+   */
+  @SafeVarargs
+  public static <E> Domain<E> of(final E... domain) {
+    return new Domain<E>(domain);
+  }
+
+  /**
+   * Returns the number of unique elements in this domain.
+   *
+   * @return the number of unique elements in this domain.
    */
   @Override
   public int size() {
-    return totalSize;
+    return elements.size();
   }
 
   /**
-   * Returns a new domain where the rank of each unique element is clamped to
-   * the specified maximum.
+   * Returns the total number of elements in this domain, the sum of all multiplicities.
    *
-   * @param maxRank the maximum rank for any unique element.
-   * @return a new domain with ranks clamped to the specified maximum.
+   * @return the total number of elements in this domain.
+   */
+  public int totalSize() {
+    return view.size();
+  }
+
+  /**
+   * Returns the number of unique elements in this domain.
+   *
+   * @return the number of unique elements in this domain.
+   */
+  public int distinctSize() {
+    return elements.size();
+  }
+
+  /**
+   * Returns a new domain where the multiplicity of each unique element is
+   * clamped to the specified maximum.
+   *
+   * @param maxRank the maximum multiplicity for any unique element.
+   * @return a new domain with multiplicities clamped to the specified maximum.
    */
   public Domain<E> restrictRank(final int maxRank) {
     return new Domain<E>(this, maxRank);
@@ -136,6 +174,16 @@ public final class Domain<E> implements List<List<E>> {
   }
 
   /**
+   * Returns the flat view of this domain, listing every element expanded to its
+   * multiplicity.  The view is constructed eagerly when this domain is built.
+   *
+   * @return the flat view of this domain.
+   */
+  public Domain.FlatView<E> flatView() {
+    return view;
+  }
+
+  /**
    * Returns a multiplicity array for this domain object.
    *
    * @return a multiplicity array for this domain object.
@@ -143,206 +191,187 @@ public final class Domain<E> implements List<List<E>> {
   public int[] toMultiplicity() {
     int[] rankArray = new int[elements.size()];
     int i = 0;
-    for(List<E> element : elements) {
-      rankArray[i++] = element.size();
+    for(Domain.Element<E> element : elements) {
+      rankArray[i++] = element.getMultiplicity();
     }
     return rankArray;
   }
 
   /**
-   * Returns a two dimensional array representation of this domain.
+   * Returns a two dimensional array representation of this domain, where each
+   * row contains the element value repeated its multiplicity times.
    *
    * @return a two dimensional array representation of this domain.
    */
   public E[][] toValueArray() {
     E[][] valueArray = Utils.newArray(componentType, elements.size(), 0);
     for(int i = 0; i < elements.size(); i++) {
-      valueArray[i] = elements.get(i).toArray(Utils.newArray(componentType, elements.get(i).size()));
+      Domain.Element<E> element = elements.get(i);
+      int multiplicity = element.getMultiplicity();
+      E[] row = Utils.newArray(componentType, multiplicity);
+      for(int j = 0; j < multiplicity; j++) {
+        row[j] = element.getValue();
+      }
+      valueArray[i] = row;
     }
     return valueArray;
   }
 
-  @Override
-  public boolean add(List<E> e) {
-    throw new UnsupportedOperationException();
+  /**
+   * Returns a list of the unique elements of this domain, in order, one entry
+   * per unique value.
+   *
+   * @return a list of the unique elements of this domain.
+   */
+  public List<E> uniqueElements() {
+    List<E> unique = new ArrayList<E>(elements.size());
+    for(Domain.Element<E> element : elements) {
+      unique.add(element.getValue());
+    }
+    return unique;
+  }
+
+  /**
+   * Returns a grouping view of this domain, one entry per unique value, where
+   * each entry carries its value and multiplicity.  The returned list is
+   * unmodifiable.
+   *
+   * @return the grouping view of this domain.
+   */
+  public List<Domain.Element<E>> rankView() {
+    return List.copyOf(elements);
   }
 
   @Override
-  public void add(int index, List<E> element) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean addAll(int index, Collection<? extends List<E>> c) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean addAll(Collection<? extends List<E>> c) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void clear() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean contains(Object o) {
-    return elements.contains(o);
-  }
-
-  @Override
-  public boolean containsAll(Collection<?> c) {
-    return elements.containsAll(c);
-  }
-
-  @Override
-  public List<E> get(int index) {
+  public Domain.Element<E> get(int index) {
     return elements.get(index);
   }
 
   @Override
-  public int indexOf(Object o) {
-    return elements.indexOf(o);
-  }
-
-  @Override
-  public boolean isEmpty() {
-    return elements.isEmpty();
-  }
-
-  @Override
-  public Iterator<List<E>> iterator() {
-    return elements.iterator();
-  }
-
-  @Override
-  public int lastIndexOf(Object o) {
-    return elements.lastIndexOf(o);
-  }
-
-  @Override
-  public ListIterator<List<E>> listIterator() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public ListIterator<List<E>> listIterator(int index) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean remove(Object o) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public List<E> remove(int index) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean removeAll(Collection<?> c) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean retainAll(Collection<?> c) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public List<E> set(int index, List<E> element) {
-    throw new UnsupportedOperationException();
-  }
-
-
-  public int distinctSize() {
-    return elements.size();
-  }
-
-  @Override
-  public List<List<E>> subList(int fromIndex, int toIndex) {
-    return elements.subList(fromIndex, toIndex);
-  }
-
-  @Override
-  public Object[] toArray() {
-    return elements.toArray();
-  }
-
-  @Override
-  @SuppressWarnings("unchecked")
-  public <T> T[] toArray(T[] array) {
-    return (T[])elements.toArray((Object[])array);
-  }
-
-  @Override
   public boolean equals(Object o) {
-    return elements.equals(o);
+    if(this == o) return true;
+    if(!(o instanceof Domain)) return false;
+    Domain<?> other = (Domain<?>)o;
+    return elements.equals(other.elements);
   }
 
   @Override
   public int hashCode() {
-    return elements.hashCode();
+    return Objects.hash(componentType, elements);
   }
 
   @Override
   public String toString() {
-    return elements.toString();
+    return view.toString();
   }
 
   /**
-   * A builder for Domain objects.
+   * A single value in a {@link Domain} together with the number of times that
+   * value occurs.
    *
    * @param <E> the element type of the domain.
    */
-  public static final class Builder<E> {
-    /** The accumulated elements of this domain. */
-    private final List<E> accumulated = new ArrayList<E>();
-    /** The component type of the domain, captured from the first element. */
-    private Class<E> componentType;
+  public static final class Element<E> {
+    /** The unique value of this element. */
+    private final E value;
+    /** The number of times this value occurs in the domain. */
+    private final int multiplicity;
 
     /**
-     * Adds the specified element to the domain the specified number of times.
+     * Constructs an element with the specified value and multiplicity.  This
+     * constructor is the basis for the generated builder.
      *
-     * @param value the element to add.
-     * @param count the number of times to add the element.
-     * @return this builder.
+     * @param value the unique value.
+     * @param multiplicity the number of occurrences of the value.
      */
-    @SuppressWarnings("unchecked")
-    public Builder<E> element(final E value, final int count) {
-      if(componentType == null) {
-        componentType = (Class<E>)value.getClass();
-      }
-      for(int i = 0; i < count; i++) {
-        accumulated.add(value);
-      }
-      return this;
+    @GeneratePojoBuilder
+    protected Element(final E value, final int multiplicity) {
+      this.value = value;
+      this.multiplicity = multiplicity;
     }
 
     /**
-     * Builds a Domain from the accumulated elements.
+     * Creates a new element with the specified value and multiplicity.
      *
-     * @return a new Domain.
+     * @param value the unique value.
+     * @param multiplicity the number of occurrences of the value.
+     * @return a new element.
      */
-    public Domain<E> build() {
-      return new Domain<E>(componentType, accumulated);
+    public static <E> Domain.Element<E> of(final E value, final int multiplicity) {
+      return new Domain.Element<E>(value, multiplicity);
     }
 
     /**
-     * Builds a Domain from the given domain, treating each element as having
-     * a rank of one.
+     * Returns the unique value of this element.
      *
-     * @param domain the elements that make up this domain.
-     * @return a new Domain.
+     * @return the unique value of this element.
      */
-    public Domain<E> build(final E... domain) {
-      for(E value : domain) {
-        this.element(value, 1);
-      }
-      return this.build();
+    public E getValue() {
+      return value;
+    }
+
+    /**
+     * Returns the multiplicity of this element in the domain.
+     *
+     * @return the multiplicity of this element in the domain.
+     */
+    public int getMultiplicity() {
+      return multiplicity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if(this == o) return true;
+      if(!(o instanceof Domain.Element)) return false;
+      Domain.Element<?> other = (Domain.Element<?>)o;
+      return multiplicity == other.multiplicity && Objects.equals(value, other.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(value, multiplicity);
+    }
+
+    @Override
+    public String toString() {
+      return "Element{value=" + value + ", multiplicity=" + multiplicity + "}";
+    }
+  }
+
+  /**
+   * A flat, fully expanded view of a {@link Domain}, listing every element one
+   * entry per occurrence.  This view is a random access, unmodifiable list.
+   *
+   * @param <E> the element type of the domain.
+   */
+  public static final class FlatView<E> extends AbstractList<E> {
+    /** The expanded entries of the view, one entry per occurrence. */
+    private final List<E> elements;
+
+    /**
+     * Constructs a flat view over the expanded elements.  This constructor is
+     * the basis for the generated builder.
+     *
+     * @param elements the expanded entries, one per occurrence.
+     */
+    @GeneratePojoBuilder
+    protected FlatView(final List<E> elements) {
+      this.elements = List.copyOf(elements);
+    }
+
+    @Override
+    public int size() {
+      return elements.size();
+    }
+
+    @Override
+    public E get(int index) {
+      return elements.get(index);
+    }
+
+    @Override
+    public String toString() {
+      return elements.toString();
     }
   }
 }

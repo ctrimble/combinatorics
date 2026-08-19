@@ -50,7 +50,7 @@ public abstract class AbstractCombinatoric<T> extends AbstractList<T[]>
    * @param domain the domain being operated on.
    */
   protected AbstractCombinatoric(int k, T[] domain) {
-    this(k, Domain.<T>builder().build(domain));
+    this(k, Domain.<T>of(domain));
   }
 
   protected AbstractCombinatoric(int k, Domain<T> domain) {
