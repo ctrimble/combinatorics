@@ -18,17 +18,17 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  
+
   <groupId>com.xiantrimble.combinatorics</groupId>
   <artifactId>combinatorics-parent</artifactId>
   <version>0.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  
+
   <name>Java Combinatorics Library :: Parent</name>
   <description>A Java combinatorics package, with a focus on fast iteration.</description>
   <url>https://github.com/ctrimble/combinatorics</url>
   <inceptionYear>2012</inceptionYear>
-  
+
   <developers>
     <developer>
       <id>ctrimble</id>
@@ -37,12 +37,12 @@
       <url>https://github.com/ctrimble</url>
     </developer>
   </developers>
-  
+
   <modules>
     <module>combinatorics</module>
     <module>combinatorics-cli</module>
   </modules>
-  
+
   <scm>
     <connection>scm:git:git://github.com/ctrimble/combinatorics.git</connection>
     <developerConnection>scm:git:git@github.com:ctrimble/combinatorics.git</developerConnection>
@@ -56,12 +56,12 @@
     <system>Travis</system>
     <url>https://travis-ci.org/ctrimble/combinatorics</url>
   </ciManagement>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
   </properties>
-  
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -107,7 +107,7 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <repositories>
     <repository>
       <releases>
@@ -121,7 +121,7 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
-  
+
   <build>
     <pluginManagement>
       <plugins>
@@ -211,6 +211,14 @@
         <groupId>org.openrewrite.maven</groupId>
         <artifactId>rewrite-maven-plugin</artifactId>
         <version>6.46.1</version>
+        <executions>
+          <execution>
+            <phase>format</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <activeStyles>
             <!-- Matches the 'name' defined in your style yaml block -->
@@ -226,6 +234,14 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>tidy-maven-plugin</artifactId>
         <version>1.4.0</version>
+        <executions>
+          <execution>
+            <phase>format</phase>
+            <goals>
+              <goal>pom</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -248,8 +264,15 @@
         </executions>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>com.xiantrimble.maven</groupId>
+        <artifactId>maven-format-lifecycle</artifactId>
+        <version>1.0.0</version>
+      </extension>
+    </extensions>
   </build>
-  
+
   <reporting>
     <plugins>
       <plugin>
@@ -262,7 +285,7 @@
       </plugin>
     </plugins>
   </reporting>
-  
+
   <profiles>
     <profile>
       <id>github</id>
