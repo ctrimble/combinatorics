@@ -136,13 +136,9 @@
           <version>3.12.0</version>
           <configuration>
             <docfilessubdirs>true</docfilessubdirs>
-            <links>
-              <link>http://commons.apache.org/math/apidocs</link>
-              <link>http://javolution.org/target/site/apidocs</link>
-              <link>http://docs.oracle.com/javase/6/docs/api</link>
-            </links>
             <linksource>true</linksource>
             <quiet>true</quiet>
+            <doclint>all,-missing</doclint>
           </configuration>
         </plugin>
         <plugin>
@@ -294,6 +290,24 @@
       </activation>
       <build>
         <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.5.0</version>
+            <executions>
+              <execution>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>add-source</goal>
+                </goals>
+                <configuration>
+                  <sources>
+                    <source>${project.build.directory}/generated-sources/annotations</source>
+                  </sources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
           <plugin>
             <groupId>com.github.github</groupId>
             <artifactId>site-maven-plugin</artifactId>

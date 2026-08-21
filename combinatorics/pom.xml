@@ -65,10 +65,6 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
           <docfilessubdirs>true</docfilessubdirs>
-            <links>
-              <link>http://javolution.org/target/site/apidocs</link>
-              <link>http://docs.oracle.com/javase/6/docs/api</link>
-            </links>
           <linksource>true</linksource>
           <quiet>true</quiet>
         </configuration>

@@ -47,6 +47,29 @@ In modern versions of the maven-compiler-plugin (3.x or later), you need to put 
 
 The compile phase auto-detects and activates PojoBuilder, and generated sources appear under `${project.build.directory}/generated-sources/annotations`.
 
+Other plugins need to be aware of this location for source files.  You will need to configure `${project.build.directory}/generated-sources/annotations` in the project sources using the `build-helper-maven-plugin`:
+
+```
+<plugin>
+  <groupId>org.codehaus.mojo</groupId>
+  <artifactId>build-helper-maven-plugin</artifactId>
+  <version>3.5.0</version>
+  <executions>
+    <execution>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>add-source</goal>
+      </goals>
+      <configuration>
+        <sources>
+          <source>${project.build.directory}/generated-sources/annotations</source>
+        </sources>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+```
+
 ### Triggering Generation
 
 You can trigger code generation by annotating one of the following:
