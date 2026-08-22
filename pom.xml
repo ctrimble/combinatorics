@@ -204,6 +204,25 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>net.revelc.code</groupId>
+        <artifactId>impsort-maven-plugin</artifactId>
+        <version>1.12.0</version>
+        <configuration>
+          <groups>java.,javax.,org.,com.</groups>
+          <staticGroups>java,*</staticGroups>
+          <removeUnused>true</removeUnused>
+        </configuration>
+        <executions>
+          <execution>
+            <id>sort-imports</id>
+            <phase>format</phase>
+            <goals>
+              <goal>sort</goal><!-- runs at process-sources phase by default -->
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.openrewrite.maven</groupId>
         <artifactId>rewrite-maven-plugin</artifactId>
         <version>6.46.1</version>

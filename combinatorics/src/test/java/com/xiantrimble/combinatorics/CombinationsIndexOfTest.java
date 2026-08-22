@@ -15,6 +15,7 @@
  */
 package com.xiantrimble.combinatorics;
 
+import static com.xiantrimble.combinatorics.CombinationsIndexOfTest.Element.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
@@ -24,8 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static com.xiantrimble.combinatorics.CombinationsIndexOfTest.Element.*;
 
 @RunWith(Parameterized.class)
 public class CombinationsIndexOfTest {

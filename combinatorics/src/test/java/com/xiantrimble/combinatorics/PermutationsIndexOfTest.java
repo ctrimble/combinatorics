@@ -15,14 +15,14 @@
  */
 package com.xiantrimble.combinatorics;
 
+import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.*;
+
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.*;
 
 @RunWith(Parameterized.class)
 public class PermutationsIndexOfTest

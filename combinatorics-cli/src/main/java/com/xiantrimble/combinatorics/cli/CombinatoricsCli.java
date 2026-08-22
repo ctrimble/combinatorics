@@ -15,9 +15,6 @@
  */
 package com.xiantrimble.combinatorics.cli;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.beust.jcommander.JCommander;

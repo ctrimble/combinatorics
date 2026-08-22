@@ -15,8 +15,8 @@
  */
 package com.xiantrimble.combinatorics;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractCombinatoricIteratorTest {
   protected static Integer ONE = 1;

@@ -15,13 +15,13 @@
  */
 package com.xiantrimble.combinatorics;
 
+import static com.xiantrimble.combinatorics.Utils.list;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
-import static com.xiantrimble.combinatorics.Utils.list;
 
 public abstract class AbstractPermutationsIteratorTest
 {

@@ -16,7 +16,6 @@
 package com.xiantrimble.combinatorics;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 /**
  * A CombinatoricGenerator implementation for Permutations.

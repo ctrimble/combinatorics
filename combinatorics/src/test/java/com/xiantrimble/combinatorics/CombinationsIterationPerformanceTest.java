@@ -15,9 +15,8 @@
  */
 package com.xiantrimble.combinatorics;
 
-import java.util.Arrays;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Ignore;
 import org.junit.Rule;

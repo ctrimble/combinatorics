@@ -15,6 +15,7 @@
  */
 package com.xiantrimble.combinatorics;
 
+import static com.xiantrimble.combinatorics.LeadingElementPerportionTest.Element.*;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
@@ -24,8 +25,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import static com.xiantrimble.combinatorics.LeadingElementPerportionTest.Element.*;
 
 /**
  * This test verifies that for permutations of length k, containing two unique elements and k

@@ -17,7 +17,6 @@ package com.xiantrimble.combinatorics.cli;
 
 import java.util.List;
 
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
