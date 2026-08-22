@@ -19,17 +19,13 @@ import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.FOUR;
 import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.ONE;
 import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.THREE;
 import static com.xiantrimble.combinatorics.AbstractIndexOfTest.Element.TWO;
-import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import com.xiantrimble.combinatorics.AbstractIndexOfTest.Element;
 
 @RunWith(Parameterized.class)
 public class CombinationIndexOfTest

@@ -17,12 +17,10 @@ package com.xiantrimble.combinatorics.cli;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
-import com.xiantrimble.combinatorics.Combinatoric;
 import com.xiantrimble.combinatorics.CombinatoricFactory;
 
 @Parameters(commandNames = "count", commandDescription = "Counts the elements of the combination or permutation of length k")
